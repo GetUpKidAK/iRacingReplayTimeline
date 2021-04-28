@@ -8,20 +8,9 @@ namespace ReplayTimline
 	public class TimelineNode : INotifyPropertyChanged
 	{
 		public int Frame { get; set; }
+		public Driver Driver { get; set; }
+		public Camera Camera { get; set; }
 
-		//private Driver _driver;
-		//public Driver Driver
-		//{
-		//	get { return _driver; }
-		//	set { _driver = value; OnPropertyChanged("Driver"); }
-		//}
-
-		//private Camera _camera;
-		//public Camera Camera
-		//{
-		//	get { return _camera; }
-		//	set { _camera = value; OnPropertyChanged("Camera"); }
-		//}
 
 
 		public event PropertyChangedEventHandler PropertyChanged;

@@ -14,7 +14,7 @@
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="90"/>
+			<RowDefinition Height="120"/>
 		</Grid.RowDefinitions>
 
 		<Grid>
@@ -24,6 +24,14 @@
 						<GridViewColumn Width="80" DisplayMemberBinding="{Binding Frame}">
 							<GridViewColumnHeader Content="Frame" IsEnabled="False" />
 						</GridViewColumn>
+
+						<GridViewColumn Width="250" DisplayMemberBinding="{Binding Driver}">
+							<GridViewColumnHeader Content="Driver name" IsEnabled="False" />
+						</GridViewColumn>
+
+						<GridViewColumn Width="150" DisplayMemberBinding="{Binding Camera.GroupName}">
+							<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
+						</GridViewColumn>
 					</GridView>
 				</ListView.View>
 			</ListView>
@@ -32,16 +40,21 @@
 		<Grid Grid.Row="1">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="2*"/>
+				<RowDefinition Height="2*"/>
 			</Grid.RowDefinitions>
 
 			<WrapPanel HorizontalAlignment="Center">
 				<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 				<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
 			</WrapPanel>
-			
 
 			<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+				<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="250" Margin="5"/>
+				<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="250" Margin="5"/>
+			</WrapPanel>
+
+			<WrapPanel Grid.Row="2" HorizontalAlignment="Center">
 				<Button Content="Prev Frame" Command="{Binding PreviousStoredFrameCommand}" Width="150" Height="35" />
 				<Button Content="Store Frame" Command="{Binding StoreCurrentFrameCommand}" Width="150" Height="35" />
 				<Button Content="Next Frame" Command="{Binding NextStoredFrameCommand}" Width="150" Height="35" />

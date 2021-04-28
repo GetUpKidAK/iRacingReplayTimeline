@@ -13,6 +13,22 @@ namespace ReplayTimline
 		private SdkWrapper m_Wrapper;
 
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
+		public ObservableCollection<Driver> Drivers { get; set; }
+		public ObservableCollection<Camera> Cameras { get; set; }
+
+		private Driver _currentDriver;
+		public Driver CurrentDriver
+		{
+			get { return _currentDriver; }
+			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); }
+		}
+
+		private Camera _currentCamera;
+		public Camera CurrentCamera
+		{
+			get { return _currentCamera; }
+			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); }
+		}
 
 		private int _currentFrame;
 		public int CurrentFrame
@@ -45,6 +61,8 @@ namespace ReplayTimline
 			m_Wrapper.Start();
 
 			TimelineNodes = new ObservableCollection<TimelineNode>();
+			Drivers = new ObservableCollection<Driver>();
+			Cameras = new ObservableCollection<Camera>();
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
@@ -62,7 +80,108 @@ namespace ReplayTimline
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
 		{
-			
+			ParseDrivers(e.SessionInfo);
+			ParseCameras(e.SessionInfo);
+		}
+
+		private void ParseDrivers(SessionInfo sessionInfo)
+		{
+			// Number of starters (Live only)
+			YamlQuery weekendOptionsQuery = sessionInfo["WeekendInfo"]["WeekendOptions"];
+			var starters = weekendOptionsQuery["NumStarters"].GetValue();
+			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
+
+			var newDrivers = new List<Driver>();
+
+			for (int i = 0; i < currentStarters; i++)
+			{
+				YamlQuery query = sessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
+				Driver newDriver;
+
+				string driverName = query["UserName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(driverName) && driverName != "Pace Car")
+				{
+					// Get driver if driver is in previous list
+					newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
+
+					// If not...
+					if (newDriver == null)
+					{
+						// Populate driver info
+						newDriver = new Driver();
+						newDriver.Id = i;
+						newDriver.Name = driverName;
+						newDriver.CustomerId = int.Parse(query["UserID"].GetValue("0")); // default value 0
+						newDriver.Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'); // trim the quotes
+						newDriver.Rating = int.Parse(query["IRating"].GetValue("0"));
+					}
+
+					// Add to drivers list
+					newDrivers.Add(newDriver);
+				}
+			}
+
+			// Cache current driver, needed for live sessions
+			//var cachedCurrentDriver = CurrentDriver;
+			// Replace old list of drivers with new list of drivers and update the grid
+			Drivers.Clear();
+			foreach (var newDriver in newDrivers)
+			{
+				Drivers.Add(newDriver);
+			}
+			// Replace previous driver once list is rebuilt.
+			//CurrentDriver = cachedCurrentDriver;
+		}
+
+		private void ParseCameras(SessionInfo sessionInfo)
+		{
+			int id = 1;
+			Camera newCam;
+
+			var newCameras = new List<Camera>();
+
+			// Loop through cameras until none are found anymore
+			do
+			{
+				newCam = null;
+				YamlQuery query = sessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
+
+				// Get Camera Group name
+				string groupName = query["GroupName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(groupName))
+				{
+					// Get Camera if it is in previous list
+					newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
+
+					// Otherwise...
+					if (newCam == null)
+					{
+						// If group name is found, create a new camera
+						newCam = new Camera();
+						newCam.GroupNum = id;
+						newCam.GroupName = groupName;
+					}
+					newCameras.Add(newCam);
+
+					id++;
+				}
+			}
+			while (newCam != null);
+
+			// Cache current camera, needed for live sessions
+			//var cachedCurrentCamera = CurrentCamera;
+
+			// Replace old list of drivers with new list of drivers and update the grid
+			Cameras.Clear();
+			foreach (var newCamera in newCameras)
+			{
+				Cameras.Add(newCamera);
+			}
+
+			// Replace previous camera once list is rebuilt.
+			//CurrentCamera = cachedCurrentCamera;
 		}
 
 		public void StoreCurrentFrame()
@@ -76,6 +195,8 @@ namespace ReplayTimline
 			{
 				TimelineNode newNode = new TimelineNode();
 				newNode.Frame = CurrentFrame;
+				newNode.Driver = CurrentDriver;
+				newNode.Camera = CurrentCamera;
 
 				TimelineNodes.Add(newNode);
 			}

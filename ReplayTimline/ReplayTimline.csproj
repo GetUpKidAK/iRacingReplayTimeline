@@ -61,9 +61,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Camera.cs" />
     <Compile Include="Commands\NextStoredFrameCommand.cs" />
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
-    <Compile Include="TimelineNode.cs" />
+    <Compile Include="Model\Driver.cs" />
+    <Compile Include="Model\TimelineNode.cs" />
     <Compile Include="ViewModel\ReplayTimelineVM.cs" />
     <Compile Include="Commands\StoreCurrentFrameCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
@@ -106,8 +108,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
