@@ -1,0 +1,51 @@
+﻿<Window x:Class="ReplayTimline.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:ReplayTimline"
+        xmlns:local="clr-namespace:ReplayTimline"
+        mc:Ignorable="d"
+        Title="iRacing Replay Timeline" Height="450" Width="800">
+	<Window.DataContext>
+		<vm:ReplayTimelineVM/>
+	</Window.DataContext>
+	
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="90"/>
+		</Grid.RowDefinitions>
+
+		<Grid>
+			<ListView ItemsSource="{Binding TimelineNodes}">
+				<ListView.View>
+					<GridView>
+						<GridViewColumn Width="80" DisplayMemberBinding="{Binding Frame}">
+							<GridViewColumnHeader Content="Frame" IsEnabled="False" />
+						</GridViewColumn>
+					</GridView>
+				</ListView.View>
+			</ListView>
+		</Grid>
+
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<WrapPanel HorizontalAlignment="Center">
+				<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
+			</WrapPanel>
+			
+
+			<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+				<Button Content="Prev Frame" Command="{Binding PreviousStoredFrameCommand}" Width="150" Height="35" />
+				<Button Content="Store Frame" Command="{Binding StoreCurrentFrameCommand}" Width="150" Height="35" />
+				<Button Content="Next Frame" Command="{Binding NextStoredFrameCommand}" Width="150" Height="35" />
+			</WrapPanel>
+		</Grid>
+	</Grid>
+</Window>
