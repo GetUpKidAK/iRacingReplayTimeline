@@ -21,7 +21,18 @@ namespace ReplayTimeline
 		public TimelineNode CurrentTimelineNode
 		{
 			get { return _currentTimelineNode; }
-			set { _currentTimelineNode = value; OnPropertyChanged("CurrentTimelineNode"); }
+			set
+			{
+				_currentTimelineNode = value;
+				OnPropertyChanged("CurrentTimelineNode");
+
+				if (CurrentTimelineNode != null)
+				{
+					CurrentDriver = CurrentTimelineNode.Driver;
+					CurrentCamera = CurrentTimelineNode.Camera;
+					GoToFrame(CurrentTimelineNode.Frame);
+				}
+			}
 		}
 
 		private Driver _currentDriver;
@@ -112,7 +123,6 @@ namespace ReplayTimeline
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
-
 			PlayPauseCommand = new PlayPauseCommand(this);
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
@@ -126,6 +136,8 @@ namespace ReplayTimeline
 
 			CurrentFrame = e.TelemetryInfo.ReplayFrameNum.Value;
 			CurrentPlaybackSpeed = e.TelemetryInfo.ReplayPlaySpeed.Value;
+
+			RunTimeline();
 		}
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
@@ -233,6 +245,21 @@ namespace ReplayTimeline
 			// Replace previous camera once list is rebuilt.
 			//CurrentCamera = cachedCurrentCamera;
 		}
+
+		private void RunTimeline()
+		{
+			if (CurrentPlaybackSpeed == 1)
+			{
+				if (TimelineNodes.Count > 0)
+				{
+					var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
+
+					// TODO: Timeline stuff!
+				}
+			}
+		}
+
+		
 
 		public void PlayPauseToggle()
 		{
@@ -387,7 +414,7 @@ namespace ReplayTimeline
 				if (targetNode != null)
 				{
 					CurrentTimelineNode = targetNode;
-					m_Wrapper.Replay.SetPosition(targetNode.Frame);
+					GoToFrame(targetNode.Frame);
 				}
 			}
 		}
@@ -416,9 +443,14 @@ namespace ReplayTimeline
 				if (targetNode != null)
 				{
 					CurrentTimelineNode = targetNode;
-					m_Wrapper.Replay.SetPosition(targetNode.Frame);
+					GoToFrame(targetNode.Frame);
 				}
 			}
+		}
+
+		private void GoToFrame(int frame)
+		{
+			m_Wrapper.Replay.SetPosition(frame);
 		}
 	}
 }
