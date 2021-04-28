@@ -1,12 +1,12 @@
-﻿<Window x:Class="ReplayTimline.MainWindow"
+﻿<Window x:Class="ReplayTimeline.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:vm="clr-namespace:ReplayTimline"
-        xmlns:local="clr-namespace:ReplayTimline"
-        mc:Ignorable="d"
-        Title="iRacing Replay Timeline" Height="450" Width="800">
+		xmlns:vm="clr-namespace:ReplayTimeline"
+        xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
+        Title="iRacing Replay Timeline" Height="450" Width="600"
+		WindowStartupLocation="CenterScreen">
 	<Window.DataContext>
 		<vm:ReplayTimelineVM/>
 	</Window.DataContext>
@@ -15,17 +15,18 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="120"/>
+			<RowDefinition Height="80"/>
 		</Grid.RowDefinitions>
 
 		<Grid>
-			<ListView ItemsSource="{Binding TimelineNodes}">
+			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}">
 				<ListView.View>
 					<GridView>
-						<GridViewColumn Width="80" DisplayMemberBinding="{Binding Frame}">
-							<GridViewColumnHeader Content="Frame" IsEnabled="False" />
+						<GridViewColumn Width="100" DisplayMemberBinding="{Binding Frame}">
+							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="250" DisplayMemberBinding="{Binding Driver}">
+						<GridViewColumn Width="250" DisplayMemberBinding="{Binding Driver.Name}">
 							<GridViewColumnHeader Content="Driver name" IsEnabled="False" />
 						</GridViewColumn>
 
@@ -59,6 +60,14 @@
 				<Button Content="Store Frame" Command="{Binding StoreCurrentFrameCommand}" Width="150" Height="35" />
 				<Button Content="Next Frame" Command="{Binding NextStoredFrameCommand}" Width="150" Height="35" />
 			</WrapPanel>
+		</Grid>
+
+		<Grid Grid.Row="2">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="40">
+				<Button Content="{Binding RewindBtnText}" Width="100" Command="{Binding RewindCommand}"/>
+				<Button Content="{Binding PlayPauseBtnText}" Width="200" Command="{Binding PlayPauseCommand}"/>
+				<Button Content="{Binding FastForwardBtnText}" Width="100" Command="{Binding FastForwardCommand}"/>
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Window>

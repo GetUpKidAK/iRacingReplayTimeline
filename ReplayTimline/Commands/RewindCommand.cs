@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ReplayTimeline
 {
-	public class StoreCurrentFrameCommand : ICommand
+	public class RewindCommand : ICommand
 	{
 		public ReplayTimelineVM ReplayTimelineVM { get; set; }
 
@@ -15,7 +15,7 @@ namespace ReplayTimeline
 		}
 
 
-		public StoreCurrentFrameCommand(ReplayTimelineVM vm)
+		public RewindCommand(ReplayTimelineVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}
@@ -27,7 +27,7 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.StoreCurrentFrame();
+			ReplayTimelineVM.RewindPlayback();
 		}
 	}
 }

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ReplayTimline
+namespace ReplayTimeline
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

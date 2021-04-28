@@ -2,7 +2,7 @@
 using System.Windows.Input;
 
 
-namespace ReplayTimline
+namespace ReplayTimeline
 {
 	public class PreviousStoredFrameCommand : ICommand
 	{

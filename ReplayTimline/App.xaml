@@ -1,7 +1,7 @@
-﻿<Application x:Class="ReplayTimline.App"
+﻿<Application x:Class="ReplayTimeline.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ReplayTimline"
+             xmlns:local="clr-namespace:ReplayTimeline"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
          

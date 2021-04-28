@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 
-namespace ReplayTimline
+namespace ReplayTimeline
 {
 	public class TimelineNode : INotifyPropertyChanged
 	{

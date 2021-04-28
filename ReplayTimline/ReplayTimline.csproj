@@ -61,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\FastForwardCommand.cs" />
+    <Compile Include="Commands\PlayPauseCommand.cs" />
+    <Compile Include="Commands\RewindCommand.cs" />
     <Compile Include="Model\Camera.cs" />
     <Compile Include="Commands\NextStoredFrameCommand.cs" />
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />

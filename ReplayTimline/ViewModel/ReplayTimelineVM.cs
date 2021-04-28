@@ -6,7 +6,7 @@ using System.Linq;
 using iRacingSdkWrapper;
 
 
-namespace ReplayTimline
+namespace ReplayTimeline
 {
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
@@ -16,18 +16,26 @@ namespace ReplayTimline
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
+
+		private TimelineNode _currentTimelineNode;
+		public TimelineNode CurrentTimelineNode
+		{
+			get { return _currentTimelineNode; }
+			set { _currentTimelineNode = value; OnPropertyChanged("CurrentTimelineNode"); }
+		}
+
 		private Driver _currentDriver;
 		public Driver CurrentDriver
 		{
 			get { return _currentDriver; }
-			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); }
+			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); DriverChanged(); }
 		}
 
 		private Camera _currentCamera;
 		public Camera CurrentCamera
 		{
 			get { return _currentCamera; }
-			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); }
+			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); CameraChanged(); }
 		}
 
 		private int _currentFrame;
@@ -37,9 +45,46 @@ namespace ReplayTimline
 			set { _currentFrame = value; OnPropertyChanged("CurrentFrame"); }
 		}
 
+		private int m_CurrentPlaybackSpeed;
+		private int CurrentPlaybackSpeed
+		{
+			get => m_CurrentPlaybackSpeed;
+			set
+			{
+				m_CurrentPlaybackSpeed = value;
+				if (m_CurrentPlaybackSpeed > 16) m_CurrentPlaybackSpeed = 16;
+				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
+				UpdatePlaybackButtonText();
+			}
+		}
+
+		private string _playPauseBtnText;
+		public string PlayPauseBtnText
+		{
+			get { return _playPauseBtnText; }
+			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
+		}
+
+		private string _fastForwardBtnText;
+		public string FastForwardBtnText
+		{
+			get { return _fastForwardBtnText; }
+			set { _fastForwardBtnText = value; OnPropertyChanged("FastForwardBtnText"); }
+		}
+
+		private string _rewindBtnText;
+		public string RewindBtnText
+		{
+			get { return _rewindBtnText; }
+			set { _rewindBtnText = value; OnPropertyChanged("RewindBtnText"); }
+		}
+
 		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
+		public PlayPauseCommand PlayPauseCommand { get; set; }
+		public RewindCommand RewindCommand { get; set; }
+		public FastForwardCommand FastForwardCommand { get; set; }
 
 		public TestCommand TestCommand { get; set; }
 
@@ -68,6 +113,10 @@ namespace ReplayTimline
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
 
+			PlayPauseCommand = new PlayPauseCommand(this);
+			RewindCommand = new RewindCommand(this);
+			FastForwardCommand = new FastForwardCommand(this);
+
 			TestCommand = new TestCommand(this);
 		}
 
@@ -75,7 +124,8 @@ namespace ReplayTimline
 		{
 			m_TelemetryCache = e.TelemetryInfo;
 
-			CurrentFrame = m_TelemetryCache.ReplayFrameNum.Value;
+			CurrentFrame = e.TelemetryInfo.ReplayFrameNum.Value;
+			CurrentPlaybackSpeed = e.TelemetryInfo.ReplayPlaySpeed.Value;
 		}
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
@@ -184,6 +234,102 @@ namespace ReplayTimline
 			//CurrentCamera = cachedCurrentCamera;
 		}
 
+		public void PlayPauseToggle()
+		{
+			if (CurrentPlaybackSpeed == 0)
+			{
+				CurrentPlaybackSpeed = 1;
+
+				ChangePlaybackSpeed();
+			}
+			else
+			{
+				CurrentPlaybackSpeed = 0;
+
+				ChangePlaybackSpeed();
+			}
+		}
+
+		public void RewindPlayback()
+		{
+			if (CurrentPlaybackSpeed < 0)
+			{
+				CurrentPlaybackSpeed *= 2;
+			}
+			else
+			{
+				CurrentPlaybackSpeed = -1;
+			}
+
+			ChangePlaybackSpeed();
+		}
+
+		public void FastForwardPlayback()
+		{
+			if (CurrentPlaybackSpeed > 0)
+			{
+				CurrentPlaybackSpeed *= 2;
+			}
+			else
+			{
+				CurrentPlaybackSpeed = 2;
+			}
+
+			ChangePlaybackSpeed();
+		}
+
+		private void ChangePlaybackSpeed()
+		{
+			m_Wrapper.Replay.SetPlaybackSpeed(CurrentPlaybackSpeed);
+		}
+
+		private void UpdatePlaybackButtonText()
+		{
+			PlayPauseBtnText = CurrentPlaybackSpeed != 0 ? "Pause" : "Play";
+
+			if (CurrentPlaybackSpeed > 0)
+			{
+				RewindBtnText = "<<";
+				FastForwardBtnText = ">>";
+
+				if (CurrentPlaybackSpeed > 1)
+				{
+					FastForwardBtnText = $"{CurrentPlaybackSpeed}x";
+				}
+			}
+			else
+			{
+				RewindBtnText = "<<";
+				FastForwardBtnText = ">>";
+
+				if (CurrentPlaybackSpeed < -1)
+				{
+					RewindBtnText = $"{-CurrentPlaybackSpeed}x";
+				}
+			}
+		}
+
+		private void DriverChanged()
+		{
+			if (CurrentDriver == null)
+				return;
+
+			m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id);
+		}
+
+		private void CameraChanged()
+		{
+			if (CurrentCamera == null)
+				return;
+
+			if (CurrentDriver == null)
+				m_Wrapper.Camera.SwitchGroup(CurrentCamera.GroupNum);
+			else
+			{
+				m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id, CurrentCamera.GroupNum);
+			}
+		}
+
 		public void StoreCurrentFrame()
 		{
 			if (m_TelemetryCache == null)
@@ -199,10 +345,13 @@ namespace ReplayTimline
 				newNode.Camera = CurrentCamera;
 
 				TimelineNodes.Add(newNode);
+
+				CurrentTimelineNode = newNode;
 			}
 
 			// Simple version of sorting for now.
 			var sortedTimeline = TimelineNodes.OrderBy(n => n.Frame).ToList();
+			var cachedNode = CurrentTimelineNode;
 
 			TimelineNodes.Clear();
 
@@ -210,6 +359,8 @@ namespace ReplayTimline
 			{
 				TimelineNodes.Add(node);
 			}
+
+			CurrentTimelineNode = cachedNode;
 		}
 
 		public void GoToPreviousStoredFrame()
@@ -235,6 +386,7 @@ namespace ReplayTimline
 
 				if (targetNode != null)
 				{
+					CurrentTimelineNode = targetNode;
 					m_Wrapper.Replay.SetPosition(targetNode.Frame);
 				}
 			}
@@ -263,6 +415,7 @@ namespace ReplayTimline
 
 				if (targetNode != null)
 				{
+					CurrentTimelineNode = targetNode;
 					m_Wrapper.Replay.SetPosition(targetNode.Frame);
 				}
 			}
