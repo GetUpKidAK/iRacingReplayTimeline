@@ -27,7 +27,7 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.JumpToNextLap();
+			ReplayTimelineVM.JumpToEvent(iRSDKSharp.ReplaySearchModeTypes.NextLap);
 		}
 	}
 }

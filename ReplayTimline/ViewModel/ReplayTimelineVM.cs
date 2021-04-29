@@ -352,24 +352,9 @@ namespace ReplayTimeline
 			}
 		}
 
-		public void JumpToNextLap()
+		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
-			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.NextLap);
-		}
-
-		public void JumpToPreviousLap()
-		{
-			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.PreviousLap);
-		}
-
-		public void JumpToNextSession()
-		{
-			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.NextSession);
-		}
-
-		public void JumpToPreviousSession()
-		{
-			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.PreviousSession);
+			m_Wrapper.Replay.Jump(replayEvent);
 		}
 
 		private void DriverChanged()
