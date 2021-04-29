@@ -13,6 +13,8 @@ namespace ReplayTimeline
 		private SdkWrapper m_Wrapper;
 		private TelemetryInfo m_TelemetryCache;
 
+		public int SessionID { get; private set; }
+
 		#region Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
@@ -165,8 +167,23 @@ namespace ReplayTimeline
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
 		{
+			YamlQuery weekendInfoQuery = e.SessionInfo["WeekendInfo"];
+			SessionID = int.Parse(weekendInfoQuery["SubSessionID"].GetValue("-1"));
+
 			ParseDrivers(e.SessionInfo);
 			ParseCameras(e.SessionInfo);
+
+			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+
+			if (loaddedProject.TimelineNodes.Count > 0)
+			{
+				TimelineNodes.Clear();
+
+				foreach (var node in loaddedProject.TimelineNodes)
+				{
+					TimelineNodes.Add(node);
+				}
+			}
 		}
 
 		private void ParseDrivers(SessionInfo sessionInfo)
@@ -424,6 +441,8 @@ namespace ReplayTimeline
 				TimelineNodes.Add(newNode);
 
 				CurrentTimelineNode = newNode;
+
+				SaveProjectChanges();
 			}
 
 			// Simple version of sorting for now.
@@ -510,6 +529,11 @@ namespace ReplayTimeline
 		private void GoToFrame(int frame)
 		{
 			m_Wrapper.Replay.SetPosition(frame);
+		}
+
+		private void SaveProjectChanges()
+		{
+			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}
 	}
 }

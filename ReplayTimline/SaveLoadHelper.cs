@@ -1,0 +1,63 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+
+namespace ReplayTimeline
+{
+	public class SaveLoadHelper
+	{
+		private const string m_ProjectSaveName = "_timeline.cfg";
+
+
+		public static void SaveProject(List<TimelineNode> nodes, int sessionID)
+		{
+			TimelineProject newProject = new TimelineProject();
+
+			newProject.SessionID = sessionID;
+			newProject.TimelineNodes = nodes;
+
+			var finalFilename = $"{sessionID}_{m_ProjectSaveName}";
+
+			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, finalFilename);
+
+			SaveToFile(saveFile, newProject);
+		}
+
+		public static TimelineProject LoadProject(int sessionID)
+		{
+			var filename = $"{sessionID}_{m_ProjectSaveName}";
+
+			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+
+			TimelineProject loadedProject = null;
+
+			if (File.Exists(saveFile))
+			{
+				try
+				{
+					string fileContents = File.ReadAllText(saveFile);
+					loadedProject = JsonConvert.DeserializeObject<TimelineProject>(fileContents);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
+			}
+
+			return loadedProject;
+		}
+
+		private static void SaveToFile<T>(string fullSavePath, T saveData)
+		{
+			string jsonOutput = JsonConvert.SerializeObject(saveData, Formatting.Indented); // TODO: Remove formatting
+
+			try { File.WriteAllText(fullSavePath, jsonOutput); }
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+		}
+	}
+}
