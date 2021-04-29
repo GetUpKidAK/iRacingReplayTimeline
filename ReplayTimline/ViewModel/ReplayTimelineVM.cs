@@ -11,7 +11,9 @@ namespace ReplayTimeline
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
 		private SdkWrapper m_Wrapper;
+		private TelemetryInfo m_TelemetryCache;
 
+		#region Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
@@ -27,11 +29,7 @@ namespace ReplayTimeline
 				OnPropertyChanged("CurrentTimelineNode");
 
 				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Frame" : "Update Frame";
-
-				if (CurrentTimelineNode != null)
-				{
-					JumpToNode(CurrentTimelineNode);
-				}
+				if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
 			}
 		}
 
@@ -118,14 +116,11 @@ namespace ReplayTimeline
 		public NextSessionCommand NextSessionCommand { get; set; }
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 
-		public TestCommand TestCommand { get; set; }
-
-
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+#endregion
 
-
-		private TelemetryInfo m_TelemetryCache;
+		public TestCommand TestCommand { get; set; }
 
 
 		public ReplayTimelineVM()
@@ -314,13 +309,11 @@ namespace ReplayTimeline
 			if (CurrentPlaybackSpeed == 0)
 			{
 				CurrentPlaybackSpeed = 1;
-
 				ChangePlaybackSpeed();
 			}
 			else
 			{
 				CurrentPlaybackSpeed = 0;
-
 				ChangePlaybackSpeed();
 			}
 		}
@@ -335,7 +328,6 @@ namespace ReplayTimeline
 			{
 				CurrentPlaybackSpeed = -1;
 			}
-
 			ChangePlaybackSpeed();
 		}
 
@@ -349,7 +341,6 @@ namespace ReplayTimeline
 			{
 				CurrentPlaybackSpeed = 2;
 			}
-
 			ChangePlaybackSpeed();
 		}
 
@@ -368,9 +359,7 @@ namespace ReplayTimeline
 				FastForwardBtnText = ">>";
 
 				if (CurrentPlaybackSpeed > 1)
-				{
 					FastForwardBtnText = $"{CurrentPlaybackSpeed}x";
-				}
 			}
 			else
 			{
@@ -378,9 +367,7 @@ namespace ReplayTimeline
 				FastForwardBtnText = ">>";
 
 				if (CurrentPlaybackSpeed < -1)
-				{
 					RewindBtnText = $"{-CurrentPlaybackSpeed}x";
-				}
 			}
 		}
 
