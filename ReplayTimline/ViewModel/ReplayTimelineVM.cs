@@ -26,6 +26,8 @@ namespace ReplayTimeline
 				_currentTimelineNode = value;
 				OnPropertyChanged("CurrentTimelineNode");
 
+				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Frame" : "Update Frame";
+
 				if (CurrentTimelineNode != null)
 				{
 					JumpToNode(CurrentTimelineNode);
@@ -51,7 +53,14 @@ namespace ReplayTimeline
 		public int CurrentFrame
 		{
 			get { return _currentFrame; }
-			set { _currentFrame = value; OnPropertyChanged("CurrentFrame"); }
+			set
+			{
+				var lastFrame = _currentFrame;
+				_currentFrame = value;
+				if (lastFrame != _currentFrame) CheckCurrentFrameForStoredNodes();
+
+				OnPropertyChanged("CurrentFrame");
+			}
 		}
 
 		private int m_CurrentPlaybackSpeed;
@@ -65,6 +74,13 @@ namespace ReplayTimeline
 				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
 				UpdatePlaybackButtonText();
 			}
+		}
+
+		private string _storeFrameBtnText;
+		public string StoreFrameBtnText
+		{
+			get { return _storeFrameBtnText; }
+			set { _storeFrameBtnText = value; OnPropertyChanged("StoreFrameBtnText"); }
 		}
 
 		private string _playPauseBtnText;
@@ -121,6 +137,8 @@ namespace ReplayTimeline
 			TimelineNodes = new ObservableCollection<TimelineNode>();
 			Drivers = new ObservableCollection<Driver>();
 			Cameras = new ObservableCollection<Camera>();
+
+			StoreFrameBtnText = "Store Frame";
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
@@ -251,9 +269,19 @@ namespace ReplayTimeline
 			// Replace previous camera once list is rebuilt.
 			//CurrentCamera = cachedCurrentCamera;
 		}
+		
+		private void CheckCurrentFrameForStoredNodes()
+		{
+			var foundNode = TimelineNodes.FirstOrDefault(n => n.Frame == CurrentFrame);
+
+			if (CurrentTimelineNode != foundNode)
+				CurrentTimelineNode = foundNode;
+		}
 
 		private void RunTimeline()
 		{
+			//TODO: Enable playback mode 
+
 			if (CurrentPlaybackSpeed == 1)
 			{
 				if (TimelineNodes.Count > 0)
@@ -363,6 +391,11 @@ namespace ReplayTimeline
 				return;
 
 			m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id);
+
+			if (CurrentTimelineNode != null)
+			{
+				CurrentTimelineNode.Driver = CurrentDriver;
+			}
 		}
 
 		private void CameraChanged()
@@ -375,6 +408,11 @@ namespace ReplayTimeline
 			else
 			{
 				m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id, CurrentCamera.GroupNum);
+			}
+
+			if (CurrentTimelineNode != null)
+			{
+				CurrentTimelineNode.Camera = CurrentCamera;
 			}
 		}
 

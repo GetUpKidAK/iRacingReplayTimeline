@@ -22,7 +22,10 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			return true;
+			bool driverSelected = ReplayTimelineVM.CurrentDriver != null;
+			bool cameraSelected = ReplayTimelineVM.CurrentCamera != null;
+
+			return driverSelected && cameraSelected;
 		}
 
 		public void Execute(object parameter)
