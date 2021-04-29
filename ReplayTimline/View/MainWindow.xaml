@@ -14,8 +14,7 @@
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="120"/>
-			<RowDefinition Height="80"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
 		<Grid>
@@ -40,46 +39,42 @@
 
 		<Grid Grid.Row="1">
 			<Grid.RowDefinitions>
+				<RowDefinition Height="0.5*"/>
+				<RowDefinition Height="0.6*"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="2*"/>
-				<RowDefinition Height="2*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<WrapPanel HorizontalAlignment="Center">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 0">
 				<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 				<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
-			</WrapPanel>
+			</StackPanel>
 
-			<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-				<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="250" Margin="5"/>
-				<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="250" Margin="5"/>
-			</WrapPanel>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="25">
+				<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="250"/>
+				<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="250"/>
+			</StackPanel>
 
-			<WrapPanel Grid.Row="2" HorizontalAlignment="Center">
-				<Button Content="Prev Frame" Command="{Binding PreviousStoredFrameCommand}" Width="150" Height="35" />
-				<Button Content="Store Frame" Command="{Binding StoreCurrentFrameCommand}" Width="150" Height="35" />
-				<Button Content="Next Frame" Command="{Binding NextStoredFrameCommand}" Width="150" Height="35" />
-			</WrapPanel>
-		</Grid>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="35">
+				<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
+				<Button Content="Store Frame" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
+				<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+			</StackPanel>
 
-		<Grid Grid.Row="2">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-			
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" Height="35">
 				<Button Content="{Binding RewindBtnText}" Width="60" Command="{Binding RewindCommand}"/>
 				<Button Content="{Binding PlayPauseBtnText}" Width="140" Command="{Binding PlayPauseCommand}"/>
 				<Button Content="{Binding FastForwardBtnText}" Width="60" Command="{Binding FastForwardCommand}"/>
 			</StackPanel>
 
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" >
-				<Button Content="Prev Session" Width="100" Command="{Binding PreviousSessionCommand}"/>
-				<Button Content="Next Session" Width="100" Command="{Binding NextSessionCommand}" Margin="0 0 10 0"/>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4"  Height="35">
+				<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
+				<Button Content="Next Session" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
 
-				<Button Content="Prev Lap" Width="100" Command="{Binding PreviousLapCommand}"/>
-				<Button Content="Next Lap" Width="100" Command="{Binding NextLapCommand}" Margin="0 0 10 0"/>
+				<Button Content="Prev Lap" Command="{Binding PreviousLapCommand}" Width="100"/>
+				<Button Content="Next Lap" Command="{Binding NextLapCommand}" Width="100" Margin="0 0 10 0"/>
 			</StackPanel>
 		</Grid>
 	</Grid>
