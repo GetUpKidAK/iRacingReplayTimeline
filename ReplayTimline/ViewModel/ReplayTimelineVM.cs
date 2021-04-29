@@ -107,6 +107,7 @@ namespace ReplayTimeline
 		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
+		public DeleteStoredFrameCommand DeleteStoredFrameCommand { get; set; }
 		public PlayPauseCommand PlayPauseCommand { get; set; }
 		public RewindCommand RewindCommand { get; set; }
 		public FastForwardCommand FastForwardCommand { get; set; }
@@ -143,6 +144,7 @@ namespace ReplayTimeline
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
+			DeleteStoredFrameCommand = new DeleteStoredFrameCommand(this);
 			PlayPauseCommand = new PlayPauseCommand(this);
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
@@ -504,6 +506,15 @@ namespace ReplayTimeline
 					CurrentTimelineNode = targetNode;
 					GoToFrame(targetNode.Frame);
 				}
+			}
+		}
+
+		public void DeleteStoredFrame()
+		{
+			if (CurrentTimelineNode != null)
+			{
+				TimelineNodes.Remove(CurrentTimelineNode);
+				CurrentTimelineNode = null;
 			}
 		}
 

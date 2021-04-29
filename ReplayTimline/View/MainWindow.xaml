@@ -60,6 +60,11 @@
 				<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
 				<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
 				<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+
+				
+			</StackPanel>
+			<StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Height="35">
+				<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="0 0 20 0"/>
 			</StackPanel>
 
 
