@@ -63,10 +63,23 @@
 		</Grid>
 
 		<Grid Grid.Row="2">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="40">
-				<Button Content="{Binding RewindBtnText}" Width="100" Command="{Binding RewindCommand}"/>
-				<Button Content="{Binding PlayPauseBtnText}" Width="200" Command="{Binding PlayPauseCommand}"/>
-				<Button Content="{Binding FastForwardBtnText}" Width="100" Command="{Binding FastForwardCommand}"/>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+				<Button Content="{Binding RewindBtnText}" Width="60" Command="{Binding RewindCommand}"/>
+				<Button Content="{Binding PlayPauseBtnText}" Width="140" Command="{Binding PlayPauseCommand}"/>
+				<Button Content="{Binding FastForwardBtnText}" Width="60" Command="{Binding FastForwardCommand}"/>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" >
+				<Button Content="Prev Session" Width="100" Command="{Binding PreviousSessionCommand}"/>
+				<Button Content="Next Session" Width="100" Command="{Binding NextSessionCommand}" Margin="0 0 10 0"/>
+
+				<Button Content="Prev Lap" Width="100" Command="{Binding PreviousLapCommand}"/>
+				<Button Content="Next Lap" Width="100" Command="{Binding NextLapCommand}" Margin="0 0 10 0"/>
 			</StackPanel>
 		</Grid>
 	</Grid>

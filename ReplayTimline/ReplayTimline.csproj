@@ -38,6 +38,10 @@
     <Reference Include="iRacingSdkWrapper">
       <HintPath>..\..\iRacingSdkWrapper\iRacingSdkWrapper\bin\Debug\iRacingSdkWrapper.dll</HintPath>
     </Reference>
+    <Reference Include="iRSDKSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\iRacingSdkWrapper\iRacingSdkWrapper\bin\Debug\iRSDKSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -62,7 +66,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\FastForwardCommand.cs" />
+    <Compile Include="Commands\NextLapCommand.cs" />
+    <Compile Include="Commands\NextSessionCommand.cs" />
     <Compile Include="Commands\PlayPauseCommand.cs" />
+    <Compile Include="Commands\PreviousLapCommand.cs" />
+    <Compile Include="Commands\PreviousSessionCommand.cs" />
     <Compile Include="Commands\RewindCommand.cs" />
     <Compile Include="Model\Camera.cs" />
     <Compile Include="Commands\NextStoredFrameCommand.cs" />

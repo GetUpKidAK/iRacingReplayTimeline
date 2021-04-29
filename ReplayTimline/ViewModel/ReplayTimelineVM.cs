@@ -28,9 +28,7 @@ namespace ReplayTimeline
 
 				if (CurrentTimelineNode != null)
 				{
-					CurrentDriver = CurrentTimelineNode.Driver;
-					CurrentCamera = CurrentTimelineNode.Camera;
-					GoToFrame(CurrentTimelineNode.Frame);
+					JumpToNode(CurrentTimelineNode);
 				}
 			}
 		}
@@ -96,6 +94,10 @@ namespace ReplayTimeline
 		public PlayPauseCommand PlayPauseCommand { get; set; }
 		public RewindCommand RewindCommand { get; set; }
 		public FastForwardCommand FastForwardCommand { get; set; }
+		public NextLapCommand NextLapCommand { get; set; }
+		public PreviousLapCommand PreviousLapCommand { get; set; }
+		public NextSessionCommand NextSessionCommand { get; set; }
+		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 
 		public TestCommand TestCommand { get; set; }
 
@@ -126,6 +128,10 @@ namespace ReplayTimeline
 			PlayPauseCommand = new PlayPauseCommand(this);
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
+			NextLapCommand = new NextLapCommand(this);
+			PreviousLapCommand = new PreviousLapCommand(this);
+			NextSessionCommand = new NextSessionCommand(this);
+			PreviousSessionCommand = new PreviousSessionCommand(this);
 
 			TestCommand = new TestCommand(this);
 		}
@@ -252,14 +258,24 @@ namespace ReplayTimeline
 			{
 				if (TimelineNodes.Count > 0)
 				{
-					var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
+					var activeNode = TimelineNodes.FirstOrDefault(n => n.Frame == CurrentFrame);
 
-					// TODO: Timeline stuff!
+					if (activeNode != null)
+					{
+						JumpToNode(activeNode);
+					}
 				}
 			}
 		}
 
-		
+		private void JumpToNode(TimelineNode node)
+		{
+			CurrentDriver = node.Driver;
+			CurrentCamera = node.Camera;
+
+			if (CurrentPlaybackSpeed == 0)
+				GoToFrame(node.Frame);
+		}
 
 		public void PlayPauseToggle()
 		{
@@ -334,6 +350,26 @@ namespace ReplayTimeline
 					RewindBtnText = $"{-CurrentPlaybackSpeed}x";
 				}
 			}
+		}
+
+		public void JumpToNextLap()
+		{
+			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.NextLap);
+		}
+
+		public void JumpToPreviousLap()
+		{
+			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.PreviousLap);
+		}
+
+		public void JumpToNextSession()
+		{
+			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.NextSession);
+		}
+
+		public void JumpToPreviousSession()
+		{
+			m_Wrapper.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.PreviousSession);
 		}
 
 		private void DriverChanged()
