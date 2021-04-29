@@ -64,15 +64,17 @@ namespace ReplayTimeline
 		}
 
 		private int m_CurrentPlaybackSpeed;
-		private int CurrentPlaybackSpeed
+		public int CurrentPlaybackSpeed
 		{
 			get => m_CurrentPlaybackSpeed;
-			set
+			private set
 			{
 				m_CurrentPlaybackSpeed = value;
 				if (m_CurrentPlaybackSpeed > 16) m_CurrentPlaybackSpeed = 16;
 				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
 				UpdatePlaybackButtonText();
+
+				OnPropertyChanged("CurrentPlaybackSpeed");
 			}
 		}
 

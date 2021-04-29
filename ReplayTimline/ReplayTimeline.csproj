@@ -72,7 +72,7 @@
     <Compile Include="Commands\PreviousLapCommand.cs" />
     <Compile Include="Commands\PreviousSessionCommand.cs" />
     <Compile Include="Commands\RewindCommand.cs" />
-    <Compile Include="DeleteStoredFrameCommand.cs" />
+    <Compile Include="Commands\DeleteStoredFrameCommand.cs" />
     <Compile Include="Model\Camera.cs" />
     <Compile Include="Commands\NextStoredFrameCommand.cs" />
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
