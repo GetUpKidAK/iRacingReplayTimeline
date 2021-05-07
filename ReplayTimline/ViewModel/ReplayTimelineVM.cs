@@ -11,8 +11,7 @@ namespace ReplayTimeline
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
-
-		private TelemetryInfo m_TelemetryCache;
+		private int m_TargetFrame = -1;
 
 		public int SessionID { get; private set; }
 
@@ -58,8 +57,11 @@ namespace ReplayTimeline
 			{
 				var lastFrame = _currentFrame;
 				_currentFrame = value;
-				if (lastFrame != _currentFrame) CheckCurrentFrameForStoredNodes();
 
+				if (_currentFrame == m_TargetFrame || m_TargetFrame == -1)
+					if (lastFrame != _currentFrame) CheckCurrentFrameForStoredNodes();
+
+				if (_currentFrame == m_TargetFrame) m_TargetFrame = -1;
 				OnPropertyChanged("CurrentFrame");
 			}
 		}
@@ -315,9 +317,6 @@ namespace ReplayTimeline
 
 		public void StoreCurrentFrame()
 		{
-			if (m_TelemetryCache == null)
-				return;
-
 			var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
 
 			if (!timelineFrames.Contains(CurrentFrame))
@@ -350,9 +349,6 @@ namespace ReplayTimeline
 
 		public void GoToPreviousStoredFrame()
 		{
-			if (m_TelemetryCache == null)
-				return;
-
 			if (TimelineNodes.Count > 0)
 			{
 				TimelineNode targetNode = null;
@@ -379,9 +375,6 @@ namespace ReplayTimeline
 
 		public void GoToNextStoredFrame()
 		{
-			if (m_TelemetryCache == null)
-				return;
-
 			if (TimelineNodes.Count > 0)
 			{
 				TimelineNode targetNode = null;
@@ -417,6 +410,8 @@ namespace ReplayTimeline
 
 		private void GoToFrame(int frame)
 		{
+			m_TargetFrame = frame;
+
 			m_SDKHelper.GoToFrame(frame);
 		}
 
