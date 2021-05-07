@@ -10,8 +10,11 @@ namespace ReplayTimeline
 {
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
-		private SdkWrapper m_Wrapper;
+		private SDKHelper m_SDKHelper;
+
 		private TelemetryInfo m_TelemetryCache;
+
+		public int SessionID { get; private set; }
 
 		#region Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
@@ -104,6 +107,11 @@ namespace ReplayTimeline
 			set { _rewindBtnText = value; OnPropertyChanged("RewindBtnText"); }
 		}
 
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		#endregion
+
+		#region Commands
 		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
@@ -115,22 +123,14 @@ namespace ReplayTimeline
 		public PreviousLapCommand PreviousLapCommand { get; set; }
 		public NextSessionCommand NextSessionCommand { get; set; }
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-#endregion
+		#endregion
 
 		public TestCommand TestCommand { get; set; }
 
 
 		public ReplayTimelineVM()
 		{
-			m_Wrapper = new SdkWrapper();
-
-			m_Wrapper.TelemetryUpdated += TelemetryUpdated;
-			m_Wrapper.SessionInfoUpdated += SessionInfoUpdated;
-
-			m_Wrapper.Start();
+			m_SDKHelper = new SDKHelper(this);
 
 			TimelineNodes = new ObservableCollection<TimelineNode>();
 			Drivers = new ObservableCollection<Driver>();
@@ -153,120 +153,42 @@ namespace ReplayTimeline
 			TestCommand = new TestCommand(this);
 		}
 
-		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
+		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
-			m_TelemetryCache = e.TelemetryInfo;
+			//m_TelemetryCache = e.TelemetryInfo;
 
-			CurrentFrame = e.TelemetryInfo.ReplayFrameNum.Value;
-			CurrentPlaybackSpeed = e.TelemetryInfo.ReplayPlaySpeed.Value;
-
-			RunTimeline();
+			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
+			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 		}
 
-		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
+		public void SessionInfoUpdated(SessionInfo sessionInfo)
 		{
-			ParseDrivers(e.SessionInfo);
-			ParseCameras(e.SessionInfo);
-		}
-
-		private void ParseDrivers(SessionInfo sessionInfo)
-		{
-			// Number of starters (Live only)
-			YamlQuery weekendOptionsQuery = sessionInfo["WeekendInfo"]["WeekendOptions"];
-			var starters = weekendOptionsQuery["NumStarters"].GetValue();
-			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
-
-			var newDrivers = new List<Driver>();
-
-			for (int i = 0; i < currentStarters; i++)
-			{
-				YamlQuery query = sessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
-				Driver newDriver;
-
-				string driverName = query["UserName"].GetValue("");
-
-				if (!string.IsNullOrEmpty(driverName) && driverName != "Pace Car")
-				{
-					// Get driver if driver is in previous list
-					newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
-
-					// If not...
-					if (newDriver == null)
-					{
-						// Populate driver info
-						newDriver = new Driver();
-						newDriver.Id = i;
-						newDriver.Name = driverName;
-						newDriver.CustomerId = int.Parse(query["UserID"].GetValue("0")); // default value 0
-						newDriver.Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'); // trim the quotes
-						newDriver.Rating = int.Parse(query["IRating"].GetValue("0"));
-					}
-
-					// Add to drivers list
-					newDrivers.Add(newDriver);
-				}
-			}
-
-			// Cache current driver, needed for live sessions
-			//var cachedCurrentDriver = CurrentDriver;
-			// Replace old list of drivers with new list of drivers and update the grid
+			var sessionDrivers = SessionInfoHelper.GetSessionDrivers(sessionInfo, Drivers);
 			Drivers.Clear();
-			foreach (var newDriver in newDrivers)
+			foreach (var newDriver in sessionDrivers)
 			{
 				Drivers.Add(newDriver);
 			}
-			// Replace previous driver once list is rebuilt.
-			//CurrentDriver = cachedCurrentDriver;
-		}
 
-		private void ParseCameras(SessionInfo sessionInfo)
-		{
-			int id = 1;
-			Camera newCam;
-
-			var newCameras = new List<Camera>();
-
-			// Loop through cameras until none are found anymore
-			do
-			{
-				newCam = null;
-				YamlQuery query = sessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
-
-				// Get Camera Group name
-				string groupName = query["GroupName"].GetValue("");
-
-				if (!string.IsNullOrEmpty(groupName))
-				{
-					// Get Camera if it is in previous list
-					newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
-
-					// Otherwise...
-					if (newCam == null)
-					{
-						// If group name is found, create a new camera
-						newCam = new Camera();
-						newCam.GroupNum = id;
-						newCam.GroupName = groupName;
-					}
-					newCameras.Add(newCam);
-
-					id++;
-				}
-			}
-			while (newCam != null);
-
-			// Cache current camera, needed for live sessions
-			//var cachedCurrentCamera = CurrentCamera;
-
-			// Replace old list of drivers with new list of drivers and update the grid
+			var sessionCameras = SessionInfoHelper.GetSessionCameras(sessionInfo, Cameras);
 			Cameras.Clear();
-			foreach (var newCamera in newCameras)
+			foreach (var newCamera in sessionCameras)
 			{
 				Cameras.Add(newCamera);
 			}
 
-			// Replace previous camera once list is rebuilt.
-			//CurrentCamera = cachedCurrentCamera;
+			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
+
+			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+			if (loaddedProject.TimelineNodes.Count > 0)
+			{
+				TimelineNodes.Clear();
+
+				foreach (var node in loaddedProject.TimelineNodes)
+				{
+					TimelineNodes.Add(node);
+				}
+			}
 		}
 		
 		private void CheckCurrentFrameForStoredNodes()
@@ -275,24 +197,6 @@ namespace ReplayTimeline
 
 			if (CurrentTimelineNode != foundNode)
 				CurrentTimelineNode = foundNode;
-		}
-
-		private void RunTimeline()
-		{
-			//TODO: Enable playback mode 
-
-			if (CurrentPlaybackSpeed == 1)
-			{
-				if (TimelineNodes.Count > 0)
-				{
-					var activeNode = TimelineNodes.FirstOrDefault(n => n.Frame == CurrentFrame);
-
-					if (activeNode != null)
-					{
-						JumpToNode(activeNode);
-					}
-				}
-			}
 		}
 
 		private void JumpToNode(TimelineNode node)
@@ -346,7 +250,7 @@ namespace ReplayTimeline
 
 		private void ChangePlaybackSpeed()
 		{
-			m_Wrapper.Replay.SetPlaybackSpeed(CurrentPlaybackSpeed);
+			m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
 		}
 
 		private void UpdatePlaybackButtonText()
@@ -373,7 +277,7 @@ namespace ReplayTimeline
 
 		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
-			m_Wrapper.Replay.Jump(replayEvent);
+			m_SDKHelper.JumpToEvent(replayEvent);
 		}
 
 		private void DriverChanged()
@@ -381,7 +285,7 @@ namespace ReplayTimeline
 			if (CurrentDriver == null)
 				return;
 
-			m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id);
+			m_SDKHelper.SetDriver(CurrentDriver);
 
 			if (CurrentTimelineNode != null)
 			{
@@ -395,10 +299,12 @@ namespace ReplayTimeline
 				return;
 
 			if (CurrentDriver == null)
-				m_Wrapper.Camera.SwitchGroup(CurrentCamera.GroupNum);
+			{
+				m_SDKHelper.SetCamera(CurrentCamera);
+			}
 			else
 			{
-				m_Wrapper.Camera.SwitchToCar(CurrentDriver.Id, CurrentCamera.GroupNum);
+				m_SDKHelper.SetDriver(CurrentDriver, CurrentCamera);
 			}
 
 			if (CurrentTimelineNode != null)
@@ -424,6 +330,8 @@ namespace ReplayTimeline
 				TimelineNodes.Add(newNode);
 
 				CurrentTimelineNode = newNode;
+
+				SaveProjectChanges();
 			}
 
 			// Simple version of sorting for now.
@@ -509,7 +417,12 @@ namespace ReplayTimeline
 
 		private void GoToFrame(int frame)
 		{
-			m_Wrapper.Replay.SetPosition(frame);
+			m_SDKHelper.GoToFrame(frame);
+		}
+
+		private void SaveProjectChanges()
+		{
+			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}
 	}
 }

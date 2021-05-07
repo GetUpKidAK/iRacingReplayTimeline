@@ -42,6 +42,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\iRacingSdkWrapper\iRacingSdkWrapper\bin\Debug\iRSDKSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -78,9 +81,13 @@
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="Model\TimelineNode.cs" />
+    <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
+    <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />
+    <Compile Include="Model\TimelineProject.cs" />
     <Compile Include="ViewModel\ReplayTimelineVM.cs" />
     <Compile Include="Commands\StoreCurrentFrameCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
+    <Compile Include="ViewModel\Helpers\WrapperHelper.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,6 +119,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
