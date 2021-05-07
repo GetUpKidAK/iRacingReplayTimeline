@@ -8,7 +8,7 @@ namespace ReplayTimeline
 {
 	public class SaveLoadHelper
 	{
-		private const string m_ProjectSaveName = "_timeline.cfg";
+		private const string m_ProjectExtension = "_timeline.timeline";
 
 
 		public static void SaveProject(List<TimelineNode> nodes, int sessionID)
@@ -18,7 +18,7 @@ namespace ReplayTimeline
 			newProject.SessionID = sessionID;
 			newProject.TimelineNodes = nodes;
 
-			var finalFilename = $"{sessionID}_{m_ProjectSaveName}";
+			var finalFilename = $"{sessionID}{m_ProjectExtension}";
 
 			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, finalFilename);
 
@@ -27,7 +27,7 @@ namespace ReplayTimeline
 
 		public static TimelineProject LoadProject(int sessionID)
 		{
-			var filename = $"{sessionID}_{m_ProjectSaveName}";
+			var filename = $"{sessionID}{m_ProjectExtension}";
 
 			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
 
