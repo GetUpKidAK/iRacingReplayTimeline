@@ -6,7 +6,8 @@
 		xmlns:vm="clr-namespace:ReplayTimeline"
         xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
         Title="iRacing Replay Timeline" Height="450" Width="600"
-		WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+		WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+		Closing="Window_Closing">
 	<Window.DataContext>
 		<vm:ReplayTimelineVM/>
 	</Window.DataContext>

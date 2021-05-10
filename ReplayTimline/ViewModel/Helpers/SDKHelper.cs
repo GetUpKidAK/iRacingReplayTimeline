@@ -28,10 +28,16 @@ namespace ReplayTimeline
 			m_Wrapper.Start();
 		}
 
+		public void Stop()
+		{
+			m_Wrapper.TelemetryUpdated -= TelemetryUpdated;
+			m_Wrapper.SessionInfoUpdated -= SessionInfoUpdated;
+
+			m_Wrapper.Stop();
+		}
+
 		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
 		{
-			//TelemetryCache = e.TelemetryInfo;
-
 			_timelineVM.TelemetryUpdated(e.TelemetryInfo);
 		}
 

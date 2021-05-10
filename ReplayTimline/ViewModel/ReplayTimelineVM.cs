@@ -156,6 +156,14 @@ namespace ReplayTimeline
 			TestCommand = new TestCommand(this);
 		}
 
+		public void ApplicationClosing()
+		{
+			m_SDKHelper.Stop();
+
+			App.Current.Shutdown();
+			Environment.Exit(0);
+		}
+
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
