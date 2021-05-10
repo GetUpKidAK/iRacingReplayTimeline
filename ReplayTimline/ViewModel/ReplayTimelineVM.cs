@@ -11,6 +11,7 @@ namespace ReplayTimeline
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
+		private bool m_ReplayInitialised = false;
 		private int m_TargetFrame = -1;
 
 		public int SessionID { get; private set; }
@@ -157,8 +158,6 @@ namespace ReplayTimeline
 
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
-			//m_TelemetryCache = e.TelemetryInfo;
-
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 		}
@@ -181,15 +180,20 @@ namespace ReplayTimeline
 
 			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
 
-			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
-			if (loaddedProject.TimelineNodes.Count > 0)
+			if (!m_ReplayInitialised)
 			{
-				TimelineNodes.Clear();
-
-				foreach (var node in loaddedProject.TimelineNodes)
+				var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+				if (loaddedProject.TimelineNodes.Count > 0)
 				{
-					TimelineNodes.Add(node);
+					TimelineNodes.Clear();
+
+					foreach (var node in loaddedProject.TimelineNodes)
+					{
+						TimelineNodes.Add(node);
+					}
 				}
+
+				m_ReplayInitialised = true;
 			}
 		}
 		
@@ -318,6 +322,7 @@ namespace ReplayTimeline
 		public void StoreCurrentFrame()
 		{
 			var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
+			TimelineNode storedNode = null;
 
 			if (!timelineFrames.Contains(CurrentFrame))
 			{
@@ -327,15 +332,13 @@ namespace ReplayTimeline
 				newNode.Camera = CurrentCamera;
 
 				TimelineNodes.Add(newNode);
-
-				CurrentTimelineNode = newNode;
+				storedNode = newNode;
 
 				SaveProjectChanges();
 			}
 
 			// Simple version of sorting for now.
 			var sortedTimeline = TimelineNodes.OrderBy(n => n.Frame).ToList();
-			var cachedNode = CurrentTimelineNode;
 
 			TimelineNodes.Clear();
 
@@ -344,7 +347,7 @@ namespace ReplayTimeline
 				TimelineNodes.Add(node);
 			}
 
-			CurrentTimelineNode = cachedNode;
+			CurrentTimelineNode = storedNode;
 		}
 
 		public void GoToPreviousStoredFrame()

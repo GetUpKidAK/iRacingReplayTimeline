@@ -31,7 +31,7 @@ namespace ReplayTimeline
 
 			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
 
-			TimelineProject loadedProject = null;
+			TimelineProject loadedProject = new TimelineProject();
 
 			if (File.Exists(saveFile))
 			{
