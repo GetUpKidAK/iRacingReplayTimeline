@@ -28,7 +28,7 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.CurrentPlaybackSpeed = ReplayTimelineVM.CurrentPlaybackSpeed > 0 ? 1 : -1;
+			ReplayTimelineVM.CurrentPlaybackSpeed = ReplayTimelineVM.CurrentPlaybackSpeed >= 0 ? 1 : -1;
 
 			ReplayTimelineVM.ChangePlaybackSpeed();
 		}

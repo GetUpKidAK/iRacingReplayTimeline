@@ -79,10 +79,6 @@
 				<Button Content="{Binding PlayPauseBtnText}" Width="140" Command="{Binding PlayPauseCommand}"/>
 				<Button Content="{Binding FastForwardBtnText}" Width="60" Command="{Binding FastForwardCommand}"/>
 			</StackPanel>
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Height="35">
-				<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="0 0 50 0"/>
-			</StackPanel>
-			
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="4"  Height="35">
 				<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
