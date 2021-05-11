@@ -9,6 +9,7 @@ namespace ReplayTimeline
 	public class SaveLoadHelper
 	{
 		private const string m_ProjectExtension = "_timeline.timeline";
+		private const Formatting m_FileFormatting = Formatting.Indented;
 
 
 		public static void SaveProject(List<TimelineNode> nodes, int sessionID)
@@ -51,7 +52,7 @@ namespace ReplayTimeline
 
 		private static void SaveToFile<T>(string fullSavePath, T saveData)
 		{
-			string jsonOutput = JsonConvert.SerializeObject(saveData, Formatting.Indented); // TODO: Remove formatting
+			string jsonOutput = JsonConvert.SerializeObject(saveData, m_FileFormatting);
 
 			try { File.WriteAllText(fullSavePath, jsonOutput); }
 			catch (Exception e)
