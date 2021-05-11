@@ -66,6 +66,14 @@ namespace ReplayTimeline
 			}
 		}
 
+		private int _finalFrame;
+		public int FinalFrame
+		{
+			get { return _finalFrame; }
+			set { _finalFrame = value; OnPropertyChanged("FinalFrame"); }
+		}
+
+
 		private int m_CurrentPlaybackSpeed;
 		public int CurrentPlaybackSpeed
 		{
@@ -177,6 +185,7 @@ namespace ReplayTimeline
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
+			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 		}
 
@@ -434,6 +443,8 @@ namespace ReplayTimeline
 			{
 				TimelineNodes.Remove(CurrentTimelineNode);
 				CurrentTimelineNode = null;
+
+				SaveProjectChanges();
 			}
 		}
 

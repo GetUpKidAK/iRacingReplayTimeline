@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using iRacingSdkWrapper;
 
 
@@ -10,7 +7,6 @@ namespace ReplayTimeline
 {
 	public class SessionInfoHelper
 	{
-
 		public static int GetSessionID(SessionInfo sessionInfo)
 		{
 			YamlQuery weekendInfoQuery = sessionInfo["WeekendInfo"];
@@ -20,7 +16,6 @@ namespace ReplayTimeline
 		public static List<Driver> GetSessionDrivers(SessionInfo sessionInfo, ICollection<Driver> currentDrivers)
 		{
 			YamlQuery weekendOptionsQuery = sessionInfo["WeekendInfo"]["WeekendOptions"];
-			//var starters = weekendOptionsQuery["NumStarters"].GetValue();
 			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
 
 			var sessionDrivers = new List<Driver>();

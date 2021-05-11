@@ -22,7 +22,6 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			
 			if (!ReplayTimelineVM.PlaybackEnabled)
 			{
 				bool driverSelected = ReplayTimelineVM.CurrentDriver != null;
@@ -32,8 +31,8 @@ namespace ReplayTimeline
 
 				if (timelineNodeSelected)
 				{
-					return ReplayTimelineVM.CurrentDriver == ReplayTimelineVM.CurrentTimelineNode.Driver
-						&& ReplayTimelineVM.CurrentCamera == ReplayTimelineVM.CurrentTimelineNode.Camera;
+					return ReplayTimelineVM.CurrentDriver != ReplayTimelineVM.CurrentTimelineNode.Driver
+						|| ReplayTimelineVM.CurrentCamera != ReplayTimelineVM.CurrentTimelineNode.Camera;
 				}
 				else
 				{
