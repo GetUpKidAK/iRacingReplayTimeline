@@ -81,6 +81,7 @@
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="Model\TimelineNode.cs" />
+    <Compile Include="Commands\SlowMotionToggleCommand.cs" />
     <Compile Include="ViewModel\Helpers\SDKHelper.cs" />
     <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />

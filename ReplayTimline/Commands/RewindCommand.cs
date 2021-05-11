@@ -27,7 +27,21 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.RewindPlayback();
+			bool slowMoEnabled = ReplayTimelineVM.SlowMotionEnabled;
+
+			if (ReplayTimelineVM.CurrentPlaybackSpeed < 0)
+			{
+				if (!slowMoEnabled)
+					ReplayTimelineVM.CurrentPlaybackSpeed *= 2;
+				else
+					ReplayTimelineVM.CurrentPlaybackSpeed -= 2;
+			}
+			else
+			{
+				ReplayTimelineVM.CurrentPlaybackSpeed = -1;
+			}
+
+			ReplayTimelineVM.ChangePlaybackSpeed();
 		}
 	}
 }

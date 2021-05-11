@@ -9,16 +9,15 @@ namespace ReplayTimeline
 {
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
-		public string WindowTitle { get { return $"{m_ApplicationTitle} | v{m_VersionNumber}"; } }
-
-		private const string m_ApplicationTitle = "iRacing Replay Timeline";
-		private const float m_VersionNumber = 0.1f;
-
 		private SDKHelper m_SDKHelper;
 		private bool m_ReplayInitialised = false;
 		private int m_TargetFrame = -1;
 
+		private const string m_ApplicationTitle = "iRacing Replay Timeline";
+		private const float m_VersionNumber = 0.1f;
+
 		#region Properties
+		public string WindowTitle { get { return $"{m_ApplicationTitle} | v{m_VersionNumber}"; } }
 		public int SessionID { get; private set; }
 		#endregion
 
@@ -78,14 +77,20 @@ namespace ReplayTimeline
 			set { _finalFrame = value; OnPropertyChanged("FinalFrame"); }
 		}
 
+		private bool _slowMotionEnabled;
+		public bool SlowMotionEnabled
+		{
+			get { return _slowMotionEnabled; }
+			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); /*ChangePlaybackSpeed();*/ }
+		}
 
 		private int m_CurrentPlaybackSpeed;
 		public int CurrentPlaybackSpeed
 		{
 			get => m_CurrentPlaybackSpeed;
-			private set
+			set
 			{
-				m_CurrentPlaybackSpeed = value;
+				m_CurrentPlaybackSpeed = value; /*Console.WriteLine(m_CurrentPlaybackSpeed);*/
 				if (m_CurrentPlaybackSpeed > 16) m_CurrentPlaybackSpeed = 16;
 				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
 				UpdatePlaybackButtonText();
@@ -145,6 +150,7 @@ namespace ReplayTimeline
 		public PlayPauseCommand PlayPauseCommand { get; set; }
 		public RewindCommand RewindCommand { get; set; }
 		public FastForwardCommand FastForwardCommand { get; set; }
+		public SlowMotionToggleCommand SlowMotionToggleCommand { get; set; }
 		public NextLapCommand NextLapCommand { get; set; }
 		public PreviousLapCommand PreviousLapCommand { get; set; }
 		public NextSessionCommand NextSessionCommand { get; set; }
@@ -171,6 +177,7 @@ namespace ReplayTimeline
 			PlayPauseCommand = new PlayPauseCommand(this);
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
+			SlowMotionToggleCommand = new SlowMotionToggleCommand(this);
 			NextLapCommand = new NextLapCommand(this);
 			PreviousLapCommand = new PreviousLapCommand(this);
 			NextSessionCommand = new NextSessionCommand(this);
@@ -192,6 +199,9 @@ namespace ReplayTimeline
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
 			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
+			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
+
+			Console.WriteLine($"Telemetry {SlowMotionEnabled}");
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)
@@ -246,49 +256,9 @@ namespace ReplayTimeline
 				GoToFrame(node.Frame);
 		}
 
-		public void PlayPauseToggle()
+		public void ChangePlaybackSpeed()
 		{
-			if (CurrentPlaybackSpeed == 0)
-			{
-				CurrentPlaybackSpeed = 1;
-				ChangePlaybackSpeed();
-			}
-			else
-			{
-				CurrentPlaybackSpeed = 0;
-				ChangePlaybackSpeed();
-			}
-		}
-
-		public void RewindPlayback()
-		{
-			if (CurrentPlaybackSpeed < 0)
-			{
-				CurrentPlaybackSpeed *= 2;
-			}
-			else
-			{
-				CurrentPlaybackSpeed = -1;
-			}
-			ChangePlaybackSpeed();
-		}
-
-		public void FastForwardPlayback()
-		{
-			if (CurrentPlaybackSpeed > 0)
-			{
-				CurrentPlaybackSpeed *= 2;
-			}
-			else
-			{
-				CurrentPlaybackSpeed = 2;
-			}
-			ChangePlaybackSpeed();
-		}
-
-		private void ChangePlaybackSpeed()
-		{
-			m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
+			m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed, SlowMotionEnabled);
 
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 		}
@@ -303,7 +273,9 @@ namespace ReplayTimeline
 				FastForwardBtnText = ">>";
 
 				if (CurrentPlaybackSpeed > 1)
-					FastForwardBtnText = $"{CurrentPlaybackSpeed}x";
+				{
+					FastForwardBtnText = SlowMotionEnabled ? $"1/{CurrentPlaybackSpeed + 1}x" : $"{CurrentPlaybackSpeed}x";
+				}
 			}
 			else
 			{
@@ -311,7 +283,9 @@ namespace ReplayTimeline
 				FastForwardBtnText = ">>";
 
 				if (CurrentPlaybackSpeed < -1)
-					RewindBtnText = $"{-CurrentPlaybackSpeed}x";
+				{
+					RewindBtnText = SlowMotionEnabled ? $"1/{-CurrentPlaybackSpeed - 1}x" : $"{-CurrentPlaybackSpeed}x";
+				}
 			}
 		}
 

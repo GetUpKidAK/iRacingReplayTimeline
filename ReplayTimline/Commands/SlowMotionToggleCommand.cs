@@ -4,9 +4,10 @@ using System.Windows.Input;
 
 namespace ReplayTimeline
 {
-	public class FastForwardCommand : ICommand
+	public class SlowMotionToggleCommand : ICommand
 	{
 		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +16,7 @@ namespace ReplayTimeline
 		}
 
 
-		public FastForwardCommand(ReplayTimelineVM vm)
+		public SlowMotionToggleCommand(ReplayTimelineVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}
@@ -27,19 +28,7 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			bool slowMoEnabled = ReplayTimelineVM.SlowMotionEnabled;
-
-			if (ReplayTimelineVM.CurrentPlaybackSpeed > 0)
-			{
-				if (!slowMoEnabled)
-					ReplayTimelineVM.CurrentPlaybackSpeed *= 2;
-				else
-					ReplayTimelineVM.CurrentPlaybackSpeed += 2;
-			}
-			else
-			{
-				ReplayTimelineVM.CurrentPlaybackSpeed = 2;
-			}
+			ReplayTimelineVM.CurrentPlaybackSpeed = ReplayTimelineVM.CurrentPlaybackSpeed > 0 ? 1 : -1;
 
 			ReplayTimelineVM.ChangePlaybackSpeed();
 		}

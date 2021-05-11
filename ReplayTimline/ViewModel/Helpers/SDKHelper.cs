@@ -13,8 +13,6 @@ namespace ReplayTimeline
 		private ReplayTimelineVM _timelineVM;
 		private SdkWrapper m_Wrapper;
 
-		//public TelemetryInfo TelemetryCache { get; private set; }
-
 
 		public SDKHelper(ReplayTimelineVM timelimeVM)
 		{
@@ -47,9 +45,9 @@ namespace ReplayTimeline
 		}
 
 
-		public void SetPlaybackSpeed(int playbackSpeed)
+		public void SetPlaybackSpeed(int playbackSpeed, bool slowMotion)
 		{
-			m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed);
+			m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed, slowMotion);
 		}
 
 		public void SetCamera(Camera camera)
