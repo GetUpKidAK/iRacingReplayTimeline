@@ -13,9 +13,11 @@ namespace ReplayTimeline
 		private bool m_ReplayInitialised = false;
 		private int m_TargetFrame = -1;
 
-		public int SessionID { get; private set; }
-
 		#region Properties
+		public int SessionID { get; private set; }
+		#endregion
+
+		#region Binding Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
@@ -79,6 +81,17 @@ namespace ReplayTimeline
 			}
 		}
 
+		private bool _playbackEnabled;
+		public bool PlaybackEnabled
+		{
+			get { return _playbackEnabled; }
+			private set
+			{
+				_playbackEnabled = value;
+				OnPropertyChanged("PlaybackEnabled");
+			}
+		}
+
 		private string _storeFrameBtnText;
 		public string StoreFrameBtnText
 		{
@@ -136,7 +149,7 @@ namespace ReplayTimeline
 			Drivers = new ObservableCollection<Driver>();
 			Cameras = new ObservableCollection<Camera>();
 
-			StoreFrameBtnText = "Store Frame";
+			StoreFrameBtnText = "Store Node";
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
@@ -215,7 +228,7 @@ namespace ReplayTimeline
 			CurrentDriver = node.Driver;
 			CurrentCamera = node.Camera;
 
-			if (CurrentPlaybackSpeed == 0)
+			if (!PlaybackEnabled)
 				GoToFrame(node.Frame);
 		}
 
@@ -262,11 +275,13 @@ namespace ReplayTimeline
 		private void ChangePlaybackSpeed()
 		{
 			m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
+
+			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 		}
 
 		private void UpdatePlaybackButtonText()
 		{
-			PlayPauseBtnText = CurrentPlaybackSpeed != 0 ? "Pause" : "Play";
+			PlayPauseBtnText = PlaybackEnabled ? "Pause" : "Play";
 
 			if (CurrentPlaybackSpeed > 0)
 			{
@@ -316,7 +331,7 @@ namespace ReplayTimeline
 
 		private void TimelineNodeChanged()
 		{
-			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Frame" : "Update Frame";
+			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
 			if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
 		}
 

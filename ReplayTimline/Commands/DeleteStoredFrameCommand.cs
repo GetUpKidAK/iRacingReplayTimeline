@@ -22,7 +22,7 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.CurrentTimelineNode != null;
+			return ReplayTimelineVM.CurrentTimelineNode != null && !ReplayTimelineVM.PlaybackEnabled;
 		}
 
 		public void Execute(object parameter)
