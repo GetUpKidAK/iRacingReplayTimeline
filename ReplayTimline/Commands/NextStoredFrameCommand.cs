@@ -24,7 +24,10 @@ namespace ReplayTimeline
 		{
 			if (!ReplayTimelineVM.PlaybackEnabled)
 			{
-				return ReplayTimelineVM.TimelineNodes.Count > 0;
+				var currentNode = ReplayTimelineVM.CurrentTimelineNode;
+				var nodeIndex = ReplayTimelineVM.TimelineNodes.IndexOf(currentNode);
+
+				return ReplayTimelineVM.TimelineNodes.Count > 0 && nodeIndex != -1 && nodeIndex < ReplayTimelineVM.TimelineNodes.Count - 1 ;
 			}
 
 			return false;
