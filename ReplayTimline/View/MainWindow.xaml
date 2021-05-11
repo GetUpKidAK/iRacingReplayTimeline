@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:ReplayTimeline"
         xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
-        Title="iRacing Replay Timeline"
+        Title="{Binding WindowTitle}"
 		Height="450" MinHeight="450" MaxHeight="600"
 		Width="600" MinWidth="600" MaxWidth="600"
 		WindowStartupLocation="CenterScreen"
