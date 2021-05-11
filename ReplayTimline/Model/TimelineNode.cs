@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 
 namespace ReplayTimeline
 {
 	public class TimelineNode : INotifyPropertyChanged
 	{
-		public int Frame { get; set; }
-		public Driver Driver { get; set; }
-		public Camera Camera { get; set; }
+		private int _frame;
+		public int Frame
+		{
+			get { return _frame; }
+			set { _frame = value; OnPropertyChanged("Frame"); }
+		}
 
+		private Driver _driver;
+		public Driver Driver
+		{
+			get { return _driver; }
+			set { _driver = value; OnPropertyChanged("Driver"); }
+		}
+
+		private Camera _camera;
+		public Camera Camera
+		{
+			get { return _camera; }
+			set { _camera = value; OnPropertyChanged("Camera"); }
+		}
 
 
 		public event PropertyChangedEventHandler PropertyChanged;

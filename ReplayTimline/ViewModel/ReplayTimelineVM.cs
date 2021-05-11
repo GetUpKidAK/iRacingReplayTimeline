@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -30,9 +29,7 @@ namespace ReplayTimeline
 			{
 				_currentTimelineNode = value;
 				OnPropertyChanged("CurrentTimelineNode");
-
-				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Frame" : "Update Frame";
-				if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
+				TimelineNodeChanged();
 			}
 		}
 
@@ -300,11 +297,6 @@ namespace ReplayTimeline
 				return;
 
 			m_SDKHelper.SetDriver(CurrentDriver);
-
-			if (CurrentTimelineNode != null)
-			{
-				CurrentTimelineNode.Driver = CurrentDriver;
-			}
 		}
 
 		private void CameraChanged()
@@ -320,42 +312,53 @@ namespace ReplayTimeline
 			{
 				m_SDKHelper.SetDriver(CurrentDriver, CurrentCamera);
 			}
+		}
 
-			if (CurrentTimelineNode != null)
-			{
-				CurrentTimelineNode.Camera = CurrentCamera;
-			}
+		private void TimelineNodeChanged()
+		{
+			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Frame" : "Update Frame";
+			if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
 		}
 
 		public void StoreCurrentFrame()
 		{
-			var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
-			TimelineNode storedNode = null;
-
-			if (!timelineFrames.Contains(CurrentFrame))
+			if (CurrentTimelineNode != null)
 			{
-				TimelineNode newNode = new TimelineNode();
-				newNode.Frame = CurrentFrame;
-				newNode.Driver = CurrentDriver;
-				newNode.Camera = CurrentCamera;
-
-				TimelineNodes.Add(newNode);
-				storedNode = newNode;
+				CurrentTimelineNode.Driver = CurrentDriver;
+				CurrentTimelineNode.Camera = CurrentCamera;
 
 				SaveProjectChanges();
 			}
-
-			// Simple version of sorting for now.
-			var sortedTimeline = TimelineNodes.OrderBy(n => n.Frame).ToList();
-
-			TimelineNodes.Clear();
-
-			foreach (var node in sortedTimeline)
+			else
 			{
-				TimelineNodes.Add(node);
-			}
+				var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
+				TimelineNode storedNode = null;
 
-			CurrentTimelineNode = storedNode;
+				if (!timelineFrames.Contains(CurrentFrame))
+				{
+					TimelineNode newNode = new TimelineNode();
+					newNode.Frame = CurrentFrame;
+					newNode.Driver = CurrentDriver;
+					newNode.Camera = CurrentCamera;
+
+					TimelineNodes.Add(newNode);
+					storedNode = newNode;
+
+					SaveProjectChanges();
+				}
+
+				// Simple version of sorting for now.
+				var sortedTimeline = TimelineNodes.OrderBy(n => n.Frame).ToList();
+
+				TimelineNodes.Clear();
+
+				foreach (var node in sortedTimeline)
+				{
+					TimelineNodes.Add(node);
+				}
+
+				CurrentTimelineNode = storedNode;
+			}
 		}
 
 		public void GoToPreviousStoredFrame()
