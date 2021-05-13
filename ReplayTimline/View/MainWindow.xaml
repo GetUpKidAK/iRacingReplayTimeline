@@ -6,8 +6,8 @@
 		xmlns:vm="clr-namespace:ReplayTimeline"
         xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
         Title="{Binding WindowTitle}"
-		Height="450" MinHeight="450" MaxHeight="600"
-		Width="600" MinWidth="600" MaxWidth="600"
+		Height="550" MinHeight="550" MaxHeight="600"
+		Width="1050" MinWidth="1050" MaxWidth="1050"
 		WindowStartupLocation="CenterScreen"
 		Closing="Window_Closing">
 	<Window.DataContext>
@@ -15,12 +15,32 @@
 	</Window.DataContext>
 	
     <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="250" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="250" />
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="220"/>
 		</Grid.RowDefinitions>
 
-		<Grid>
+		<Grid Grid.RowSpan="2">
+			<ListView ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}">
+				<ListView.View>
+					<GridView>
+						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Id}">
+							<GridViewColumnHeader Content="Car #" IsEnabled="False" />
+						</GridViewColumn>
+						<GridViewColumn Width="150" DisplayMemberBinding="{Binding Name}">
+							<GridViewColumnHeader Content="Driver Name" IsEnabled="False" />
+						</GridViewColumn>
+					</GridView>
+				</ListView.View>
+			</ListView>
+		</Grid>
+
+		<Grid Grid.Column="1">
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}">
 				<ListView.View>
 					<GridView>
@@ -40,7 +60,7 @@
 			</ListView>
 		</Grid>
 
-		<Grid Grid.Row="1">
+		<Grid Grid.Column="1" Grid.Row="1">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="0.8*"/>
 				<RowDefinition Height="0.6*"/>
@@ -87,6 +107,21 @@
 				<Button Content="Prev Lap" Command="{Binding PreviousLapCommand}" Width="100"/>
 				<Button Content="Next Lap" Command="{Binding NextLapCommand}" Width="100" Margin="0 0 10 0"/>
 			</StackPanel>
+		</Grid>
+
+		<Grid Grid.Column="2" Grid.RowSpan="2">
+			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}">
+				<ListView.View>
+					<GridView>
+						<GridViewColumn Width="170" DisplayMemberBinding="{Binding GroupName}">
+							<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
+						</GridViewColumn>
+						<GridViewColumn Width="50" DisplayMemberBinding="{Binding GroupNum}">
+							<GridViewColumnHeader Content="Group #" IsEnabled="False" />
+						</GridViewColumn>
+					</GridView>
+				</ListView.View>
+			</ListView>
 		</Grid>
 	</Grid>
 </Window>
