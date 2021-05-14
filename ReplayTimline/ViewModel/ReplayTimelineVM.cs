@@ -14,7 +14,7 @@ namespace ReplayTimeline
 		private int m_TargetFrame = -1;
 
 		private const string m_ApplicationTitle = "iRacing Replay Timeline";
-		private const float m_VersionNumber = 0.1f;
+		private const float m_VersionNumber = 0.2f;
 
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} | v{m_VersionNumber}"; } }
@@ -155,6 +155,8 @@ namespace ReplayTimeline
 		public PreviousLapCommand PreviousLapCommand { get; set; }
 		public NextSessionCommand NextSessionCommand { get; set; }
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
+		public NextDriverCommand NextDriverCommand { get; set; }
+		public PreviousDriverCommand PreviousDriverCommand { get; set; }
 		#endregion
 
 		public TestCommand TestCommand { get; set; }
@@ -182,6 +184,8 @@ namespace ReplayTimeline
 			PreviousLapCommand = new PreviousLapCommand(this);
 			NextSessionCommand = new NextSessionCommand(this);
 			PreviousSessionCommand = new PreviousSessionCommand(this);
+			NextDriverCommand = new NextDriverCommand(this);
+			PreviousDriverCommand = new PreviousDriverCommand(this);
 
 			TestCommand = new TestCommand(this);
 		}
@@ -201,7 +205,7 @@ namespace ReplayTimeline
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
 
-			Console.WriteLine($"Telemetry {SlowMotionEnabled}");
+			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)

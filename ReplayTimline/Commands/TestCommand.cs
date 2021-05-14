@@ -27,7 +27,7 @@ namespace ReplayTimeline
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.StoreCurrentFrame();
+			
 		}
 	}
 }

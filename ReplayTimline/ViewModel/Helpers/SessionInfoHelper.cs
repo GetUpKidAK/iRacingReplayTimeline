@@ -91,104 +91,18 @@ namespace ReplayTimeline
 			return sessionCameras;
 		}
 
-		//private static void ParseDrivers(SessionInfo sessionInfo)
-		//{
-		//	// Number of starters (Live only)
-		//	YamlQuery weekendOptionsQuery = sessionInfo["WeekendInfo"]["WeekendOptions"];
-		//	var starters = weekendOptionsQuery["NumStarters"].GetValue();
-		//	int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
+		public static void UpdateDriverTelemetry(TelemetryInfo telemetryInfo, ICollection<Driver> driverList)
+		{
+			var laps = telemetryInfo.CarIdxLap.Value;
+			var lapDistances = telemetryInfo.CarIdxLapDistPct.Value;
 
-		//	var newDrivers = new List<Driver>();
-
-		//	for (int i = 0; i < currentStarters; i++)
-		//	{
-		//		YamlQuery query = sessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
-		//		Driver newDriver;
-
-		//		string driverName = query["UserName"].GetValue("");
-
-		//		if (!string.IsNullOrEmpty(driverName) && driverName != "Pace Car")
-		//		{
-		//			// Get driver if driver is in previous list
-		//			newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
-
-		//			// If not...
-		//			if (newDriver == null)
-		//			{
-		//				// Populate driver info
-		//				newDriver = new Driver();
-		//				newDriver.Id = i;
-		//				newDriver.Name = driverName;
-		//				newDriver.CustomerId = int.Parse(query["UserID"].GetValue("0")); // default value 0
-		//				newDriver.Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'); // trim the quotes
-		//				newDriver.Rating = int.Parse(query["IRating"].GetValue("0"));
-		//			}
-
-		//			// Add to drivers list
-		//			newDrivers.Add(newDriver);
-		//		}
-		//	}
-
-		//	// Cache current driver, needed for live sessions
-		//	//var cachedCurrentDriver = CurrentDriver;
-		//	// Replace old list of drivers with new list of drivers and update the grid
-		//	Drivers.Clear();
-		//	foreach (var newDriver in newDrivers)
-		//	{
-		//		Drivers.Add(newDriver);
-		//	}
-		//	// Replace previous driver once list is rebuilt.
-		//	//CurrentDriver = cachedCurrentDriver;
-		//}
-
-		//private static void ParseCameras(SessionInfo sessionInfo)
-		//{
-		//	int id = 1;
-		//	Camera newCam;
-
-		//	var newCameras = new List<Camera>();
-
-		//	// Loop through cameras until none are found anymore
-		//	do
-		//	{
-		//		newCam = null;
-		//		YamlQuery query = sessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
-
-		//		// Get Camera Group name
-		//		string groupName = query["GroupName"].GetValue("");
-
-		//		if (!string.IsNullOrEmpty(groupName))
-		//		{
-		//			// Get Camera if it is in previous list
-		//			newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
-
-		//			// Otherwise...
-		//			if (newCam == null)
-		//			{
-		//				// If group name is found, create a new camera
-		//				newCam = new Camera();
-		//				newCam.GroupNum = id;
-		//				newCam.GroupName = groupName;
-		//			}
-		//			newCameras.Add(newCam);
-
-		//			id++;
-		//		}
-		//	}
-		//	while (newCam != null);
-
-		//	// Cache current camera, needed for live sessions
-		//	//var cachedCurrentCamera = CurrentCamera;
-
-		//	// Replace old list of drivers with new list of drivers and update the grid
-		//	Cameras.Clear();
-		//	foreach (var newCamera in newCameras)
-		//	{
-		//		Cameras.Add(newCamera);
-		//	}
-
-		//	// Replace previous camera once list is rebuilt.
-		//	//CurrentCamera = cachedCurrentCamera;
-		//}
+			// Loop through the list of current drivers
+			foreach (Driver driver in driverList)
+			{
+				// Set the lap, distance belonging to this driver
+				driver.Lap = laps[driver.Id];
+				driver.LapDistance = lapDistances[driver.Id];
+			}
+		}
 	}
 }
