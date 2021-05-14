@@ -6,8 +6,8 @@
 		xmlns:vm="clr-namespace:ReplayTimeline"
         xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
         Title="{Binding WindowTitle}"
-		Height="600" MinHeight="600" MaxHeight="800"
-		Width="1050" MinWidth="1050" MaxWidth="1050"
+		Height="600" MinHeight="600" MaxHeight="900"
+		Width="1000" MinWidth="1000" MaxWidth="1000"
 		WindowStartupLocation="CenterScreen"
 		Closing="Window_Closing">
 	<Window.DataContext>
@@ -76,11 +76,11 @@
 							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="250" DisplayMemberBinding="{Binding Driver.Name}">
+						<GridViewColumn Width="210" DisplayMemberBinding="{Binding Driver.Name}">
 							<GridViewColumnHeader Content="Driver name" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="150" DisplayMemberBinding="{Binding Camera.GroupName}">
+						<GridViewColumn Width="140" DisplayMemberBinding="{Binding Camera.GroupName}">
 							<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
 						</GridViewColumn>
 					</GridView>
@@ -107,17 +107,16 @@
 					<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
 					<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
 					<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+					
+					<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
 				</StackPanel>
-				
-				<StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Height="35">
-					<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="0 0 20 0"/>
-				</StackPanel>
-
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="35">
 					<Button Content="{Binding RewindBtnText}" Width="60" Command="{Binding RewindCommand}"/>
 					<Button Content="{Binding PlayPauseBtnText}" Width="140" Command="{Binding PlayPauseCommand}"/>
 					<Button Content="{Binding FastForwardBtnText}" Width="60" Command="{Binding FastForwardCommand}"/>
+					
+					<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="20 0 0 0"/>
 				</StackPanel>
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3"  Height="35">

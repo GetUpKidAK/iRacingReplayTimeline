@@ -262,7 +262,8 @@ namespace ReplayTimeline
 
 		public void ChangePlaybackSpeed()
 		{
-			m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed, SlowMotionEnabled);
+			if (SlowMotionEnabled) m_SDKHelper.SetSlowMotionPlaybackSpeed(CurrentPlaybackSpeed);
+			else m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
 
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 		}

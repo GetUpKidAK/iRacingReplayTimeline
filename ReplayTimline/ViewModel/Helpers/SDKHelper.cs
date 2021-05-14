@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iRacingSdkWrapper;
+﻿using iRacingSdkWrapper;
 
 
 namespace ReplayTimeline
@@ -45,9 +40,14 @@ namespace ReplayTimeline
 		}
 
 
-		public void SetPlaybackSpeed(int playbackSpeed, bool slowMotion)
+		public void SetPlaybackSpeed(int playbackSpeed)
 		{
-			m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed, slowMotion);
+			m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed);
+		}
+
+		public void SetSlowMotionPlaybackSpeed(int playbackSpeed)
+		{
+			m_Wrapper.Replay.SetSlowmotionPlaybackSpeed(playbackSpeed);
 		}
 
 		public void SetCamera(Camera camera)
