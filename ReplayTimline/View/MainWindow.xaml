@@ -43,8 +43,8 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="50"/>
 			</Grid.RowDefinitions>
-			
-			<ListView ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}">
+
+			<ListView ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" SelectionMode="Single">
 				<ListView.View>
 					<GridView>
 						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Id}">
@@ -66,10 +66,10 @@
 		<Grid Grid.Row="1" Grid.Column="1" Margin="5">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="220"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}">
+			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}" SelectionMode="Single">
 				<ListView.View>
 					<GridView>
 						<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
@@ -87,52 +87,54 @@
 				</ListView.View>
 			</ListView>
 
-			<Grid Grid.Row="1">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
+			<Grid Grid.Row="1" Margin="5">
+				<StackPanel>
+					<Grid Margin="5" Height="35">
+						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
+						
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
+						</StackPanel>
+					</Grid>
 
-				<Grid Margin="5">
-					<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
-					</StackPanel>
-				</Grid>
+					<Grid Margin="5" Height="35">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
+							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
+							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+							
+							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
+						</StackPanel>
+					</Grid>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
-					<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-					<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
-					<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
-					
-					<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
-				</StackPanel>
+					<Grid Margin="5" Height="35">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+							<Button Content="&lt;" ToolTip="Back One Frame" Width="50" Command="{Binding SkipFrameBackCommand}"/>
+							<Button Content="{Binding RewindBtnText}" Width="50" Command="{Binding RewindCommand}"/>
+							<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}"/>
+							<Button Content="{Binding FastForwardBtnText}" Width="50" Command="{Binding FastForwardCommand}"/>
+							<Button Content="&gt;" ToolTip="Forward One Frame" Width="50" Command="{Binding SkipFrameForwardCommand}"/>
+							
+							<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="20 0 0 0"/>
+						</StackPanel>
+					</Grid>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="35">
-					<Button Content="&lt;" ToolTip="Back One Frame" Width="50" Command="{Binding SkipFrameBackCommand}"/>
-					<Button Content="{Binding RewindBtnText}" Width="50" Command="{Binding RewindCommand}"/>
-					<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}"/>
-					<Button Content="{Binding FastForwardBtnText}" Width="50" Command="{Binding FastForwardCommand}"/>
-					<Button Content="&gt;" ToolTip="Forward One Frame" Width="50" Command="{Binding SkipFrameForwardCommand}"/>
-					
-					<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="20 0 0 0"/>
-				</StackPanel>
+					<Grid Margin="5" Height="35">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
+							<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
+							<Button Content="Next Session" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3"  Height="35">
-					<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
-					<Button Content="Next Session" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
-
-					<Button Content="Prev Lap" Command="{Binding PreviousLapCommand}" Width="100"/>
-					<Button Content="Next Lap" Command="{Binding NextLapCommand}" Width="100" Margin="0 0 10 0"/>
+							<Button Content="Prev Lap" Command="{Binding PreviousLapCommand}" Width="100"/>
+							<Button Content="Next Lap" Command="{Binding NextLapCommand}" Width="100" Margin="0 0 10 0"/>
+						</StackPanel>
+					</Grid>
 				</StackPanel>
 			</Grid>
 		</Grid>
 
 		<Grid Grid.Row="1" Grid.Column="2" Margin="5">
-			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}">
+			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" SelectionMode="Single">
 				<ListView.View>
 					<GridView>
 						<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
