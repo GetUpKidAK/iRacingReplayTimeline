@@ -215,11 +215,32 @@ namespace ReplayTimeline
 
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
+			// Leave now if the session info hasn't already been loaded
+			if (!m_ReplayInitialised)
+				return;
+
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
 			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
 
+			// Get current car ID and current camera group from sim
+			var currentCarId = telemetryInfo.CamCarIdx.Value;
+			var currentCamGroup = telemetryInfo.CamGroupNumber.Value;
+
+			if (CurrentDriver == null || CurrentCamera == null)
+			{
+				// Set the current driver and camera if they were null
+				CurrentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId);
+				CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup);
+			}
+
+			// If the sim car/camera doesn't match the currently selected ones in the UI (i.e. it changed in sim), then update it
+			// OnPropertyChanged is called and not the property directly so that there's no recursive loop of changing the driver again, causing stutters
+			if (currentCarId != CurrentDriver.Id) _currentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId); OnPropertyChanged("CurrentDriver");
+			if (currentCamGroup != CurrentCamera.GroupNum) _currentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup); OnPropertyChanged("CurrentCamera");
+
+			// Update driver telemetry info
 			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
 		}
 
