@@ -6,7 +6,7 @@
 		xmlns:vm="clr-namespace:ReplayTimeline"
         xmlns:local="clr-namespace:ReplayTimeline" mc:Ignorable="d"
         Title="{Binding WindowTitle}"
-		Height="600" MinHeight="600" MaxHeight="900"
+		Height="600" MinHeight="400" MaxHeight="900"
 		Width="1000" MinWidth="1000" MaxWidth="1000"
 		WindowStartupLocation="CenterScreen"
 		Closing="Window_Closing">
@@ -76,11 +76,11 @@
 							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="210" DisplayMemberBinding="{Binding Driver.Name}">
+						<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.Name}">
 							<GridViewColumnHeader Content="Driver name" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="140" DisplayMemberBinding="{Binding Camera.GroupName}">
+						<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
 							<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
 						</GridViewColumn>
 					</GridView>
@@ -133,7 +133,7 @@
 			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}">
 				<ListView.View>
 					<GridView>
-						<GridViewColumn Width="170" DisplayMemberBinding="{Binding GroupName}">
+						<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
 							<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
 						</GridViewColumn>
 						<GridViewColumn Width="50" DisplayMemberBinding="{Binding GroupNum}">
