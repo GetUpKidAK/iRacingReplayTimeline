@@ -72,6 +72,15 @@
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}" SelectionMode="Single">
 				<ListView.View>
 					<GridView>
+						<GridViewColumn Width="40">
+							<GridViewColumnHeader IsEnabled="False" />
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox Margin="5, 0" IsChecked="{Binding Enabled}"/>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</GridViewColumn>
+						
 						<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
 							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>

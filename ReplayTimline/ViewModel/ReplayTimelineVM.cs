@@ -203,6 +203,8 @@ namespace ReplayTimeline
 			PreviousDriverCommand = new PreviousDriverCommand(this);
 
 			TestCommand = new TestCommand(this);
+
+			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
 		}
 
 		public void ApplicationClosing()
@@ -211,6 +213,33 @@ namespace ReplayTimeline
 
 			App.Current.Shutdown();
 			Environment.Exit(0);
+		}
+
+		private void TimelineNodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			if (e.NewItems != null)
+			{
+				foreach (INotifyPropertyChanged added in e.NewItems)
+				{
+					added.PropertyChanged += TimelineNodesPropertyChanged;
+				}
+			}
+
+			if (e.OldItems != null)
+			{
+				foreach (INotifyPropertyChanged removed in e.OldItems)
+				{
+					removed.PropertyChanged -= TimelineNodesPropertyChanged;
+				}
+			}
+		}
+
+		private void TimelineNodesPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		{
+			if (propertyChangedEventArgs.PropertyName == "Enabled")
+			{
+				SaveProjectChanges();
+			}
 		}
 
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
@@ -289,6 +318,9 @@ namespace ReplayTimeline
 
 		private void JumpToNode(TimelineNode node)
 		{
+			if (PlaybackEnabled && !node.Enabled)
+				return;
+
 			CurrentDriver = node.Driver;
 			CurrentCamera = node.Camera;
 

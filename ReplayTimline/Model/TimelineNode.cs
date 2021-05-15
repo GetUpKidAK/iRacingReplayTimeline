@@ -5,6 +5,14 @@ namespace ReplayTimeline
 {
 	public class TimelineNode : INotifyPropertyChanged
 	{
+		private bool _enabled = true;
+
+		public bool Enabled
+		{
+			get { return _enabled; }
+			set { _enabled = value; OnPropertyChanged("Enabled"); }
+		}
+
 		private int _frame;
 		public int Frame
 		{
