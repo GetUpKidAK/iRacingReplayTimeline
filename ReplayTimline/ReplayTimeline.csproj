@@ -84,6 +84,8 @@
     <Compile Include="Commands\SlowMotionToggleCommand.cs" />
     <Compile Include="Commands\NextDriverCommand.cs" />
     <Compile Include="Commands\PreviousDriverCommand.cs" />
+    <Compile Include="Commands\SkipFrameBackCommand.cs" />
+    <Compile Include="Commands\SkipFrameForwardCommand.cs" />
     <Compile Include="ViewModel\Helpers\SDKHelper.cs" />
     <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />

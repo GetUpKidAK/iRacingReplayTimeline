@@ -72,7 +72,7 @@
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}">
 				<ListView.View>
 					<GridView>
-						<GridViewColumn Width="100" DisplayMemberBinding="{Binding Frame}">
+						<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
 							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>
 
@@ -112,9 +112,11 @@
 				</StackPanel>
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Height="35">
-					<Button Content="{Binding RewindBtnText}" Width="60" Command="{Binding RewindCommand}"/>
-					<Button Content="{Binding PlayPauseBtnText}" Width="140" Command="{Binding PlayPauseCommand}"/>
-					<Button Content="{Binding FastForwardBtnText}" Width="60" Command="{Binding FastForwardCommand}"/>
+					<Button Content="&lt;" ToolTip="Back One Frame" Width="50" Command="{Binding SkipFrameBackCommand}"/>
+					<Button Content="{Binding RewindBtnText}" Width="50" Command="{Binding RewindCommand}"/>
+					<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}"/>
+					<Button Content="{Binding FastForwardBtnText}" Width="50" Command="{Binding FastForwardCommand}"/>
+					<Button Content="&gt;" ToolTip="Forward One Frame" Width="50" Command="{Binding SkipFrameForwardCommand}"/>
 					
 					<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="20 0 0 0"/>
 				</StackPanel>
@@ -146,7 +148,7 @@
 
 		<StatusBar Grid.Row="3" Grid.ColumnSpan="3">
 			<StatusBarItem>
-				<TextBlock Text="Status Bar Stuff..." />
+				<TextBlock Text="Status Bar..." />
 			</StatusBarItem>
 		</StatusBar>
 	</Grid>

@@ -65,9 +65,20 @@ namespace ReplayTimeline
 				if (_currentFrame == m_TargetFrame || m_TargetFrame == -1)
 					if (lastFrame != _currentFrame) CheckCurrentFrameForStoredNodes();
 
-				if (_currentFrame == m_TargetFrame) m_TargetFrame = -1;
+				if (_currentFrame == m_TargetFrame)
+				{
+					m_TargetFrame = -1;
+					MovingToFrame = false;
+				}
 				OnPropertyChanged("CurrentFrame");
 			}
+		}
+
+		private bool _movingToFrame;
+		public bool MovingToFrame
+		{
+			get { return _movingToFrame; }
+			private set { _movingToFrame = value; OnPropertyChanged("MovingToFrame"); }
 		}
 
 		private int _finalFrame;
@@ -81,7 +92,7 @@ namespace ReplayTimeline
 		public bool SlowMotionEnabled
 		{
 			get { return _slowMotionEnabled; }
-			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); /*ChangePlaybackSpeed();*/ }
+			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); }
 		}
 
 		private int m_CurrentPlaybackSpeed;
@@ -90,7 +101,7 @@ namespace ReplayTimeline
 			get => m_CurrentPlaybackSpeed;
 			set
 			{
-				m_CurrentPlaybackSpeed = value; /*Console.WriteLine(m_CurrentPlaybackSpeed);*/
+				m_CurrentPlaybackSpeed = value;
 				if (m_CurrentPlaybackSpeed > 16) m_CurrentPlaybackSpeed = 16;
 				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
 				UpdatePlaybackButtonText();
@@ -150,6 +161,8 @@ namespace ReplayTimeline
 		public PlayPauseCommand PlayPauseCommand { get; set; }
 		public RewindCommand RewindCommand { get; set; }
 		public FastForwardCommand FastForwardCommand { get; set; }
+		public SkipFrameBackCommand SkipFrameBackCommand { get; set; }
+		public SkipFrameForwardCommand SkipFrameForwardCommand { get; set; }
 		public SlowMotionToggleCommand SlowMotionToggleCommand { get; set; }
 		public NextLapCommand NextLapCommand { get; set; }
 		public PreviousLapCommand PreviousLapCommand { get; set; }
@@ -180,6 +193,8 @@ namespace ReplayTimeline
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
 			SlowMotionToggleCommand = new SlowMotionToggleCommand(this);
+			SkipFrameBackCommand = new SkipFrameBackCommand(this);
+			SkipFrameForwardCommand = new SkipFrameForwardCommand(this);
 			NextLapCommand = new NextLapCommand(this);
 			PreviousLapCommand = new PreviousLapCommand(this);
 			NextSessionCommand = new NextSessionCommand(this);
@@ -432,9 +447,10 @@ namespace ReplayTimeline
 			}
 		}
 
-		private void GoToFrame(int frame)
+		public void GoToFrame(int frame)
 		{
 			m_TargetFrame = frame;
+			MovingToFrame = true;
 
 			m_SDKHelper.GoToFrame(frame);
 		}
