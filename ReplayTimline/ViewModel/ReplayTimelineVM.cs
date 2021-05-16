@@ -170,6 +170,29 @@ namespace ReplayTimeline
 			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
+		private bool _showTimelineNodeList;
+		public bool ShowTimelineNodeList
+		{
+			get { return _showTimelineNodeList; }
+			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
+		}
+
+		private bool _minimizedMode;
+		public bool MinimizedMode
+		{
+			get { return _minimizedMode; }
+			set
+			{
+				_minimizedMode = value;
+
+				ShowReplayTimeline = !_minimizedMode;
+				ShowSessionLapSkipButtons = !_minimizedMode;
+				ShowDriverCameraPanels = !_minimizedMode;
+				ShowTimelineNodeList = !_minimizedMode;
+
+				OnPropertyChanged("MinimizedMode");
+			}
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -209,6 +232,7 @@ namespace ReplayTimeline
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
 			ShowDriverCameraPanels = true;
+			ShowTimelineNodeList = true;
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
