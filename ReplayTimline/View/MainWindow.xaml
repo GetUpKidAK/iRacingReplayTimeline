@@ -30,7 +30,7 @@
 
 		<Menu Grid.ColumnSpan="3">
 			<MenuItem Header="_File">
-				<MenuItem Header="_Quit" />
+				<MenuItem Header="_Quit" Command="{Binding ApplicationQuitCommand}" />
 			</MenuItem>
 
 			<MenuItem Header="View">
@@ -42,13 +42,13 @@
 				<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
 			</MenuItem>
 
-			<MenuItem Header="Debug Menu">
+			<!--<MenuItem Header="Debug Menu">
 				<MenuItem Header="Next Driver" Command="{Binding NextDriverCommand}"/>
 				<MenuItem Header="Prev Driver" Command="{Binding PreviousDriverCommand}"/>
-			</MenuItem>
+			</MenuItem>-->
 		</Menu>
 
-		<Grid Grid.Row="1" Margin="5" Width="250" MaxHeight="495" VerticalAlignment="Top"
+		<Grid Grid.Row="1" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"
 			  Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
@@ -161,7 +161,7 @@
 			</Grid>
 		</Grid>
 
-		<Grid Grid.Row="1" Grid.Column="2" Margin="5" Width="250" MaxHeight="495" VerticalAlignment="Top"
+		<Grid Grid.Row="1" Grid.Column="2" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"
 			  Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
 			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" SelectionMode="Single">
 				<ListView.View>

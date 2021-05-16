@@ -13,11 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace ReplayTimeline
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		public MainWindow()
@@ -30,7 +28,6 @@ namespace ReplayTimeline
 			ReplayTimelineVM vm = this.DataContext as ReplayTimelineVM;
 
 			vm.ApplicationClosing();
-			Console.WriteLine("Closing");
 		}
 	}
 }

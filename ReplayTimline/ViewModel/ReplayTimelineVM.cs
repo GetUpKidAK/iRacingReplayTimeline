@@ -215,6 +215,7 @@ namespace ReplayTimeline
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
+		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		#endregion
 
 		public TestCommand TestCommand { get; set; }
@@ -250,6 +251,7 @@ namespace ReplayTimeline
 			PreviousSessionCommand = new PreviousSessionCommand(this);
 			NextDriverCommand = new NextDriverCommand(this);
 			PreviousDriverCommand = new PreviousDriverCommand(this);
+			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 
 			TestCommand = new TestCommand(this);
 
@@ -260,8 +262,7 @@ namespace ReplayTimeline
 		{
 			m_SDKHelper.Stop();
 
-			App.Current.Shutdown();
-			Environment.Exit(0);
+			ApplicationQuitCommand.Execute(this);
 		}
 
 		private void TimelineNodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
