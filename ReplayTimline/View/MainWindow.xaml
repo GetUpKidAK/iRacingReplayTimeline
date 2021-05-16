@@ -32,6 +32,11 @@
 				<MenuItem Header="_Quit" />
 			</MenuItem>
 
+			<MenuItem Header="View">
+				<MenuItem Header="Replay Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
+				<MenuItem Header="Prev/Next Session/Lap" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
+			</MenuItem>
+
 			<MenuItem Header="Debug Menu">
 				<MenuItem Header="Next Driver" Command="{Binding NextDriverCommand}"/>
 				<MenuItem Header="Prev Driver" Command="{Binding PreviousDriverCommand}"/>
@@ -98,9 +103,9 @@
 
 			<Grid Grid.Row="1" Margin="5">
 				<StackPanel>
-					<Grid Margin="5" Height="35">
+					<Grid Margin="5" Height="35" Visibility="{Binding ShowReplayTimeline, Converter={StaticResource VisibilityConverter}}">
 						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
-						
+
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
@@ -129,7 +134,7 @@
 						</StackPanel>
 					</Grid>
 
-					<Grid Margin="5" Height="35">
+					<Grid Margin="5" Height="35" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
 							<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
 							<Button Content="Next Session" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>

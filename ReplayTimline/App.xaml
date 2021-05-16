@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:ReplayTimeline"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
-    </Application.Resources>
+		<local:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
+	</Application.Resources>
 </Application>

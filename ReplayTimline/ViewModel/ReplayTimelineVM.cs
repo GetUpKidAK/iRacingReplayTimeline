@@ -149,6 +149,20 @@ namespace ReplayTimeline
 			set { _rewindBtnText = value; OnPropertyChanged("RewindBtnText"); }
 		}
 
+		private bool _showReplayTimeline;
+		public bool ShowReplayTimeline
+		{
+			get { return _showReplayTimeline; }
+			set { _showReplayTimeline = value; OnPropertyChanged("ShowReplayTimeline"); }
+		}
+
+		private bool _showSessionLapSkipButtons;
+		public bool ShowSessionLapSkipButtons
+		{
+			get { return _showSessionLapSkipButtons; }
+			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		#endregion
@@ -184,6 +198,8 @@ namespace ReplayTimeline
 			Cameras = new ObservableCollection<Camera>();
 
 			StoreFrameBtnText = "Store Node";
+			ShowReplayTimeline = true;
+			ShowSessionLapSkipButtons = true;
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
