@@ -10,7 +10,6 @@ namespace ReplayTimeline
 	public class ReplayTimelineVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
-		private bool m_ReplayInitialised = false;
 		private int m_TargetFrame = -1;
 
 		private const string m_ApplicationTitle = "iRacing Replay Timeline";
@@ -18,6 +17,7 @@ namespace ReplayTimeline
 
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} | v{m_VersionNumber}"; } }
+		public bool SessionInfoLoaded { get; private set; } = false;
 		public int SessionID { get; private set; }
 		#endregion
 
@@ -194,6 +194,13 @@ namespace ReplayTimeline
 			}
 		}
 
+		private string _statusBarText;
+		public string StatusBarText
+		{
+			get { return _statusBarText; }
+			set { _statusBarText = value; OnPropertyChanged("StatusBarText"); }
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		#endregion
@@ -229,6 +236,7 @@ namespace ReplayTimeline
 			Drivers = new ObservableCollection<Driver>();
 			Cameras = new ObservableCollection<Camera>();
 
+			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
@@ -292,10 +300,26 @@ namespace ReplayTimeline
 			}
 		}
 
+		public void SdkConnected()
+		{
+			StatusBarText = "iRacing Connected";
+		}
+
+		public void SdkDisconnected()
+		{
+			StatusBarText = "iRacing Disconnected";
+
+			// Unload session info, clear information
+			SessionInfoLoaded = false;
+			Drivers.Clear();
+			Cameras.Clear();
+			TimelineNodes.Clear();
+		}
+
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
 			// Leave now if the session info hasn't already been loaded
-			if (!m_ReplayInitialised)
+			if (!SessionInfoLoaded)
 				return;
 
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
@@ -341,7 +365,7 @@ namespace ReplayTimeline
 
 			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
 
-			if (!m_ReplayInitialised)
+			if (!SessionInfoLoaded)
 			{
 				var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
 				if (loaddedProject.TimelineNodes.Count > 0)
@@ -354,7 +378,7 @@ namespace ReplayTimeline
 					}
 				}
 
-				m_ReplayInitialised = true;
+				SessionInfoLoaded = true;
 			}
 		}
 		

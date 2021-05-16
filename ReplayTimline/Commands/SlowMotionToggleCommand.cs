@@ -23,7 +23,7 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			return true;
+			return ReplayTimelineVM.SessionInfoLoaded;
 		}
 
 		public void Execute(object parameter)

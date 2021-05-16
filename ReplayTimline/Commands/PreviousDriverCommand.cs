@@ -23,7 +23,12 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.CurrentDriver != null;
+			if (ReplayTimelineVM.SessionInfoLoaded)
+			{
+				return ReplayTimelineVM.CurrentDriver != null;
+			}
+
+			return false;
 		}
 
 		public void Execute(object parameter)

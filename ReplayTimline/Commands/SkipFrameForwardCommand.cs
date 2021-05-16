@@ -22,7 +22,8 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.CurrentFrame != ReplayTimelineVM.FinalFrame - 1;
+			return ReplayTimelineVM.SessionInfoLoaded &&
+				ReplayTimelineVM.CurrentFrame != ReplayTimelineVM.FinalFrame - 1;
 		}
 
 		public void Execute(object parameter)

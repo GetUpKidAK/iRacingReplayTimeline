@@ -179,7 +179,7 @@
 
 		<StatusBar Grid.Row="3" Grid.ColumnSpan="3">
 			<StatusBarItem>
-				<TextBlock Text="Status Bar..." />
+				<TextBlock Text="{Binding StatusBarText}" />
 			</StatusBarItem>
 		</StatusBar>
 	</Grid>

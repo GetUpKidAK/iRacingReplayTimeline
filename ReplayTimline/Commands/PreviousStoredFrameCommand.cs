@@ -22,12 +22,15 @@ namespace ReplayTimeline
 
 		public bool CanExecute(object parameter)
 		{
-			if (!ReplayTimelineVM.PlaybackEnabled)
+			if (ReplayTimelineVM.SessionInfoLoaded)
 			{
-				var currentNode = ReplayTimelineVM.CurrentTimelineNode;
-				var nodeIndex = ReplayTimelineVM.TimelineNodes.IndexOf(currentNode);
+				if (!ReplayTimelineVM.PlaybackEnabled)
+				{
+					var currentNode = ReplayTimelineVM.CurrentTimelineNode;
+					var nodeIndex = ReplayTimelineVM.TimelineNodes.IndexOf(currentNode);
 
-				return ReplayTimelineVM.TimelineNodes.Count > 0 && nodeIndex > 0;
+					return ReplayTimelineVM.TimelineNodes.Count > 0 && nodeIndex > 0;
+				}
 			}
 
 			return false;

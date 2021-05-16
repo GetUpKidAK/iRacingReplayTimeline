@@ -15,6 +15,8 @@ namespace ReplayTimeline
 
 			m_Wrapper = new SdkWrapper();
 
+			m_Wrapper.Connected += SdkConnected;
+			m_Wrapper.Disconnected += SdkDisconnected;
 			m_Wrapper.TelemetryUpdated += TelemetryUpdated;
 			m_Wrapper.SessionInfoUpdated += SessionInfoUpdated;
 
@@ -23,10 +25,22 @@ namespace ReplayTimeline
 
 		public void Stop()
 		{
+			m_Wrapper.Connected -= SdkConnected;
+			m_Wrapper.Disconnected -= SdkDisconnected;
 			m_Wrapper.TelemetryUpdated -= TelemetryUpdated;
 			m_Wrapper.SessionInfoUpdated -= SessionInfoUpdated;
 
 			m_Wrapper.Stop();
+		}
+
+		private void SdkConnected(object sender, System.EventArgs e)
+		{
+			_timelineVM.SdkConnected();
+		}
+
+		private void SdkDisconnected(object sender, System.EventArgs e)
+		{
+			_timelineVM.SdkDisconnected();
 		}
 
 		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
