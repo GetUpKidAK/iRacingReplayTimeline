@@ -163,6 +163,14 @@ namespace ReplayTimeline
 			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
 		}
 
+		private bool _showDriverCameraPanels;
+		public bool ShowDriverCameraPanels
+		{
+			get { return _showDriverCameraPanels; }
+			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
+		}
+
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		#endregion
@@ -200,6 +208,7 @@ namespace ReplayTimeline
 			StoreFrameBtnText = "Store Node";
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
+			ShowDriverCameraPanels = true;
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
