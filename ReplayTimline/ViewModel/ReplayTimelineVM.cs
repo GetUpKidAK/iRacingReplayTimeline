@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using iRacingSdkWrapper;
 
 
@@ -16,13 +17,14 @@ namespace ReplayTimeline
 		private const float m_VersionNumber = 0.2f;
 
 		#region Properties
-		public string WindowTitle { get { return $"{m_ApplicationTitle} | v{m_VersionNumber}"; } }
+		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
 		public int SessionID { get; private set; }
 		#endregion
 
 		#region Binding Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
+		public ICollectionView TimelineNodesView { get; private set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
@@ -233,8 +235,14 @@ namespace ReplayTimeline
 			m_SDKHelper = new SDKHelper(this);
 
 			TimelineNodes = new ObservableCollection<TimelineNode>();
+			TimelineNodesView = CollectionViewSource.GetDefaultView(TimelineNodes);
 			Drivers = new ObservableCollection<Driver>();
 			Cameras = new ObservableCollection<Camera>();
+
+			TimelineNodesView.SortDescriptions.Clear();
+
+			SortDescription frameSort = new SortDescription("Frame", ListSortDirection.Ascending);
+			TimelineNodesView.SortDescriptions.Add(frameSort);
 
 			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
@@ -338,16 +346,33 @@ namespace ReplayTimeline
 				CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup);
 			}
 
-			// If the sim car/camera doesn't match the currently selected ones in the UI (i.e. it changed in sim), then update it
-			// OnPropertyChanged is called and not the property directly so that there's no recursive loop of changing the driver again, causing stutters
-			if (currentCarId != CurrentDriver.Id) _currentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId); OnPropertyChanged("CurrentDriver");
-			if (currentCamGroup != CurrentCamera.GroupNum) _currentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup); OnPropertyChanged("CurrentCamera");
+			if (CurrentDriver != null && CurrentCamera != null)
+			{
+				// If the sim car/camera doesn't match the currently selected ones in the UI (i.e. it changed in sim), then update it
+				// OnPropertyChanged is called and not the property directly so that there's no recursive loop of changing the driver again, causing stutters
+				if (currentCarId != CurrentDriver.Id) _currentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId); OnPropertyChanged("CurrentDriver");
+				if (currentCamGroup != CurrentCamera.GroupNum) _currentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup); OnPropertyChanged("CurrentCamera");
+			}
 
 			// Update driver telemetry info
 			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)
+		{
+			UpdateDriversAndCameras(sessionInfo);
+
+			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
+
+			if (!SessionInfoLoaded)
+			{
+				LoadExistingProjectFile();
+
+				SessionInfoLoaded = true;
+			}
+		}
+
+		private void UpdateDriversAndCameras(SessionInfo sessionInfo)
 		{
 			var sessionDrivers = SessionInfoHelper.GetSessionDrivers(sessionInfo, Drivers);
 			Drivers.Clear();
@@ -363,22 +388,46 @@ namespace ReplayTimeline
 				Cameras.Add(newCamera);
 			}
 
-			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
+			VerifyExistingNodeCameras();
+		}
 
-			if (!SessionInfoLoaded)
+		private void VerifyExistingNodeCameras()
+		{
+			foreach (var node in TimelineNodes)
 			{
-				var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
-				if (loaddedProject.TimelineNodes.Count > 0)
-				{
-					TimelineNodes.Clear();
+				// Check for node camera in camera list, based on name
+				var existingCameraInSession = Cameras.FirstOrDefault(c => c.GroupName == node.Camera.GroupName);
 
-					foreach (var node in loaddedProject.TimelineNodes)
+				if (existingCameraInSession == null)
+				{
+					// Disable node if it wasn't found
+					node.Enabled = false;
+				}
+				else
+				{
+					// If a camera is found but the group number is different...
+					if (node.Camera.GroupNum != existingCameraInSession.GroupNum)
 					{
-						TimelineNodes.Add(node);
+						// Set the camera group number to the one in the active camera liust
+						node.Camera.GroupNum = existingCameraInSession.GroupNum;
 					}
 				}
+			}
+		}
 
-				SessionInfoLoaded = true;
+		private void LoadExistingProjectFile()
+		{
+			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+			if (loaddedProject.TimelineNodes.Count > 0)
+			{
+				TimelineNodes.Clear();
+
+				foreach (var node in loaddedProject.TimelineNodes)
+				{
+					TimelineNodes.Add(node);
+				}
+
+				VerifyExistingNodeCameras();
 			}
 		}
 		
@@ -392,12 +441,15 @@ namespace ReplayTimeline
 
 		private void JumpToNode(TimelineNode node)
 		{
+			// If replay is playing back AND node is disabled, skip it...
 			if (PlaybackEnabled && !node.Enabled)
 				return;
 
+			// Otherwise, switch driver and camera
 			CurrentDriver = node.Driver;
 			CurrentCamera = node.Camera;
 
+			// If playback is disabled, skip to the frame
 			if (!PlaybackEnabled)
 				GoToFrame(node.Frame);
 		}
@@ -495,16 +547,6 @@ namespace ReplayTimeline
 					storedNode = newNode;
 
 					SaveProjectChanges();
-				}
-
-				// Simple version of sorting for now.
-				var sortedTimeline = TimelineNodes.OrderBy(n => n.Frame).ToList();
-
-				TimelineNodes.Clear();
-
-				foreach (var node in sortedTimeline)
-				{
-					TimelineNodes.Add(node);
 				}
 
 				CurrentTimelineNode = storedNode;

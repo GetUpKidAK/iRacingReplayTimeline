@@ -73,14 +73,19 @@ namespace ReplayTimeline
 					// Get Camera if it is in previous list
 					newCam = currentCameras.FirstOrDefault(c => c.GroupName == groupName);
 
-					// Otherwise...
+					// Create new camera if not in previous lsit
 					if (newCam == null)
 					{
-						// If group name is found, create a new camera
 						newCam = new Camera();
 						newCam.GroupNum = id;
 						newCam.GroupName = groupName;
 					}
+					else
+					{
+						// If it does exist, update the group number to ensure it matches
+						newCam.GroupNum = id;
+					}
+
 					sessionCameras.Add(newCam);
 
 					id++;

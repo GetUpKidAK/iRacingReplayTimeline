@@ -6,7 +6,6 @@ namespace ReplayTimeline
 	public class TimelineNode : INotifyPropertyChanged
 	{
 		private bool _enabled = true;
-
 		public bool Enabled
 		{
 			get { return _enabled; }

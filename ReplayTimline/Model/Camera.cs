@@ -1,15 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Diagnostics;
+
 
 namespace ReplayTimeline
 {
-	public class Camera : IEquatable<Camera>
+	[DebuggerDisplay("{ToString()}")]
+	public class Camera : INotifyPropertyChanged, IEquatable<Camera>
 	{
-		public int GroupNum { get; set; }
-		public string GroupName { get; set; }
+		private int _groupNum;
+		public int GroupNum
+		{
+			get { return _groupNum; }
+			set { _groupNum = value; OnPropertyChanged("GroupNum"); }
+		}
+
+		private string _groupName;
+		public string GroupName
+		{
+			get { return _groupName; }
+			set { _groupName = value; OnPropertyChanged("GroupName"); }
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
 
 
 		public override bool Equals(object obj) => this.Equals(obj as Camera);
@@ -36,7 +51,7 @@ namespace ReplayTimeline
 			// Return true if the fields match.
 			// Note that the base class is not invoked because it is
 			// System.Object, which defines Equals as reference equality.
-			return (GroupName == other.GroupName && GroupNum == other.GroupNum);
+			return (GroupName == other.GroupName);
 		}
 
 		public override int GetHashCode() => (GroupName).GetHashCode();
@@ -58,5 +73,10 @@ namespace ReplayTimeline
 		}
 
 		public static bool operator !=(Camera lhs, Camera rhs) => !(lhs == rhs);
+
+		public override string ToString()
+		{
+			return $"{GroupName} #{GroupNum}";
+		}
 	}
 }
