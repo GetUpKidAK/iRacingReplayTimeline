@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 using iRacingSdkWrapper;
 
 
@@ -73,6 +74,7 @@ namespace ReplayTimeline
 					MovingToFrame = false;
 				}
 				OnPropertyChanged("CurrentFrame");
+				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
@@ -109,6 +111,7 @@ namespace ReplayTimeline
 				UpdatePlaybackButtonText();
 
 				OnPropertyChanged("CurrentPlaybackSpeed");
+				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
@@ -120,6 +123,7 @@ namespace ReplayTimeline
 			{
 				_playbackEnabled = value;
 				OnPropertyChanged("PlaybackEnabled");
+				CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
@@ -549,58 +553,6 @@ namespace ReplayTimeline
 				}
 
 				CurrentTimelineNode = storedNode;
-			}
-		}
-
-		public void GoToPreviousStoredFrame()
-		{
-			if (TimelineNodes.Count > 0)
-			{
-				TimelineNode targetNode = null;
-
-				for (int i = 0; i < TimelineNodes.Count; i++)
-				{
-					if (TimelineNodes[i].Frame < CurrentFrame)
-					{
-						targetNode = TimelineNodes[i];
-					}
-					else if (TimelineNodes[i].Frame >= CurrentFrame)
-					{
-						break;
-					}
-				}
-
-				if (targetNode != null)
-				{
-					CurrentTimelineNode = targetNode;
-					GoToFrame(targetNode.Frame);
-				}
-			}
-		}
-
-		public void GoToNextStoredFrame()
-		{
-			if (TimelineNodes.Count > 0)
-			{
-				TimelineNode targetNode = null;
-
-				for (int i = TimelineNodes.Count - 1; i >= 0; i--)
-				{
-					if (TimelineNodes[i].Frame > CurrentFrame)
-					{
-						targetNode = TimelineNodes[i];
-					}
-					else if (TimelineNodes[i].Frame <= CurrentFrame)
-					{
-						break;
-					}
-				}
-
-				if (targetNode != null)
-				{
-					CurrentTimelineNode = targetNode;
-					GoToFrame(targetNode.Frame);
-				}
 			}
 		}
 
