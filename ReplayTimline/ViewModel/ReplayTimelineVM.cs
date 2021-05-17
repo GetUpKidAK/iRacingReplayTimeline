@@ -333,6 +333,7 @@ namespace ReplayTimeline
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
 			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
+			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
 
 			// Get current car ID and current camera group from sim
@@ -458,8 +459,6 @@ namespace ReplayTimeline
 		{
 			if (SlowMotionEnabled) m_SDKHelper.SetSlowMotionPlaybackSpeed(CurrentPlaybackSpeed);
 			else m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
-
-			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 		}
 
 		private void UpdatePlaybackButtonText()
