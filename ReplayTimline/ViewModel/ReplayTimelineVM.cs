@@ -74,7 +74,7 @@ namespace ReplayTimeline
 					MovingToFrame = false;
 				}
 				OnPropertyChanged("CurrentFrame");
-				CommandManager.InvalidateRequerySuggested();
+				//CommandManager.InvalidateRequerySuggested();
 			}
 		}
 
