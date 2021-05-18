@@ -13,6 +13,13 @@ namespace ReplayTimeline
 			return int.Parse(weekendInfoQuery["SubSessionID"].GetValue("-1"));
 		}
 
+		public static bool IsLiveSession(SessionInfo sessionInfo)
+		{
+			YamlQuery weekendInfoQuery = sessionInfo["WeekendInfo"];
+			var simMode = weekendInfoQuery["SimMode"].GetValue();
+			return simMode.ToLower().Contains("replay") ? false : true;
+		}
+
 		public static List<Driver> GetSessionDrivers(SessionInfo sessionInfo, ICollection<Driver> currentDrivers)
 		{
 			YamlQuery weekendOptionsQuery = sessionInfo["WeekendInfo"]["WeekendOptions"];

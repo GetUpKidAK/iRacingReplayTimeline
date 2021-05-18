@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using iRacingSdkWrapper;
@@ -13,6 +14,7 @@ namespace ReplayTimeline
 	{
 		private SDKHelper m_SDKHelper;
 		private int m_TargetFrame = -1;
+		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Replay Timeline";
 		private const float m_VersionNumber = 0.9f;
@@ -314,12 +316,12 @@ namespace ReplayTimeline
 
 		public void SdkConnected()
 		{
-			StatusBarText = "iRacing Connected";
+			StatusBarText = "iRacing Connected.";
 		}
 
 		public void SdkDisconnected()
 		{
-			StatusBarText = "iRacing Disconnected";
+			StatusBarText = "iRacing Disconnected.";
 
 			// Unload session info, clear information
 			SessionInfoLoaded = false;
@@ -371,9 +373,27 @@ namespace ReplayTimeline
 
 			if (!SessionInfoLoaded)
 			{
-				LoadExistingProjectFile();
+				if (!m_LiveSessionPopupVisible)
+				{
+					if (SessionInfoHelper.IsLiveSession(sessionInfo))
+					{
+						m_LiveSessionPopupVisible = true;
 
-				SessionInfoLoaded = true;
+						var sessionWarningResult = MessageBox.Show("You seem to be running a live session.\n\nThis tool is designed for replays. Some stuff may work, but it's not supported.",
+							"Viewing a Live session", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+						if (sessionWarningResult == MessageBoxResult.OK || sessionWarningResult == MessageBoxResult.Cancel)
+						{
+							m_LiveSessionPopupVisible = false;
+
+							StatusBarText = "iRacing Connected. Running a live session, not currently supported.";
+						}
+					}
+
+					LoadExistingProjectFile();
+
+					SessionInfoLoaded = true;
+				}
 			}
 		}
 
