@@ -34,10 +34,11 @@
 			</MenuItem>
 
 			<MenuItem Header="View">
+				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
 				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
 				<MenuItem Header="Prev/Next Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
+				<Separator/>
 				<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
-				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
 				<Separator/>
 				<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
 			</MenuItem>
@@ -125,6 +126,13 @@
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
 							<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="210" Margin="5"/>
 							<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="210" Margin="5"/>
+						</StackPanel>
+					</Grid>
+
+					<Grid Margin="5" Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
+							<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" Margin="0 0 10 0" />
+							<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
 						</StackPanel>
 					</Grid>
 
