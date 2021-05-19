@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ApplicationQuitCommand.cs" />
+    <Compile Include="ViewModel\Converters\InvertedBoolConverter.cs" />
     <Compile Include="ViewModel\Converters\FlexibleBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Commands\FastForwardCommand.cs" />

@@ -81,7 +81,9 @@
 			</Grid.RowDefinitions>
 
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
-					  MinHeight="250" MaxHeight="420" SelectionMode="Single" Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >
+					  MinHeight="250" MaxHeight="420" SelectionMode="Single" 
+					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
+					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >
 				<ListView.View>
 					<GridView>
 						<GridViewColumn Width="40">

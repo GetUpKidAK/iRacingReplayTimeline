@@ -5,6 +5,7 @@
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
 		<local:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
+		<local:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
 		<local:FlexibleBooleanToVisibilityConverter x:Key="FlexibleBooleanToVisibilityConverter"/>
 	</Application.Resources>
 </Application>
