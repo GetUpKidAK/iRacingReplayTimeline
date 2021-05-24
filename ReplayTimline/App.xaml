@@ -7,5 +7,6 @@
 		<local:BoolToVisibilityConverter x:Key="VisibilityConverter"/>
 		<local:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
 		<local:FlexibleBooleanToVisibilityConverter x:Key="FlexibleBooleanToVisibilityConverter"/>
+		<local:SecondsToTimeConverter x:Key="SecondsToTimeConverter"/>
 	</Application.Resources>
 </Application>

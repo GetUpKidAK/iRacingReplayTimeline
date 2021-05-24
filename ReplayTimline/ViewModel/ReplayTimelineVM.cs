@@ -80,6 +80,14 @@ namespace ReplayTimeline
 			}
 		}
 
+		private double _sessionTime;
+		public double SessionTime
+		{
+			get { return _sessionTime; }
+			set { _sessionTime = value; OnPropertyChanged("SessionTime"); }
+		}
+
+
 		private bool _movingToFrame;
 		public bool MovingToFrame
 		{
@@ -342,6 +350,7 @@ namespace ReplayTimeline
 
 			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
 			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
+			SessionTime = telemetryInfo.SessionTime.Value;
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
