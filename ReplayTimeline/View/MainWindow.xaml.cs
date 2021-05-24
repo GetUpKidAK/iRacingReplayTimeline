@@ -25,7 +25,7 @@ namespace iRacingReplayDirector
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			ReplayTimelineVM vm = this.DataContext as ReplayTimelineVM;
+			ReplayDirectorVM vm = this.DataContext as ReplayDirectorVM;
 
 			vm.ApplicationClosing();
 		}

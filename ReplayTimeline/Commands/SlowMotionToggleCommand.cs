@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class SlowMotionToggleCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 
 		public event EventHandler CanExecuteChanged
@@ -16,7 +16,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public SlowMotionToggleCommand(ReplayTimelineVM vm)
+		public SlowMotionToggleCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

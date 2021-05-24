@@ -10,7 +10,7 @@ using iRacingSdkWrapper;
 
 namespace iRacingReplayDirector
 {
-	public class ReplayTimelineVM : INotifyPropertyChanged
+	public class ReplayDirectorVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
 		private int m_TargetFrame = -1;
@@ -246,7 +246,7 @@ namespace iRacingReplayDirector
 		public TestCommand TestCommand { get; set; }
 
 
-		public ReplayTimelineVM()
+		public ReplayDirectorVM()
 		{
 			m_SDKHelper = new SDKHelper(this);
 

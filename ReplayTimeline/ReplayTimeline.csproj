@@ -99,7 +99,7 @@
     <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />
     <Compile Include="Model\TimelineProject.cs" />
-    <Compile Include="ViewModel\ReplayTimelineVM.cs" />
+    <Compile Include="ViewModel\ReplayDirectorVM.cs" />
     <Compile Include="Commands\StoreCurrentFrameCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
     <Page Include="View\MainWindow.xaml">

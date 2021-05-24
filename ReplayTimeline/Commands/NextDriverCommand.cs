@@ -7,7 +7,7 @@ namespace iRacingReplayDirector
 {
 	public class NextDriverCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -16,7 +16,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public NextDriverCommand(ReplayTimelineVM vm)
+		public NextDriverCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

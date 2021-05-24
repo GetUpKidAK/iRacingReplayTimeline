@@ -5,11 +5,11 @@ namespace iRacingReplayDirector
 {
 	public class SDKHelper
 	{
-		private ReplayTimelineVM _timelineVM;
+		private ReplayDirectorVM _timelineVM;
 		private SdkWrapper m_Wrapper;
 
 
-		public SDKHelper(ReplayTimelineVM timelimeVM)
+		public SDKHelper(ReplayDirectorVM timelimeVM)
 		{
 			_timelineVM = timelimeVM;
 

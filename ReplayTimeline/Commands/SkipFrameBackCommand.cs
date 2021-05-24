@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class SkipFrameBackCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +15,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public SkipFrameBackCommand(ReplayTimelineVM vm)
+		public SkipFrameBackCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

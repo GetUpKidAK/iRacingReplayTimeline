@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class RewindCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +15,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public RewindCommand(ReplayTimelineVM vm)
+		public RewindCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

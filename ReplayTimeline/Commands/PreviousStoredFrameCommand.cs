@@ -7,7 +7,7 @@ namespace iRacingReplayDirector
 {
 	public class PreviousStoredFrameCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -16,7 +16,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public PreviousStoredFrameCommand(ReplayTimelineVM vm)
+		public PreviousStoredFrameCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

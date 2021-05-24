@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class FastForwardCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +15,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public FastForwardCommand(ReplayTimelineVM vm)
+		public FastForwardCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

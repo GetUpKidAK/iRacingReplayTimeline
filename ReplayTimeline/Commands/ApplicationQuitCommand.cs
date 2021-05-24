@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class ApplicationQuitCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +15,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public ApplicationQuitCommand(ReplayTimelineVM vm)
+		public ApplicationQuitCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}

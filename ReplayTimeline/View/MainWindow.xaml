@@ -12,7 +12,7 @@
 		SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
 		Closing="Window_Closing">
 	<Window.DataContext>
-		<vm:ReplayTimelineVM/>
+		<vm:ReplayDirectorVM/>
 	</Window.DataContext>
 	
     <Grid>

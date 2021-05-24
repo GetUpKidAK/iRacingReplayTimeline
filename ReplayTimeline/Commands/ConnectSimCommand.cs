@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class ConnectSimCommand : ICommand
 	{
-		public ReplayTimelineVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayTimelineVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -15,7 +15,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public ConnectSimCommand(ReplayTimelineVM vm)
+		public ConnectSimCommand(ReplayDirectorVM vm)
 		{
 			ReplayTimelineVM = vm;
 		}
