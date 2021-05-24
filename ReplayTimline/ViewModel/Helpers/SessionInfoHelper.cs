@@ -48,6 +48,10 @@ namespace ReplayTimeline
 						newDriver.Name = driverName;
 						newDriver.CustomerId = int.Parse(query["UserID"].GetValue("0")); // default value 0
 						newDriver.Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'); // trim the quotes
+						newDriver.NumberRaw = int.Parse(query["CarNumberRaw"].GetValue(""));
+						newDriver.TeamName = query["TeamName"].GetValue("");
+
+						//newDriver.Number = int.Parse(query["CarNumberRaw"].GetValue("").TrimStart('\"').TrimEnd('\"')); // trim the quotes
 						newDriver.Rating = int.Parse(query["IRating"].GetValue("0"));
 					}
 
@@ -56,7 +60,7 @@ namespace ReplayTimeline
 				}
 			}
 
-			return sessionDrivers;
+			return sessionDrivers.OrderBy(d => d.NumberRaw).ToList();
 		}
 
 		public static List<Camera> GetSessionCameras(SessionInfo sessionInfo, ICollection<Camera> currentCameras)

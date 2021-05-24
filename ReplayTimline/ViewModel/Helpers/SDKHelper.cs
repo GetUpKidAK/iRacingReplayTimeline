@@ -71,12 +71,12 @@ namespace ReplayTimeline
 
 		public void SetDriver(Driver driver)
 		{
-			m_Wrapper.Camera.SwitchToCar(driver.Id);
+			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw);
 		}
 
 		public void SetDriver(Driver driver, Camera camera)
 		{
-			m_Wrapper.Camera.SwitchToCar(driver.Id, camera.GroupNum);
+			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw, camera.GroupNum);
 		}
 
 		public void GoToFrame(int frameNumber)

@@ -31,9 +31,19 @@ namespace ReplayTimeline
 		public int CustomerId { get; set; }
 
 		/// <summary>
+		/// The team name (TeamName) for the driver
+		/// </summary>
+		public string TeamName { get; set; }
+
+		/// <summary>
 		/// The car number of this driver
 		/// </summary>
 		public string Number { get; set; }
+
+		/// <summary>
+		/// The stripped-back car number of this driver
+		/// </summary>
+		public int NumberRaw { get; set; }
 
 		/// <summary>
 		/// A unique identifier for the car class this driver is using
@@ -74,24 +84,10 @@ namespace ReplayTimeline
 		public float LapDistance { get; set; }
 
 		/// <summary>
-		/// The relative distance between you and this driver (in percentage).
-		/// </summary>
-		public float RelativeLapDistance { get; set; }
-
-		/// <summary>
-		/// The fastest lap time of this driver
-		/// </summary>
-		public float FastestLapTime { get; set; }
-
-		/// <summary>
-		/// The last lap time of this driver
-		/// </summary>
-		public float LastLapTime { get; set; }
-
-		/// <summary>
 		/// The iRating of this driver
 		/// </summary>
 		public int Rating { get; set; }
+
 
 		public override bool Equals(object obj) => this.Equals(obj as Driver);
 
@@ -142,7 +138,7 @@ namespace ReplayTimeline
 
 		public override string ToString()
 		{
-			return $"{Name} #{Id}";
+			return $"{Name} #{Number}";
 		}
 	}
 }

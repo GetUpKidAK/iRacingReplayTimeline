@@ -59,11 +59,11 @@
 			<ListView ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" SelectionMode="Single">
 				<ListView.View>
 					<GridView>
-						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Id}">
+						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Number}">
 							<GridViewColumnHeader Content="Car #" IsEnabled="False" />
 						</GridViewColumn>
-						<GridViewColumn Width="165" DisplayMemberBinding="{Binding Name}">
-							<GridViewColumnHeader Content="Driver Name" IsEnabled="False" />
+						<GridViewColumn Width="165" DisplayMemberBinding="{Binding TeamName}">
+							<GridViewColumnHeader Content="Driver/Team Name" IsEnabled="False" />
 						</GridViewColumn>
 					</GridView>
 				</ListView.View>
@@ -100,8 +100,8 @@
 							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 						</GridViewColumn>
 
-						<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.Name}">
-							<GridViewColumnHeader Content="Driver name" IsEnabled="False" />
+						<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.TeamName}">
+							<GridViewColumnHeader Content="Driver/Team name" IsEnabled="False" />
 						</GridViewColumn>
 
 						<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
