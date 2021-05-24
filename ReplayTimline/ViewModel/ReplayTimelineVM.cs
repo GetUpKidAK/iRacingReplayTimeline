@@ -17,7 +17,7 @@ namespace ReplayTimeline
 		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Replay Timeline";
-		private const float m_VersionNumber = 0.9f;
+		private const float m_VersionNumber = 0.91f;
 
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
