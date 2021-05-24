@@ -6,12 +6,12 @@ namespace ReplayTimeline
 	public class TimelineProject
 	{
 		public int SessionID { get; set; }
-		public List<TimelineNode> TimelineNodes { get; set; }
+		public List<NodeSaveFile> Nodes { get; set; }
 
 
 		public TimelineProject()
 		{
-			TimelineNodes = new List<TimelineNode>();
+			Nodes = new List<NodeSaveFile>();
 		}
 	}
 }

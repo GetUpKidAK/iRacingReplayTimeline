@@ -43,10 +43,10 @@
 				<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
 			</MenuItem>
 
-			<!--<MenuItem Header="Debug Menu">
-				<MenuItem Header="Next Driver" Command="{Binding NextDriverCommand}"/>
-				<MenuItem Header="Prev Driver" Command="{Binding PreviousDriverCommand}"/>
-			</MenuItem>-->
+			<MenuItem Header="Debug Menu">
+				<MenuItem Header="Connect Sim" Command="{Binding ConnectSimCommand}"/>
+				<MenuItem Header="Disconnect Sim" Command="{Binding DisconnectSimCommand}"/>
+			</MenuItem>
 		</Menu>
 
 		<Grid Grid.Row="1" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"

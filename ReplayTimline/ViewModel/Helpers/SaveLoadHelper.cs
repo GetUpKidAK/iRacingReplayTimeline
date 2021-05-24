@@ -17,10 +17,15 @@ namespace ReplayTimeline
 			TimelineProject newProject = new TimelineProject();
 
 			newProject.SessionID = sessionID;
-			newProject.TimelineNodes = nodes;
+
+			foreach (var node in nodes)
+			{
+				NodeSaveFile newSaveNode = new NodeSaveFile(node.Enabled, node.Frame, node.Driver.NumberRaw, node.Camera.GroupName);
+
+				newProject.Nodes.Add(newSaveNode);
+			}
 
 			var finalFilename = $"{sessionID}{m_ProjectExtension}";
-
 			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, finalFilename);
 
 			SaveToFile(saveFile, newProject);
@@ -29,7 +34,6 @@ namespace ReplayTimeline
 		public static TimelineProject LoadProject(int sessionID)
 		{
 			var filename = $"{sessionID}{m_ProjectExtension}";
-
 			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
 
 			TimelineProject loadedProject = new TimelineProject();

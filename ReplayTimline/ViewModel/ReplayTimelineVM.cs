@@ -231,6 +231,8 @@ namespace ReplayTimeline
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
+		public ConnectSimCommand ConnectSimCommand { get; set; }
+		public DisconnectSimCommand DisconnectSimCommand { get; set; }
 		#endregion
 
 		public TestCommand TestCommand { get; set; }
@@ -274,6 +276,8 @@ namespace ReplayTimeline
 			NextDriverCommand = new NextDriverCommand(this);
 			PreviousDriverCommand = new PreviousDriverCommand(this);
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
+			ConnectSimCommand = new ConnectSimCommand(this);
+			DisconnectSimCommand = new DisconnectSimCommand(this);
 
 			TestCommand = new TestCommand(this);
 
@@ -443,13 +447,34 @@ namespace ReplayTimeline
 		private void LoadExistingProjectFile()
 		{
 			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
-			if (loaddedProject.TimelineNodes.Count > 0)
+			if (loaddedProject.Nodes.Count > 0)
 			{
 				TimelineNodes.Clear();
 
-				foreach (var node in loaddedProject.TimelineNodes)
+				foreach (var node in loaddedProject.Nodes)
 				{
-					TimelineNodes.Add(node);
+					var foundDriver = Drivers.First(d => d.NumberRaw == node.DriverNumber);
+					var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
+
+					if (foundDriver == null)
+					{
+						Console.WriteLine($"ERROR: Couldn't find driver with number {node.DriverNumber}. Node ignored.");
+					}
+					else
+					{
+						if (foundCamera == null)
+							foundCamera = new Camera() { GroupName = node.CameraName };
+
+						TimelineNode newTimelineNode = new TimelineNode()
+						{
+							Enabled = node.Enabled,
+							Frame = node.Frame,
+							Driver = foundDriver,
+							Camera = foundCamera
+						};
+
+						TimelineNodes.Add(newTimelineNode);
+					}
 				}
 
 				VerifyExistingNodeCameras();

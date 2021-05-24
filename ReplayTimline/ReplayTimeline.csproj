@@ -69,6 +69,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ApplicationQuitCommand.cs" />
+    <Compile Include="Commands\ConnectSimCommand.cs" />
+    <Compile Include="Commands\DisconnectSimCommand.cs" />
+    <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="ViewModel\Converters\InvertedBoolConverter.cs" />
     <Compile Include="ViewModel\Converters\FlexibleBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\BoolToVisibilityConverter.cs" />
