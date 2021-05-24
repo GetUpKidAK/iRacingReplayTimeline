@@ -111,13 +111,15 @@ namespace ReplayTimeline
 		{
 			var laps = telemetryInfo.CarIdxLap.Value;
 			var lapDistances = telemetryInfo.CarIdxLapDistPct.Value;
+			var trackSurfaces = telemetryInfo.CarIdxTrackSurface.Value;
 
 			// Loop through the list of current drivers
 			foreach (Driver driver in driverList)
 			{
-				// Set the lap, distance belonging to this driver
+				// Set the details belonging to this driver
 				driver.Lap = laps[driver.Id];
 				driver.LapDistance = lapDistances[driver.Id];
+				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
 			}
 		}
 	}

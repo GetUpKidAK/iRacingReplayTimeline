@@ -63,15 +63,15 @@ namespace ReplayTimeline
 		/// <summary>
 		/// Used to determine if a driver is in the pits, off or on track
 		/// </summary>
-		//public TrackSurfaces TrackSurface { get; set; }
+		public TrackSurfaces TrackSurface { get; set; }
 
 		/// <summary>
 		/// Whether or not the driver is currently in or approaching the pit stall
 		/// </summary>
-		//public bool IsInPits
-		//{
-		//	get { return this.TrackSurface == TrackSurfaces.AproachingPits || this.TrackSurface == TrackSurfaces.InPitStall; }
-		//}
+		public bool IsInPits
+		{
+			get { return this.TrackSurface == TrackSurfaces.AproachingPits || this.TrackSurface == TrackSurfaces.InPitStall; }
+		}
 
 		/// <summary>
 		/// The lap this driver is currently in
