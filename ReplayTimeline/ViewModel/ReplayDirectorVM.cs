@@ -122,6 +122,14 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private string m_PlaybackSpeedText;
+		public string PlaybackSpeedText
+		{
+			get { return m_PlaybackSpeedText; }
+			set { m_PlaybackSpeedText = value; OnPropertyChanged("PlaybackSpeedText"); }
+		}
+
+
 		private bool _playbackEnabled;
 		public bool PlaybackEnabled
 		{
@@ -146,20 +154,6 @@ namespace iRacingReplayDirector
 		{
 			get { return _playPauseBtnText; }
 			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
-		}
-
-		private string _fastForwardBtnText;
-		public string FastForwardBtnText
-		{
-			get { return _fastForwardBtnText; }
-			set { _fastForwardBtnText = value; OnPropertyChanged("FastForwardBtnText"); }
-		}
-
-		private string _rewindBtnText;
-		public string RewindBtnText
-		{
-			get { return _rewindBtnText; }
-			set { _rewindBtnText = value; OnPropertyChanged("RewindBtnText"); }
 		}
 
 		private bool _showReplayTimeline;
@@ -522,17 +516,19 @@ namespace iRacingReplayDirector
 		private void UpdatePlaybackButtonText()
 		{
 			PlayPauseBtnText = PlaybackEnabled ? "Pause" : "Play";
-
-			RewindBtnText = "<<";
-			FastForwardBtnText = ">>";
-
+			
 			if (CurrentPlaybackSpeed > 1)
-			{
-				FastForwardBtnText = SlowMotionEnabled ? $"1/{CurrentPlaybackSpeed + 1}x" : $"{CurrentPlaybackSpeed}x";
-			}
+				PlaybackSpeedText = SlowMotionEnabled ? $"FF 1/{CurrentPlaybackSpeed + 1}x" : $"FF {CurrentPlaybackSpeed}x";
 			else if (CurrentPlaybackSpeed < -1)
+				PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/{-CurrentPlaybackSpeed + 1}x" : $"RW {-CurrentPlaybackSpeed}x";
+			else
 			{
-				RewindBtnText = SlowMotionEnabled ? $"1/{-CurrentPlaybackSpeed + 1}x" : $"{-CurrentPlaybackSpeed}x";
+				if (CurrentPlaybackSpeed > 0) PlaybackSpeedText = SlowMotionEnabled ? "FF 1/2x" : $"{CurrentPlaybackSpeed}x";
+				else
+				{
+					if (PlaybackEnabled) PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/2x" : $"RW";
+					else PlaybackSpeedText = "Paused";
+				}
 			}
 		}
 

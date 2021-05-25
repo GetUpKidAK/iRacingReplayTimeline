@@ -40,11 +40,12 @@
 				<Separator/>
 				<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
 			</MenuItem>
-
-			<MenuItem Header="Debug Menu">
+			
+			<!-- DEBUG MENU - HIDE ME -->
+			<!--<MenuItem Header="Debug Menu">
 				<MenuItem Header="Connect Sim" Command="{Binding ConnectSimCommand}"/>
 				<MenuItem Header="Disconnect Sim" Command="{Binding DisconnectSimCommand}"/>
-			</MenuItem>
+			</MenuItem>-->
 
 			<MenuItem Header="Help">
 				<MenuItem Header="More Info" Command="{Binding MoreInfoCommand}"/>
@@ -116,12 +117,14 @@
 
 			<Grid Grid.Row="1" Margin="5">
 				<StackPanel>
-					<Grid Margin="5" Height="35" Visibility="{Binding ShowReplayTimeline, Converter={StaticResource VisibilityConverter}}">
+					<Grid Margin="5" Height="30" Visibility="{Binding ShowReplayTimeline, Converter={StaticResource VisibilityConverter}}">
 						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
+							<TextBlock Text=". Session Time: " HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding SessionTime, Converter={StaticResource SecondsToTimeConverter}}" HorizontalAlignment="Center"/>
 						</StackPanel>
 					</Grid>
 
@@ -151,13 +154,15 @@
 
 					<Grid Margin="5" Height="35">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
-							<Button Content="&lt;" ToolTip="Back One Frame" Width="50" Command="{Binding SkipFrameBackCommand}"/>
-							<Button Content="{Binding RewindBtnText}" Width="50" Command="{Binding RewindCommand}"/>
-							<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}"/>
-							<Button Content="{Binding FastForwardBtnText}" Width="50" Command="{Binding FastForwardCommand}"/>
-							<Button Content="&gt;" ToolTip="Forward One Frame" Width="50" Command="{Binding SkipFrameForwardCommand}"/>
-							
-							<Button Content="Slow Motion" Width="75" Command="{Binding SlowMotionCommand}" Margin="20 0 0 0"/>
+							<Button Content="&lt;" ToolTip="Back One Frame" Width="35" Command="{Binding SkipFrameBackCommand}"/>
+							<Button Content="&lt;&lt;" Width="35" Command="{Binding RewindCommand}"/>
+							<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}" />
+							<Button Content="&gt;&gt;" Width="35" Command="{Binding FastForwardCommand}"/>
+							<Button Content="&gt;" ToolTip="Forward One Frame" Width="35" Command="{Binding SkipFrameForwardCommand}"/>
+
+							<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PlaybackSpeedText}" Width="50" Margin="5 0 5 0"/>
+
+							<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>
 						</StackPanel>
 					</Grid>
 

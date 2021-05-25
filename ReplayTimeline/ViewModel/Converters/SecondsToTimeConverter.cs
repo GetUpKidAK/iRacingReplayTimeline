@@ -14,7 +14,8 @@ namespace iRacingReplayDirector
 			TimeSpan time = TimeSpan.FromSeconds(inputValue);
 
 			//here backslash is must to tell that colon is not the part of format, it just a character that we want in output
-			string str = time.ToString(@"hh\:mm\:ss\:fff");
+			//string str = time.ToString(@"hh\:mm\:ss\:fff");
+			string str = time.ToString(@"hh\:mm\:ss");
 
 			return str;
 		}
