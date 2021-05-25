@@ -6,11 +6,9 @@
 		xmlns:vm="clr-namespace:iRacingReplayDirector"
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
         Title="{Binding WindowTitle}"
-		MinHeight="200" MaxHeight="700"
-		MinWidth="500" MaxWidth="1200"
-		WindowStartupLocation="CenterScreen"
-		SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-		Closing="Window_Closing">
+		MinHeight="200" MaxHeight="700" MinWidth="500" MaxWidth="1200"
+		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
+		SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
 	<Window.DataContext>
 		<vm:ReplayDirectorVM/>
 	</Window.DataContext>

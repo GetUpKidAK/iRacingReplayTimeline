@@ -579,48 +579,6 @@ namespace iRacingReplayDirector
 			if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
 		}
 
-		public void StoreCurrentFrame()
-		{
-			if (CurrentTimelineNode != null)
-			{
-				CurrentTimelineNode.Driver = CurrentDriver;
-				CurrentTimelineNode.Camera = CurrentCamera;
-
-				SaveProjectChanges();
-			}
-			else
-			{
-				var timelineFrames = TimelineNodes.Select(n => n.Frame).ToList();
-				TimelineNode storedNode = null;
-
-				if (!timelineFrames.Contains(CurrentFrame))
-				{
-					TimelineNode newNode = new TimelineNode();
-					newNode.Frame = CurrentFrame;
-					newNode.Driver = CurrentDriver;
-					newNode.Camera = CurrentCamera;
-
-					TimelineNodes.Add(newNode);
-					storedNode = newNode;
-
-					SaveProjectChanges();
-				}
-
-				CurrentTimelineNode = storedNode;
-			}
-		}
-
-		public void DeleteStoredFrame()
-		{
-			if (CurrentTimelineNode != null)
-			{
-				TimelineNodes.Remove(CurrentTimelineNode);
-				CurrentTimelineNode = null;
-
-				SaveProjectChanges();
-			}
-		}
-
 		public void GoToFrame(int frame)
 		{
 			m_TargetFrame = frame;
@@ -629,7 +587,7 @@ namespace iRacingReplayDirector
 			m_SDKHelper.GoToFrame(frame);
 		}
 
-		private void SaveProjectChanges()
+		public void SaveProjectChanges()
 		{
 			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}

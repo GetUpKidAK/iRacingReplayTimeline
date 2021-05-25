@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class DeleteStoredFrameCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,14 +17,14 @@ namespace iRacingReplayDirector
 
 		public DeleteStoredFrameCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			if (ReplayTimelineVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
-				return ReplayTimelineVM.CurrentTimelineNode != null && !ReplayTimelineVM.PlaybackEnabled;
+				return ReplayDirectorVM.CurrentTimelineNode != null && !ReplayDirectorVM.PlaybackEnabled;
 			}
 
 			return false;
@@ -36,7 +36,15 @@ namespace iRacingReplayDirector
 						"Delete stored frame?", MessageBoxButton.YesNo, MessageBoxImage.None, MessageBoxResult.No);
 
 			if (confirmationPopUp == MessageBoxResult.Yes)
-				ReplayTimelineVM.DeleteStoredFrame();
+			{
+				if (ReplayDirectorVM.CurrentTimelineNode != null)
+				{
+					ReplayDirectorVM.TimelineNodes.Remove(ReplayDirectorVM.CurrentTimelineNode);
+					ReplayDirectorVM.CurrentTimelineNode = null;
+
+					ReplayDirectorVM.SaveProjectChanges();
+				}
+			}
 		}
 	}
 }

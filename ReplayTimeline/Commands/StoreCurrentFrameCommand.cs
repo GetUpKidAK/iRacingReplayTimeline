@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 
 
@@ -6,7 +7,7 @@ namespace iRacingReplayDirector
 {
 	public class StoreCurrentFrameCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,24 +18,24 @@ namespace iRacingReplayDirector
 
 		public StoreCurrentFrameCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			if (ReplayTimelineVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
-				if (!ReplayTimelineVM.PlaybackEnabled)
+				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
-					bool driverSelected = ReplayTimelineVM.CurrentDriver != null;
-					bool cameraSelected = ReplayTimelineVM.CurrentCamera != null;
+					bool driverSelected = ReplayDirectorVM.CurrentDriver != null;
+					bool cameraSelected = ReplayDirectorVM.CurrentCamera != null;
 
-					bool timelineNodeSelected = ReplayTimelineVM.CurrentTimelineNode != null;
+					bool timelineNodeSelected = ReplayDirectorVM.CurrentTimelineNode != null;
 
 					if (timelineNodeSelected)
 					{
-						return ReplayTimelineVM.CurrentDriver != ReplayTimelineVM.CurrentTimelineNode.Driver
-							|| ReplayTimelineVM.CurrentCamera != ReplayTimelineVM.CurrentTimelineNode.Camera;
+						return ReplayDirectorVM.CurrentDriver != ReplayDirectorVM.CurrentTimelineNode.Driver
+							|| ReplayDirectorVM.CurrentCamera != ReplayDirectorVM.CurrentTimelineNode.Camera;
 					}
 					else
 					{
@@ -48,7 +49,33 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.StoreCurrentFrame();
+			if (ReplayDirectorVM.CurrentTimelineNode != null)
+			{
+				ReplayDirectorVM.CurrentTimelineNode.Driver = ReplayDirectorVM.CurrentDriver;
+				ReplayDirectorVM.CurrentTimelineNode.Camera = ReplayDirectorVM.CurrentCamera;
+
+				ReplayDirectorVM.SaveProjectChanges();
+			}
+			else
+			{
+				var timelineFrames = ReplayDirectorVM.TimelineNodes.Select(n => n.Frame).ToList();
+				TimelineNode storedNode = null;
+
+				if (!timelineFrames.Contains(ReplayDirectorVM.CurrentFrame))
+				{
+					TimelineNode newNode = new TimelineNode();
+					newNode.Frame = ReplayDirectorVM.CurrentFrame;
+					newNode.Driver = ReplayDirectorVM.CurrentDriver;
+					newNode.Camera = ReplayDirectorVM.CurrentCamera;
+
+					ReplayDirectorVM.TimelineNodes.Add(newNode);
+					storedNode = newNode;
+
+					ReplayDirectorVM.SaveProjectChanges();
+				}
+
+				ReplayDirectorVM.CurrentTimelineNode = storedNode;
+			}
 		}
 	}
 }
