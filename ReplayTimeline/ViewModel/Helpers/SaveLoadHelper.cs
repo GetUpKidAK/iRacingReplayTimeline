@@ -57,6 +57,19 @@ namespace iRacingReplayDirector
 		{
 			var finalFilename = $"{sessionID}{m_ProjectExtension}";
 			var finalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, m_SubFolder);
+
+			if (!Directory.Exists(finalPath))
+			{
+				try
+				{
+					Directory.CreateDirectory(finalPath);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
+			}
+
 			return Path.Combine(finalPath, finalFilename);
 		}
 
