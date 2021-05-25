@@ -8,7 +8,8 @@ namespace iRacingReplayDirector
 {
 	public class SaveLoadHelper
 	{
-		private const string m_ProjectExtension = "_timeline.timeline";
+		private const string m_SubFolder = "Saves";
+		private const string m_ProjectExtension = ".timeline";
 		private const Formatting m_FileFormatting = Formatting.Indented;
 
 
@@ -25,24 +26,22 @@ namespace iRacingReplayDirector
 				newProject.Nodes.Add(newSaveNode);
 			}
 
-			var finalFilename = $"{sessionID}{m_ProjectExtension}";
-			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, finalFilename);
+			var saveFilePath = GenerateFilePath(sessionID);
 
-			SaveToFile(saveFile, newProject);
+			SaveToFile(saveFilePath, newProject);
 		}
 
 		public static TimelineProject LoadProject(int sessionID)
 		{
-			var filename = $"{sessionID}{m_ProjectExtension}";
-			string saveFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+			var saveFilePath = GenerateFilePath(sessionID);
 
 			TimelineProject loadedProject = new TimelineProject();
 
-			if (File.Exists(saveFile))
+			if (File.Exists(saveFilePath))
 			{
 				try
 				{
-					string fileContents = File.ReadAllText(saveFile);
+					string fileContents = File.ReadAllText(saveFilePath);
 					loadedProject = JsonConvert.DeserializeObject<TimelineProject>(fileContents);
 				}
 				catch (Exception e)
@@ -52,6 +51,13 @@ namespace iRacingReplayDirector
 			}
 
 			return loadedProject;
+		}
+
+		private static string GenerateFilePath(int sessionID)
+		{
+			var finalFilename = $"{sessionID}{m_ProjectExtension}";
+			var finalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, m_SubFolder);
+			return Path.Combine(finalPath, finalFilename);
 		}
 
 		private static void SaveToFile<T>(string fullSavePath, T saveData)
