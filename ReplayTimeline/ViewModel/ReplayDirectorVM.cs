@@ -241,9 +241,9 @@ namespace iRacingReplayDirector
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		public ConnectSimCommand ConnectSimCommand { get; set; }
 		public DisconnectSimCommand DisconnectSimCommand { get; set; }
+		public MoreInfoCommand MoreInfoCommand { get; set;}
+		public AboutCommand AboutCommand { get; set; }
 		#endregion
-
-		public TestCommand TestCommand { get; set; }
 
 
 		public ReplayDirectorVM()
@@ -286,8 +286,8 @@ namespace iRacingReplayDirector
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			ConnectSimCommand = new ConnectSimCommand(this);
 			DisconnectSimCommand = new DisconnectSimCommand(this);
-
-			TestCommand = new TestCommand(this);
+			MoreInfoCommand = new MoreInfoCommand(this);
+			AboutCommand = new AboutCommand(this);
 
 			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
 		}

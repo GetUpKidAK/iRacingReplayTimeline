@@ -45,6 +45,11 @@
 				<MenuItem Header="Connect Sim" Command="{Binding ConnectSimCommand}"/>
 				<MenuItem Header="Disconnect Sim" Command="{Binding DisconnectSimCommand}"/>
 			</MenuItem>
+
+			<MenuItem Header="Help">
+				<MenuItem Header="More Info" Command="{Binding MoreInfoCommand}"/>
+				<MenuItem Header="About" Command="{Binding AboutCommand}"/>
+			</MenuItem>
 		</Menu>
 
 		<Grid Grid.Row="1" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"
