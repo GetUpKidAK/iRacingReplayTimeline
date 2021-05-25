@@ -21,7 +21,7 @@ namespace iRacingReplayDirector
 
 			foreach (var node in nodes)
 			{
-				NodeSaveFile newSaveNode = new NodeSaveFile(node.Enabled, node.Frame, node.Driver.NumberRaw, node.Camera.GroupName);
+				NodeSaveFile newSaveNode = new NodeSaveFile(node.Enabled, node.Frame, 1, node.Driver.NumberRaw, node.Camera.GroupName);
 
 				newProject.Nodes.Add(newSaveNode);
 			}
