@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class PlayPauseCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,27 +17,23 @@ namespace iRacingReplayDirector
 
 		public PlayPauseCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.SessionInfoLoaded;
+			return ReplayDirectorVM.SessionInfoLoaded;
 		}
 
 		public void Execute(object parameter)
 		{
-			bool slowMoEnabled = ReplayTimelineVM.SlowMotionEnabled;
-
-			if (ReplayTimelineVM.CurrentPlaybackSpeed == 0)
+			if (ReplayDirectorVM.PlaybackEnabled)
 			{
-				ReplayTimelineVM.CurrentPlaybackSpeed = 1;
-				ReplayTimelineVM.ChangePlaybackSpeed();
+				ReplayDirectorVM.SetPlaybackSpeed(0);
 			}
 			else
 			{
-				ReplayTimelineVM.CurrentPlaybackSpeed = 0;
-				ReplayTimelineVM.ChangePlaybackSpeed();
+				ReplayDirectorVM.SetPlaybackSpeed(1);
 			}
 		}
 	}

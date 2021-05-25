@@ -95,7 +95,7 @@
     <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="Model\TimelineNode.cs" />
-    <Compile Include="Commands\SlowMotionToggleCommand.cs" />
+    <Compile Include="Commands\SlowMotionCommand.cs" />
     <Compile Include="Commands\NextDriverCommand.cs" />
     <Compile Include="Commands\PreviousDriverCommand.cs" />
     <Compile Include="Commands\SkipFrameBackCommand.cs" />

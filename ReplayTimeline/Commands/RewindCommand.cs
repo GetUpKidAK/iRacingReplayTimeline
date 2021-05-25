@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class RewindCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,31 +17,50 @@ namespace iRacingReplayDirector
 
 		public RewindCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.SessionInfoLoaded;
+			return ReplayDirectorVM.SessionInfoLoaded && !(ReplayDirectorVM.CurrentPlaybackSpeed <= -16);
 		}
 
 		public void Execute(object parameter)
 		{
-			bool slowMoEnabled = ReplayTimelineVM.SlowMotionEnabled;
-
-			if (ReplayTimelineVM.CurrentPlaybackSpeed < 0)
+			// Rewind will jump to faster speeds (up to 16x) once rewind is enabled.
+			// If in any other state (slow motion, fast-forward, etc.) then it will just start playback in reverse at 1X speed
+			if (ReplayDirectorVM.CurrentPlaybackSpeed < 0 && !ReplayDirectorVM.SlowMotionEnabled)
 			{
-				if (!slowMoEnabled)
-					ReplayTimelineVM.CurrentPlaybackSpeed *= 2;
-				else
-					ReplayTimelineVM.CurrentPlaybackSpeed -= 2;
+				// In-Sim speed jumps are 1, 2, 4, 8, 12, 16X
+				int newSpeed = ReplayDirectorVM.CurrentPlaybackSpeed;
+
+				switch (ReplayDirectorVM.CurrentPlaybackSpeed)
+				{
+					case -1:
+						newSpeed *= 2;
+						break;
+					case -2:
+						newSpeed *= 2;
+						break;
+					case -4:
+						newSpeed *= 2;
+						break;
+					case -8:
+						newSpeed -= 4;
+						break;
+					case -12:
+						newSpeed -= 4;
+						break;
+					default:
+						break;
+				}
+
+				ReplayDirectorVM.SetPlaybackSpeed(newSpeed);
 			}
 			else
 			{
-				ReplayTimelineVM.CurrentPlaybackSpeed = -1;
+				ReplayDirectorVM.SetPlaybackSpeed(-1);
 			}
-
-			ReplayTimelineVM.ChangePlaybackSpeed();
 		}
 	}
 }

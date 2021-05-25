@@ -116,10 +116,7 @@ namespace iRacingReplayDirector
 			set
 			{
 				m_CurrentPlaybackSpeed = value;
-				if (m_CurrentPlaybackSpeed > 16) m_CurrentPlaybackSpeed = 16;
-				else if (m_CurrentPlaybackSpeed < -16) m_CurrentPlaybackSpeed = -16;
 				UpdatePlaybackButtonText();
-
 				OnPropertyChanged("CurrentPlaybackSpeed");
 				CommandManager.InvalidateRequerySuggested();
 			}
@@ -231,7 +228,7 @@ namespace iRacingReplayDirector
 		public FastForwardCommand FastForwardCommand { get; set; }
 		public SkipFrameBackCommand SkipFrameBackCommand { get; set; }
 		public SkipFrameForwardCommand SkipFrameForwardCommand { get; set; }
-		public SlowMotionToggleCommand SlowMotionToggleCommand { get; set; }
+		public SlowMotionCommand SlowMotionCommand { get; set; }
 		public NextLapCommand NextLapCommand { get; set; }
 		public PreviousLapCommand PreviousLapCommand { get; set; }
 		public NextSessionCommand NextSessionCommand { get; set; }
@@ -274,7 +271,7 @@ namespace iRacingReplayDirector
 			PlayPauseCommand = new PlayPauseCommand(this);
 			RewindCommand = new RewindCommand(this);
 			FastForwardCommand = new FastForwardCommand(this);
-			SlowMotionToggleCommand = new SlowMotionToggleCommand(this);
+			SlowMotionCommand = new SlowMotionCommand(this);
 			SkipFrameBackCommand = new SkipFrameBackCommand(this);
 			SkipFrameForwardCommand = new SkipFrameForwardCommand(this);
 			NextLapCommand = new NextLapCommand(this);
@@ -513,35 +510,29 @@ namespace iRacingReplayDirector
 				GoToFrame(node.Frame);
 		}
 
-		public void ChangePlaybackSpeed()
+		public void SetPlaybackSpeed(int speed, bool slowMo = false)
 		{
-			if (SlowMotionEnabled) m_SDKHelper.SetSlowMotionPlaybackSpeed(CurrentPlaybackSpeed);
-			else m_SDKHelper.SetPlaybackSpeed(CurrentPlaybackSpeed);
+			// Shouldn't be possible, but lock speeds at 16X for safety
+			if (speed > 16) speed = 16; else if (speed < -16) speed = -16;
+
+			if (!slowMo) m_SDKHelper.SetPlaybackSpeed(speed);
+			else m_SDKHelper.SetSlowMotionPlaybackSpeed(speed);
 		}
 
 		private void UpdatePlaybackButtonText()
 		{
 			PlayPauseBtnText = PlaybackEnabled ? "Pause" : "Play";
 
-			if (CurrentPlaybackSpeed > 0)
-			{
-				RewindBtnText = "<<";
-				FastForwardBtnText = ">>";
+			RewindBtnText = "<<";
+			FastForwardBtnText = ">>";
 
-				if (CurrentPlaybackSpeed > 1)
-				{
-					FastForwardBtnText = SlowMotionEnabled ? $"1/{CurrentPlaybackSpeed + 1}x" : $"{CurrentPlaybackSpeed}x";
-				}
+			if (CurrentPlaybackSpeed > 1)
+			{
+				FastForwardBtnText = SlowMotionEnabled ? $"1/{CurrentPlaybackSpeed + 1}x" : $"{CurrentPlaybackSpeed}x";
 			}
-			else
+			else if (CurrentPlaybackSpeed < -1)
 			{
-				RewindBtnText = "<<";
-				FastForwardBtnText = ">>";
-
-				if (CurrentPlaybackSpeed < -1)
-				{
-					RewindBtnText = SlowMotionEnabled ? $"1/{-CurrentPlaybackSpeed - 1}x" : $"{-CurrentPlaybackSpeed}x";
-				}
+				RewindBtnText = SlowMotionEnabled ? $"1/{-CurrentPlaybackSpeed + 1}x" : $"{-CurrentPlaybackSpeed}x";
 			}
 		}
 

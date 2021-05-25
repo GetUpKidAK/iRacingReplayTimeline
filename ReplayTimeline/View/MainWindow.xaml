@@ -157,7 +157,7 @@
 							<Button Content="{Binding FastForwardBtnText}" Width="50" Command="{Binding FastForwardCommand}"/>
 							<Button Content="&gt;" ToolTip="Forward One Frame" Width="50" Command="{Binding SkipFrameForwardCommand}"/>
 							
-							<ToggleButton Content="Slow Motion" Width="75" Command="{Binding SlowMotionToggleCommand}" IsChecked="{Binding SlowMotionEnabled}" Margin="20 0 0 0"/>
+							<Button Content="Slow Motion" Width="75" Command="{Binding SlowMotionCommand}" Margin="20 0 0 0"/>
 						</StackPanel>
 					</Grid>
 
