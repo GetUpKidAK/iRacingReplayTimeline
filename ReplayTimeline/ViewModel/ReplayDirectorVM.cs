@@ -44,19 +44,19 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		private Driver _currentDriver;
-		public Driver CurrentDriver
-		{
-			get { return _currentDriver; }
-			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); DriverChanged(); }
-		}
+		//private Driver _currentDriver;
+		//public Driver CurrentDriver
+		//{
+		//	get { return _currentDriver; }
+		//	set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); DriverChanged(); }
+		//}
 
-		private Camera _currentCamera;
-		public Camera CurrentCamera
-		{
-			get { return _currentCamera; }
-			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); CameraChanged(); }
-		}
+		//private Camera _currentCamera;
+		//public Camera CurrentCamera
+		//{
+		//	get { return _currentCamera; }
+		//	set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); CameraChanged(); }
+		//}
 
 		private int _currentFrame;
 		public int CurrentFrame
@@ -333,6 +333,106 @@ namespace iRacingReplayDirector
 			TimelineNodes.Clear();
 		}
 
+		private Driver m_ActiveDriver;
+		public Driver ActiveDriver
+		{
+			get { return m_ActiveDriver; }
+			set
+			{
+				m_ActiveDriver = value;
+				m_SDKHelper.SetDriver(ActiveDriver);
+			}
+		}
+
+		private Camera m_ActiveCamera;
+		public Camera ActiveCamera
+		{
+			get { return m_ActiveCamera; }
+			set
+			{
+				m_ActiveCamera = value;
+				m_SDKHelper.SetDriver(ActiveDriver, ActiveCamera);
+			}
+		}
+
+
+		private Driver m_InUISelectedDriver;
+		public Driver InUISelectedDriver
+		{
+			get { return m_InUISelectedDriver; }
+			set
+			{
+				m_InUISelectedDriver = value;
+
+				if (InUISelectedDriver != InSimSelectedDriver)
+				{
+					ActiveDriver = InUISelectedDriver;
+					Console.WriteLine("UI Driver has changed");
+				}
+
+				OnPropertyChanged("InUISelectedDriver");
+			}
+		}
+
+		private Camera m_InUISelectedCamera;
+		public Camera InUISelectedCamera
+		{
+			get { return m_InUISelectedCamera; }
+			set
+			{
+				m_InUISelectedCamera = value;
+
+				if (InUISelectedCamera != InSimSelectedCamera)
+				{
+					ActiveCamera = InUISelectedCamera;
+					Console.WriteLine("UI Camera has changed");
+				}
+
+				OnPropertyChanged("InUISelectedCamera");
+			}
+		}
+
+		// TODO: Move these
+		private Driver m_InSimSelectedDriver;
+		public Driver InSimSelectedDriver
+		{
+			get => m_InSimSelectedDriver;
+			private set
+			{
+				if (m_InSimSelectedDriver == value)
+					return;
+
+				m_InSimSelectedDriver = value;
+
+				if (InSimSelectedDriver != InUISelectedDriver)
+				{
+					InUISelectedDriver = InSimSelectedDriver;
+					ActiveDriver = InSimSelectedDriver;
+					Console.WriteLine("Sim Driver has changed");
+				}
+			}
+		}
+
+		private Camera m_InSimSelectedCamera;
+		public Camera InSimSelectedCamera
+		{
+			get => m_InSimSelectedCamera;
+			private set
+			{
+				if (m_InSimSelectedCamera == value)
+					return;
+
+				m_InSimSelectedCamera = value;
+
+				if (InSimSelectedCamera != InUISelectedCamera)
+				{
+					InUISelectedCamera = InSimSelectedCamera;
+					ActiveCamera = InSimSelectedCamera;
+					Console.WriteLine("Sim Camera has changed");
+				}
+			}
+		}
+
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
 		{
 			// Leave now if the session info hasn't already been loaded
@@ -350,20 +450,8 @@ namespace iRacingReplayDirector
 			var currentCarId = telemetryInfo.CamCarIdx.Value;
 			var currentCamGroup = telemetryInfo.CamGroupNumber.Value;
 
-			if (CurrentDriver == null || CurrentCamera == null)
-			{
-				// Set the current driver and camera if they were null
-				CurrentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId);
-				CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup);
-			}
-
-			if (CurrentDriver != null && CurrentCamera != null)
-			{
-				// If the sim car/camera doesn't match the currently selected ones in the UI (i.e. it changed in sim), then update it
-				// OnPropertyChanged is called and not the property directly so that there's no recursive loop of changing the driver again, causing stutters
-				if (currentCarId != CurrentDriver.Id) _currentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId); OnPropertyChanged("CurrentDriver");
-				if (currentCamGroup != CurrentCamera.GroupNum) _currentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup); OnPropertyChanged("CurrentCamera");
-			}
+			InSimSelectedDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId);
+			InSimSelectedCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup);
 
 			// Update driver telemetry info
 			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
@@ -496,8 +584,8 @@ namespace iRacingReplayDirector
 				return;
 
 			// Otherwise, switch driver and camera
-			CurrentDriver = node.Driver;
-			CurrentCamera = node.Camera;
+			ActiveDriver = node.Driver;
+			ActiveCamera = node.Camera;
 
 			// If playback is disabled, skip to the frame
 			if (!PlaybackEnabled)
@@ -535,29 +623,6 @@ namespace iRacingReplayDirector
 		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
 			m_SDKHelper.JumpToEvent(replayEvent);
-		}
-
-		private void DriverChanged()
-		{
-			if (CurrentDriver == null)
-				return;
-
-			m_SDKHelper.SetDriver(CurrentDriver);
-		}
-
-		private void CameraChanged()
-		{
-			if (CurrentCamera == null)
-				return;
-
-			if (CurrentDriver == null)
-			{
-				m_SDKHelper.SetCamera(CurrentCamera);
-			}
-			else
-			{
-				m_SDKHelper.SetDriver(CurrentDriver, CurrentCamera);
-			}
 		}
 
 		private void TimelineNodeChanged()

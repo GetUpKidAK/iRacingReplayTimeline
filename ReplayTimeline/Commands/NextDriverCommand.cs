@@ -25,7 +25,7 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayTimelineVM.SessionInfoLoaded)
 			{
-				return ReplayTimelineVM.CurrentDriver != null;
+				return ReplayTimelineVM.ActiveDriver != null;
 			}
 
 			return false;
@@ -33,7 +33,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			var currentDriver = ReplayTimelineVM.CurrentDriver;
+			var currentDriver = ReplayTimelineVM.ActiveDriver;
 			var orderedDriverList = ReplayTimelineVM.Drivers.OrderByDescending(d => d.LapDistance).ToList();
 
 			int driverIndex = orderedDriverList.IndexOf(currentDriver);
@@ -45,7 +45,7 @@ namespace iRacingReplayDirector
 
 				var nextDriver = orderedDriverList.ElementAt(nextDriverIndex);
 
-				ReplayTimelineVM.CurrentDriver = nextDriver;
+				ReplayTimelineVM.ActiveDriver = nextDriver;
 			}
 		}
 	}

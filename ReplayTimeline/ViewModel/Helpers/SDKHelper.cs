@@ -66,16 +66,25 @@ namespace iRacingReplayDirector
 
 		public void SetCamera(Camera camera)
 		{
+			if (camera == null)
+				return;
+
 			m_Wrapper.Camera.SwitchGroup(camera.GroupNum);
 		}
 
 		public void SetDriver(Driver driver)
 		{
+			if (driver == null)
+				return;
+
 			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw);
 		}
 
 		public void SetDriver(Driver driver, Camera camera)
 		{
+			if (driver == null || camera == null)
+				return;
+
 			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw, camera.GroupNum);
 		}
 

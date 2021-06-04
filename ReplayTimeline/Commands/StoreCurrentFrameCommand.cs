@@ -27,15 +27,15 @@ namespace iRacingReplayDirector
 			{
 				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
-					bool driverSelected = ReplayDirectorVM.CurrentDriver != null;
-					bool cameraSelected = ReplayDirectorVM.CurrentCamera != null;
+					bool driverSelected = ReplayDirectorVM.ActiveDriver != null;
+					bool cameraSelected = ReplayDirectorVM.ActiveCamera != null;
 
 					bool timelineNodeSelected = ReplayDirectorVM.CurrentTimelineNode != null;
 
 					if (timelineNodeSelected)
 					{
-						return ReplayDirectorVM.CurrentDriver != ReplayDirectorVM.CurrentTimelineNode.Driver
-							|| ReplayDirectorVM.CurrentCamera != ReplayDirectorVM.CurrentTimelineNode.Camera;
+						return ReplayDirectorVM.ActiveDriver != ReplayDirectorVM.CurrentTimelineNode.Driver
+							|| ReplayDirectorVM.ActiveCamera != ReplayDirectorVM.CurrentTimelineNode.Camera;
 					}
 					else
 					{
@@ -51,8 +51,8 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayDirectorVM.CurrentTimelineNode != null)
 			{
-				ReplayDirectorVM.CurrentTimelineNode.Driver = ReplayDirectorVM.CurrentDriver;
-				ReplayDirectorVM.CurrentTimelineNode.Camera = ReplayDirectorVM.CurrentCamera;
+				ReplayDirectorVM.CurrentTimelineNode.Driver = ReplayDirectorVM.ActiveDriver;
+				ReplayDirectorVM.CurrentTimelineNode.Camera = ReplayDirectorVM.ActiveCamera;
 
 				ReplayDirectorVM.SaveProjectChanges();
 			}
@@ -65,8 +65,8 @@ namespace iRacingReplayDirector
 				{
 					TimelineNode newNode = new TimelineNode();
 					newNode.Frame = ReplayDirectorVM.CurrentFrame;
-					newNode.Driver = ReplayDirectorVM.CurrentDriver;
-					newNode.Camera = ReplayDirectorVM.CurrentCamera;
+					newNode.Driver = ReplayDirectorVM.ActiveDriver;
+					newNode.Camera = ReplayDirectorVM.ActiveCamera;
 
 					ReplayDirectorVM.TimelineNodes.Add(newNode);
 					storedNode = newNode;
