@@ -33,7 +33,7 @@ namespace iRacingReplayDirector
 
 			if (confirmationPopUp == MessageBoxResult.OK)
 			{
-				var destinationurl = "https://members.iracing.com/jforum/posts/list/3806315.page";
+				var destinationurl = "https://forums.iracing.com/discussion/605/iracing-sequence-director-editing-tool-for-replays";
 				var sInfo = new System.Diagnostics.ProcessStartInfo(destinationurl)
 				{
 					UseShellExecute = true,
