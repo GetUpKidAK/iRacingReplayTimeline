@@ -365,5 +365,11 @@ namespace iRacingReplayDirector
 		{
 			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}
+
+		public void ToggleUI(bool enable)
+		{
+			if (enable) m_SDKHelper.EnableUI();
+			else m_SDKHelper.DisableUI();
+		}
 	}
 }

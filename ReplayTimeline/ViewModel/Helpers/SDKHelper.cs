@@ -1,11 +1,12 @@
 ﻿using iRacingSdkWrapper;
+using iRacingSdkWrapper.Bitfields;
 
 
 namespace iRacingReplayDirector
 {
 	public class SDKHelper
 	{
-		private ReplayDirectorVM _timelineVM;
+		private ReplayDirectorVM m_DirectorVM;
 		private SdkWrapper m_Wrapper;
 
 		// Is Video Capture mode enabled in user settings?
@@ -14,9 +15,9 @@ namespace iRacingReplayDirector
 		public TelemetryValue<bool> VideoCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
 
 
-		public SDKHelper(ReplayDirectorVM timelimeVM)
+		public SDKHelper(ReplayDirectorVM vm)
 		{
-			_timelineVM = timelimeVM;
+			m_DirectorVM = vm;
 
 			m_Wrapper = new SdkWrapper();
 
@@ -40,22 +41,22 @@ namespace iRacingReplayDirector
 
 		private void SdkConnected(object sender, System.EventArgs e)
 		{
-			_timelineVM.SdkConnected();
+			m_DirectorVM.SdkConnected();
 		}
 
 		private void SdkDisconnected(object sender, System.EventArgs e)
 		{
-			_timelineVM.SdkDisconnected();
+			m_DirectorVM.SdkDisconnected();
 		}
 
 		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
 		{
-			_timelineVM.TelemetryUpdated(e.TelemetryInfo);
+			m_DirectorVM.TelemetryUpdated(e.TelemetryInfo);
 		}
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
 		{
-			_timelineVM.SessionInfoUpdated(e.SessionInfo);
+			m_DirectorVM.SessionInfoUpdated(e.SessionInfo);
 		}
 
 
@@ -92,6 +93,22 @@ namespace iRacingReplayDirector
 		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
 			m_Wrapper.Replay.Jump(replayEvent);
+		}
+
+		public void EnableUI()
+		{
+			CameraState state = new CameraState();
+			state.Add(CameraStates.UIHidden);
+
+			m_Wrapper.Camera.SetCameraState(state);
+		}
+
+		public void DisableUI()
+		{
+			CameraState state = new CameraState();
+			state.Remove(CameraStates.UIHidden);
+
+			m_Wrapper.Camera.SetCameraState(state);
 		}
 
 		public void EnableVideoCapture()
