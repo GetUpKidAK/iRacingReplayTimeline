@@ -10,7 +10,7 @@ namespace iRacingReplayDirector
 
 		// Is Video Capture mode enabled in user settings?
 		public TelemetryValue<bool> VideoCaptureEnabled { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
-		// Is video capture currently active? i.e. Recording
+		// Is video capture currently recording?
 		public TelemetryValue<bool> VideoCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
 
 

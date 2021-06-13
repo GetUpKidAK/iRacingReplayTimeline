@@ -4,13 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 using iRacingSdkWrapper;
 
 
 namespace iRacingReplayDirector
 {
-	public class ReplayDirectorVM : INotifyPropertyChanged
+	public partial class ReplayDirectorVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
 		private int m_TargetFrame = -1;
@@ -18,223 +17,6 @@ namespace iRacingReplayDirector
 
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
 		private const string m_VersionNumber = "1.1";
-
-		#region Properties
-		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
-		public bool SessionInfoLoaded { get; private set; } = false;
-		public int SessionID { get; private set; }
-		#endregion
-
-		#region Binding Properties
-		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
-		public ICollectionView TimelineNodesView { get; private set; }
-		public ObservableCollection<Driver> Drivers { get; set; }
-		public ObservableCollection<Camera> Cameras { get; set; }
-
-
-		private TimelineNode _currentTimelineNode;
-		public TimelineNode CurrentTimelineNode
-		{
-			get { return _currentTimelineNode; }
-			set
-			{
-				_currentTimelineNode = value;
-				OnPropertyChanged("CurrentTimelineNode");
-				TimelineNodeChanged();
-			}
-		}
-
-		private Driver _currentDriver;
-		public Driver CurrentDriver
-		{
-			get { return _currentDriver; }
-			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); DriverChanged(); }
-		}
-
-		private Camera _currentCamera;
-		public Camera CurrentCamera
-		{
-			get { return _currentCamera; }
-			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); CameraChanged(); }
-		}
-
-		private int _currentFrame;
-		public int CurrentFrame
-		{
-			get { return _currentFrame; }
-			set
-			{
-				var lastFrame = _currentFrame;
-				_currentFrame = value;
-
-				if (_currentFrame == m_TargetFrame || m_TargetFrame == -1)
-					if (lastFrame != _currentFrame) CheckCurrentFrameForStoredNodes();
-
-				if (_currentFrame == m_TargetFrame)
-				{
-					m_TargetFrame = -1;
-					MovingToFrame = false;
-				}
-				OnPropertyChanged("CurrentFrame");
-				//CommandManager.InvalidateRequerySuggested();
-			}
-		}
-
-		private double _sessionTime;
-		public double SessionTime
-		{
-			get { return _sessionTime; }
-			set { _sessionTime = value; OnPropertyChanged("SessionTime"); }
-		}
-
-
-		private bool _movingToFrame;
-		public bool MovingToFrame
-		{
-			get { return _movingToFrame; }
-			private set { _movingToFrame = value; OnPropertyChanged("MovingToFrame"); }
-		}
-
-		private int _finalFrame;
-		public int FinalFrame
-		{
-			get { return _finalFrame; }
-			set { _finalFrame = value; OnPropertyChanged("FinalFrame"); }
-		}
-
-		private bool _slowMotionEnabled;
-		public bool SlowMotionEnabled
-		{
-			get { return _slowMotionEnabled; }
-			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); }
-		}
-
-		private int m_CurrentPlaybackSpeed;
-		public int CurrentPlaybackSpeed
-		{
-			get => m_CurrentPlaybackSpeed;
-			set
-			{
-				m_CurrentPlaybackSpeed = value;
-				UpdatePlaybackButtonText();
-				OnPropertyChanged("CurrentPlaybackSpeed");
-				CommandManager.InvalidateRequerySuggested();
-			}
-		}
-
-		private string m_PlaybackSpeedText;
-		public string PlaybackSpeedText
-		{
-			get { return m_PlaybackSpeedText; }
-			set { m_PlaybackSpeedText = value; OnPropertyChanged("PlaybackSpeedText"); }
-		}
-
-
-		private bool _playbackEnabled;
-		public bool PlaybackEnabled
-		{
-			get { return _playbackEnabled; }
-			private set
-			{
-				_playbackEnabled = value;
-				OnPropertyChanged("PlaybackEnabled");
-				CommandManager.InvalidateRequerySuggested();
-			}
-		}
-
-		private string _storeFrameBtnText;
-		public string StoreFrameBtnText
-		{
-			get { return _storeFrameBtnText; }
-			set { _storeFrameBtnText = value; OnPropertyChanged("StoreFrameBtnText"); }
-		}
-
-		private string _playPauseBtnText;
-		public string PlayPauseBtnText
-		{
-			get { return _playPauseBtnText; }
-			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
-		}
-
-		private bool _showReplayTimeline;
-		public bool ShowReplayTimeline
-		{
-			get { return _showReplayTimeline; }
-			set { _showReplayTimeline = value; OnPropertyChanged("ShowReplayTimeline"); }
-		}
-
-		private bool _showSessionLapSkipButtons;
-		public bool ShowSessionLapSkipButtons
-		{
-			get { return _showSessionLapSkipButtons; }
-			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
-		}
-
-		private bool _showDriverCameraPanels;
-		public bool ShowDriverCameraPanels
-		{
-			get { return _showDriverCameraPanels; }
-			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
-		}
-
-		private bool _showTimelineNodeList;
-		public bool ShowTimelineNodeList
-		{
-			get { return _showTimelineNodeList; }
-			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
-		}
-
-		private bool _minimizedMode;
-		public bool MinimizedMode
-		{
-			get { return _minimizedMode; }
-			set
-			{
-				_minimizedMode = value;
-
-				ShowReplayTimeline = !_minimizedMode;
-				ShowSessionLapSkipButtons = !_minimizedMode;
-				ShowDriverCameraPanels = !_minimizedMode;
-				ShowTimelineNodeList = !_minimizedMode;
-
-				OnPropertyChanged("MinimizedMode");
-			}
-		}
-
-		private string _statusBarText;
-		public string StatusBarText
-		{
-			get { return _statusBarText; }
-			set { _statusBarText = value; OnPropertyChanged("StatusBarText"); }
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		#endregion
-
-		#region Commands
-		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
-		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
-		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
-		public DeleteStoredFrameCommand DeleteStoredFrameCommand { get; set; }
-		public PlayPauseCommand PlayPauseCommand { get; set; }
-		public RewindCommand RewindCommand { get; set; }
-		public FastForwardCommand FastForwardCommand { get; set; }
-		public SkipFrameBackCommand SkipFrameBackCommand { get; set; }
-		public SkipFrameForwardCommand SkipFrameForwardCommand { get; set; }
-		public SlowMotionCommand SlowMotionCommand { get; set; }
-		public NextLapCommand NextLapCommand { get; set; }
-		public PreviousLapCommand PreviousLapCommand { get; set; }
-		public NextSessionCommand NextSessionCommand { get; set; }
-		public PreviousSessionCommand PreviousSessionCommand { get; set; }
-		public NextDriverCommand NextDriverCommand { get; set; }
-		public PreviousDriverCommand PreviousDriverCommand { get; set; }
-		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
-		public ConnectSimCommand ConnectSimCommand { get; set; }
-		public DisconnectSimCommand DisconnectSimCommand { get; set; }
-		public MoreInfoCommand MoreInfoCommand { get; set;}
-		public AboutCommand AboutCommand { get; set; }
-		#endregion
 
 
 		public ReplayDirectorVM()
@@ -345,6 +127,9 @@ namespace iRacingReplayDirector
 			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
+			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
+			VideoCaptureSettingEnabled = m_SDKHelper.VideoCaptureEnabled.Value;
+			VideoCaptureActive = m_SDKHelper.VideoCaptureActive.Value;
 
 			// Get current car ID and current camera group from sim
 			var currentCarId = telemetryInfo.CamCarIdx.Value;
@@ -489,6 +274,14 @@ namespace iRacingReplayDirector
 				CurrentTimelineNode = foundNode;
 		}
 
+		private void TimelineNodeChanged()
+		{
+			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
+
+			if (CurrentTimelineNode != null)
+				JumpToNode(CurrentTimelineNode);
+		}
+
 		private void JumpToNode(TimelineNode node)
 		{
 			// If replay is playing back AND node is disabled, skip it...
@@ -502,6 +295,14 @@ namespace iRacingReplayDirector
 			// If playback is disabled, skip to the frame
 			if (!PlaybackEnabled)
 				GoToFrame(node.Frame);
+		}
+
+		public void GoToFrame(int frame)
+		{
+			m_TargetFrame = frame;
+			MovingToFrame = true;
+
+			m_SDKHelper.GoToFrame(frame);
 		}
 
 		public void SetPlaybackSpeed(int speed, bool slowMo = false)
@@ -558,20 +359,6 @@ namespace iRacingReplayDirector
 			{
 				m_SDKHelper.SetDriver(CurrentDriver, CurrentCamera);
 			}
-		}
-
-		private void TimelineNodeChanged()
-		{
-			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
-			if (CurrentTimelineNode != null) JumpToNode(CurrentTimelineNode);
-		}
-
-		public void GoToFrame(int frame)
-		{
-			m_TargetFrame = frame;
-			MovingToFrame = true;
-
-			m_SDKHelper.GoToFrame(frame);
 		}
 
 		public void SaveProjectChanges()
