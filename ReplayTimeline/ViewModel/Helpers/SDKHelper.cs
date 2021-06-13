@@ -8,6 +8,11 @@ namespace iRacingReplayDirector
 		private ReplayDirectorVM _timelineVM;
 		private SdkWrapper m_Wrapper;
 
+		// Is Video Capture mode enabled in user settings?
+		public TelemetryValue<bool> VideoCaptureEnabled { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
+		// Is video capture currently active? i.e. Recording
+		public TelemetryValue<bool> VideoCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
+
 
 		public SDKHelper(ReplayDirectorVM timelimeVM)
 		{
@@ -87,6 +92,24 @@ namespace iRacingReplayDirector
 		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
 			m_Wrapper.Replay.Jump(replayEvent);
+		}
+
+		public void EnableVideoCapture()
+		{
+			// Pass '1' as parameter to start recording
+			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
+		}
+
+		public void DisableVideoCapture()
+		{
+			// Pass '2' as parameter to stop recording
+			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
+		}
+
+		public void ToggleVideoCapture()
+		{
+			// Pass '3' as parameter to toggle recording
+			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 3, 0);
 		}
 	}
 }
