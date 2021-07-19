@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class NextSessionCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,17 +17,17 @@ namespace iRacingReplayDirector
 
 		public NextSessionCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.SessionInfoLoaded;
+			return ReplayDirectorVM.SessionInfoLoaded && !ReplayDirectorVM.PlaybackEnabled;
 		}
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.JumpToEvent(iRSDKSharp.ReplaySearchModeTypes.NextSession);
+			ReplayDirectorVM.JumpToEvent(iRSDKSharp.ReplaySearchModeTypes.NextSession);
 		}
 	}
 }

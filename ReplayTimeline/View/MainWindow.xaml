@@ -35,6 +35,7 @@
 				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
 				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
 				<MenuItem Header="Prev/Next Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
+				<MenuItem Header="Record/UI Toggle Controls" IsCheckable="True" IsChecked="{Binding ShowRecordUIToggleButtons}"/>
 				<Separator/>
 				<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
 				<Separator/>
@@ -86,7 +87,7 @@
 			</Grid.RowDefinitions>
 
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
-					  MinHeight="250" MaxHeight="420" SelectionMode="Single" 
+					  MinHeight="250" MaxHeight="380" SelectionMode="Single" 
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
 					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >
 				<ListView.View>
@@ -123,7 +124,7 @@
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
-							<TextBlock Text=". Session Time: " HorizontalAlignment="Center"/>
+							<TextBlock Text=" | Session Time: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding SessionTime, Converter={StaticResource SecondsToTimeConverter}}" HorizontalAlignment="Center"/>
 						</StackPanel>
 					</Grid>
@@ -176,14 +177,13 @@
 						</StackPanel>
 					</Grid>
 
-					<!--<Grid Margin="5" Height="35" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
+					<Grid Margin="5" Height="35" Visibility="{Binding ShowRecordUIToggleButtons, Converter={StaticResource VisibilityConverter}}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-							<Button Content="Record" Command="{Binding PreviousSessionCommand}" Width="100" Margin="0 0 10 0"/>
-							<Button Content="Record From Start" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
-							
-							<ToggleButton Content="Toggle iRacing UI" Command="{Binding NextSessionCommand}" IsChecked="True" Width="100" Margin="0 0 10 0"/>
+							<Button Content="Start Recording" Command="{Binding StartRecordCommand}" Width="100" Margin="0 0 10 0"/>
+
+							<ToggleButton Content="Toggle iRacing UI" IsChecked="{Binding InSimUIEnabled}" Width="100" Margin="0 0 10 0"/>
 						</StackPanel>
-					</Grid>-->
+					</Grid>
 				</StackPanel>
 			</Grid>
 		</Grid>

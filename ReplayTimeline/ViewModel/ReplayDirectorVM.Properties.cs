@@ -147,6 +147,21 @@ namespace iRacingReplayDirector
 			private set { _videoCaptureActive = value; OnPropertyChanged("VideoCaptureActive"); }
 		}
 
+		private bool _InSimUIEnabled;
+		public bool InSimUIEnabled
+		{
+			get { return _InSimUIEnabled; }
+			set
+			{
+				_InSimUIEnabled = value;
+
+				if (InSimUIEnabled) m_SDKHelper.DisableUI();
+				else m_SDKHelper.EnableUI();
+
+				OnPropertyChanged("InSimUIEnabled");
+			}
+		}
+
 		#endregion
 
 		#region Label Properties
@@ -191,6 +206,13 @@ namespace iRacingReplayDirector
 		{
 			get { return _showTimelineNodeList; }
 			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
+		}
+
+		private bool _showRecordUIToggleButtons;
+		public bool ShowRecordUIToggleButtons
+		{
+			get { return _showRecordUIToggleButtons; }
+			set { _showRecordUIToggleButtons = value; OnPropertyChanged("ShowRecordUIToggleButtons"); }
 		}
 
 		private bool _minimizedMode;
@@ -239,6 +261,8 @@ namespace iRacingReplayDirector
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
+		public StartRecordCommand StartRecordCommand { get; set; }
+
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		public ConnectSimCommand ConnectSimCommand { get; set; }
 		public DisconnectSimCommand DisconnectSimCommand { get; set; }

@@ -38,7 +38,10 @@ namespace iRacingReplayDirector
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
 			ShowDriverCameraPanels = true;
+			ShowRecordUIToggleButtons = true;
 			ShowTimelineNodeList = true;
+
+			InSimUIEnabled = true;
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
@@ -56,6 +59,8 @@ namespace iRacingReplayDirector
 			PreviousSessionCommand = new PreviousSessionCommand(this);
 			NextDriverCommand = new NextDriverCommand(this);
 			PreviousDriverCommand = new PreviousDriverCommand(this);
+			StartRecordCommand = new StartRecordCommand(this);
+
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			ConnectSimCommand = new ConnectSimCommand(this);
 			DisconnectSimCommand = new DisconnectSimCommand(this);
@@ -384,10 +389,14 @@ namespace iRacingReplayDirector
 			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}
 
-		public void ToggleUI(bool enable)
+		public void StartRecording()
 		{
-			if (enable) m_SDKHelper.EnableUI();
-			else m_SDKHelper.DisableUI();
+			m_SDKHelper.EnableVideoCapture();
+		}
+
+		public void StopRecording()
+		{
+			m_SDKHelper.DisableVideoCapture();
 		}
 	}
 }

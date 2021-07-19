@@ -79,6 +79,7 @@
     <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="Model\TrackSurfaces.cs" />
     <Compile Include="Commands\MoreInfoCommand.cs" />
+    <Compile Include="Commands\StartRecordCommand.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.Properties.cs" />
     <Compile Include="ViewModel\Converters\SecondsToTimeConverter.cs" />
     <Compile Include="ViewModel\Converters\InvertedBoolConverter.cs" />
