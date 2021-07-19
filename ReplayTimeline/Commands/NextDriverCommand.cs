@@ -7,7 +7,7 @@ namespace iRacingReplayDirector
 {
 	public class NextDriverCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -18,14 +18,14 @@ namespace iRacingReplayDirector
 
 		public NextDriverCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			if (ReplayTimelineVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
-				return ReplayTimelineVM.CurrentDriver != null;
+				return ReplayDirectorVM.CurrentDriver != null;
 			}
 
 			return false;
@@ -33,8 +33,8 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			var currentDriver = ReplayTimelineVM.CurrentDriver;
-			var orderedDriverList = ReplayTimelineVM.Drivers.OrderByDescending(d => d.LapDistance).ToList();
+			var currentDriver = ReplayDirectorVM.CurrentDriver;
+			var orderedDriverList = ReplayDirectorVM.Drivers.OrderByDescending(d => d.LapDistance).ToList();
 
 			int driverIndex = orderedDriverList.IndexOf(currentDriver);
 
@@ -45,7 +45,7 @@ namespace iRacingReplayDirector
 
 				var nextDriver = orderedDriverList.ElementAt(nextDriverIndex);
 
-				ReplayTimelineVM.CurrentDriver = nextDriver;
+				ReplayDirectorVM.CurrentDriver = nextDriver;
 			}
 		}
 	}

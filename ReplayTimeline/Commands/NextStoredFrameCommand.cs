@@ -7,7 +7,7 @@ namespace iRacingReplayDirector
 {
 	public class NextStoredFrameCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -18,29 +18,29 @@ namespace iRacingReplayDirector
 
 		public NextStoredFrameCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			if (!(ReplayTimelineVM.TimelineNodes.Count > 0))
+			if (!(ReplayDirectorVM.TimelineNodes.Count > 0))
 				return false;
 
-			if (ReplayTimelineVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
-				if (!ReplayTimelineVM.PlaybackEnabled)
+				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
-					var currentNode = ReplayTimelineVM.CurrentTimelineNode;
+					var currentNode = ReplayDirectorVM.CurrentTimelineNode;
 
 					if (currentNode != null)
 					{
-						var nodeIndex = ReplayTimelineVM.TimelineNodes.IndexOf(currentNode);
+						var nodeIndex = ReplayDirectorVM.TimelineNodes.IndexOf(currentNode);
 
-						return nodeIndex < ReplayTimelineVM.TimelineNodes.Count - 1;
+						return nodeIndex < ReplayDirectorVM.TimelineNodes.Count - 1;
 					}
 					else
 					{
-						var nearestNode = ReplayTimelineVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayTimelineVM.CurrentFrame);
+						var nearestNode = ReplayDirectorVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
 
 						if (nearestNode != null)
 						{
@@ -55,12 +55,12 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			var targetNode = ReplayTimelineVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayTimelineVM.CurrentFrame);
+			var targetNode = ReplayDirectorVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
 
 			if (targetNode != null)
 			{
-				ReplayTimelineVM.CurrentTimelineNode = targetNode;
-				ReplayTimelineVM.GoToFrame(targetNode.Frame);
+				ReplayDirectorVM.CurrentTimelineNode = targetNode;
+				ReplayDirectorVM.GoToFrame(targetNode.Frame);
 			}
 		}
 	}

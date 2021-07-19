@@ -35,7 +35,6 @@
 				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
 				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
 				<MenuItem Header="Prev/Next Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
-				<MenuItem Header="Record/UI Toggle Controls" IsCheckable="True" IsChecked="{Binding ShowRecordUIToggleButtons}"/>
 				<Separator/>
 				<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
 				<Separator/>
@@ -74,7 +73,7 @@
 				</ListView.View>
 			</ListView>
 
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="25">
 				<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" />
 				<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
 			</StackPanel>
@@ -87,7 +86,7 @@
 			</Grid.RowDefinitions>
 
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
-					  MinHeight="250" MaxHeight="380" SelectionMode="Single" 
+					  MinHeight="240" MaxHeight="360" SelectionMode="Single" 
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
 					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >
 				<ListView.View>
@@ -120,7 +119,7 @@
 				<StackPanel>
 					<Grid Margin="5" Height="30" Visibility="{Binding ShowReplayTimeline, Converter={StaticResource VisibilityConverter}}">
 						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
-
+						
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
@@ -137,51 +136,63 @@
 					</Grid>
 
 					<Grid Margin="5" Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="25">
 							<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" Margin="0 0 10 0" />
 							<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
 						</StackPanel>
 					</Grid>
 
-					<Grid Margin="5" Height="35">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
-							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+					<Grid Margin="5" Height="55">
+						<GroupBox Header="Nodes" Padding="5" Height="55">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+								<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
+								<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
+								<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
 
-							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
-						</StackPanel>
+								<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
+							</StackPanel>
+						</GroupBox>
 					</Grid>
 
-					<Grid Margin="5" Height="35">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
-							<Button Content="&lt;" ToolTip="Back One Frame" Width="35" Command="{Binding SkipFrameBackCommand}"/>
-							<Button Content="&lt;&lt;" Width="35" Command="{Binding RewindCommand}"/>
-							<Button Content="{Binding PlayPauseBtnText}" Width="120" Command="{Binding PlayPauseCommand}" />
-							<Button Content="&gt;&gt;" Width="35" Command="{Binding FastForwardCommand}"/>
-							<Button Content="&gt;" ToolTip="Forward One Frame" Width="35" Command="{Binding SkipFrameForwardCommand}"/>
+					<Grid Margin="5" Height="55">
+						<GroupBox Header="Playback &amp; Recording" Height="55" Padding="5">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+								<Button Content="&lt;" ToolTip="Back One Frame" Width="35" Command="{Binding SkipFrameBackCommand}"/>
+								<Button Content="&lt;&lt;" Width="35" Command="{Binding RewindCommand}"/>
+								<Button Content="{Binding PlayPauseBtnText}" Width="80" Command="{Binding PlayPauseCommand}" />
+								<Button Content="&gt;&gt;" Width="35" Command="{Binding FastForwardCommand}"/>
+								<Button Content="&gt;" ToolTip="Forward One Frame" Width="35" Command="{Binding SkipFrameForwardCommand}"/>
 
-							<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PlaybackSpeedText}" Width="50" Margin="5 0 5 0"/>
+								<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PlaybackSpeedText}" Width="50" Margin="5 0 5 0"/>
 
-							<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>
-						</StackPanel>
+								<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>
+
+								<Button Content="{Binding RecordBtnText}" Command="{Binding StartRecordCommand}" Width="100" Margin="10 0 10 0"/>
+							</StackPanel>
+						</GroupBox>
 					</Grid>
 
-					<Grid Margin="5" Height="35" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
+					<Grid Margin="5" Height="55" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-							<Button Content="Prev Session" Command="{Binding PreviousSessionCommand}" Width="100"/>
-							<Button Content="Next Session" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
+							<GroupBox Header="Session" Height="55" Padding="5">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Content="Prev" Command="{Binding PreviousSessionCommand}" Width="60"/>
+									<Button Content="Next" Command="{Binding NextSessionCommand}" Width="60" Margin="0 0 10 0"/>
+								</StackPanel>
+							</GroupBox>
 
-							<Button Content="Prev Lap" Command="{Binding PreviousLapCommand}" Width="100"/>
-							<Button Content="Next Lap" Command="{Binding NextLapCommand}" Width="100" Margin="0 0 10 0"/>
-						</StackPanel>
-					</Grid>
+							<GroupBox Header="Lap" Height="55" Padding="5">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Content="Prev" Command="{Binding PreviousLapCommand}" Width="60"/>
+									<Button Content="Next" Command="{Binding NextLapCommand}" Width="60" Margin="0 0 10 0"/>
+								</StackPanel>
+							</GroupBox>
 
-					<Grid Margin="5" Height="35" Visibility="{Binding ShowRecordUIToggleButtons, Converter={StaticResource VisibilityConverter}}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-							<Button Content="Start Recording" Command="{Binding StartRecordCommand}" Width="100" Margin="0 0 10 0"/>
-
-							<ToggleButton Content="Toggle iRacing UI" IsChecked="{Binding InSimUIEnabled}" Width="100" Margin="0 0 10 0"/>
+							<GroupBox Header="UI" Height="55" Padding="5">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<ToggleButton Content="Toggle Sim UI" IsChecked="{Binding InSimUIEnabled}" Width="100" Margin="0 0 10 0"/>
+								</StackPanel>
+							</GroupBox>
 						</StackPanel>
 					</Grid>
 				</StackPanel>

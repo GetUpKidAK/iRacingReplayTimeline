@@ -22,7 +22,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayDirectorVM.SessionInfoLoaded;
+			return ReplayDirectorVM.SessionInfoLoaded && !ReplayDirectorVM.RecordingInProgress;
 		}
 
 		public void Execute(object parameter)

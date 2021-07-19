@@ -22,7 +22,9 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayDirectorVM.SessionInfoLoaded && !(ReplayDirectorVM.CurrentPlaybackSpeed >= 16);
+			return ReplayDirectorVM.SessionInfoLoaded &&
+				!ReplayDirectorVM.RecordingInProgress && 
+				!(ReplayDirectorVM.CurrentPlaybackSpeed >= 16);
 		}
 
 		public void Execute(object parameter)

@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class ApplicationQuitCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,7 +17,7 @@ namespace iRacingReplayDirector
 
 		public ApplicationQuitCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
@@ -28,6 +28,8 @@ namespace iRacingReplayDirector
 		public void Execute(object parameter)
 		{
 			App.Current.Shutdown();
+			ReplayDirectorVM.StopRecording();
+			ReplayDirectorVM.SetPlaybackSpeed(0);
 			Environment.Exit(0);
 		}
 	}

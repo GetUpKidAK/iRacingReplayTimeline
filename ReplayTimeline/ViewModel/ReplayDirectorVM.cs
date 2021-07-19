@@ -12,13 +12,6 @@ namespace iRacingReplayDirector
 {
 	public partial class ReplayDirectorVM : INotifyPropertyChanged
 	{
-		private SDKHelper m_SDKHelper;
-		private bool m_LiveSessionPopupVisible;
-
-		private const string m_ApplicationTitle = "iRacing Sequence Director";
-		private const string m_VersionNumber = "1.05";
-
-
 		public ReplayDirectorVM()
 		{
 			m_SDKHelper = new SDKHelper(this);
@@ -35,10 +28,10 @@ namespace iRacingReplayDirector
 
 			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
+			RecordBtnText = "Record";
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
 			ShowDriverCameraPanels = true;
-			ShowRecordUIToggleButtons = true;
 			ShowTimelineNodeList = true;
 
 			InSimUIEnabled = true;
@@ -392,11 +385,13 @@ namespace iRacingReplayDirector
 		public void StartRecording()
 		{
 			m_SDKHelper.EnableVideoCapture();
+			RecordingInProgress = true;
 		}
 
 		public void StopRecording()
 		{
 			m_SDKHelper.DisableVideoCapture();
+			RecordingInProgress = false;
 		}
 	}
 }

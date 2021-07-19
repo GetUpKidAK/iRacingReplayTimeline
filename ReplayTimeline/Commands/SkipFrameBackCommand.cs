@@ -6,7 +6,7 @@ namespace iRacingReplayDirector
 {
 	public class SkipFrameBackCommand : ICommand
 	{
-		public ReplayDirectorVM ReplayTimelineVM { get; set; }
+		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
 		public event EventHandler CanExecuteChanged
 		{
@@ -17,18 +17,19 @@ namespace iRacingReplayDirector
 
 		public SkipFrameBackCommand(ReplayDirectorVM vm)
 		{
-			ReplayTimelineVM = vm;
+			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayTimelineVM.SessionInfoLoaded &&
-				ReplayTimelineVM.CurrentFrame > 0;
+			return ReplayDirectorVM.SessionInfoLoaded &&
+				!ReplayDirectorVM.RecordingInProgress &&
+				ReplayDirectorVM.CurrentFrame > 0;
 		}
 
 		public void Execute(object parameter)
 		{
-			ReplayTimelineVM.GoToFrame(ReplayTimelineVM.CurrentFrame - 1);
+			ReplayDirectorVM.GoToFrame(ReplayDirectorVM.CurrentFrame - 1);
 		}
 	}
 }

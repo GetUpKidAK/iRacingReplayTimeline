@@ -7,6 +7,12 @@ namespace iRacingReplayDirector
 {
 	public partial class ReplayDirectorVM
 	{
+		private SDKHelper m_SDKHelper;
+		private bool m_LiveSessionPopupVisible;
+
+		private const string m_ApplicationTitle = "iRacing Sequence Director";
+		private const string m_VersionNumber = "1.1";
+
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
@@ -162,6 +168,15 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private bool _recordingInProgress;
+		public bool RecordingInProgress
+		{
+			get { return _recordingInProgress; }
+			set { _recordingInProgress = value;
+				RecordBtnText = RecordingInProgress ? "Stop" : "Record";
+				OnPropertyChanged("RecordingInProgress"); }
+		}
+
 		#endregion
 
 		#region Label Properties
@@ -178,6 +193,13 @@ namespace iRacingReplayDirector
 		{
 			get { return _playPauseBtnText; }
 			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
+		}
+
+		private string _recordBtnText;
+		public string RecordBtnText
+		{
+			get { return _recordBtnText; }
+			set { _recordBtnText = value; OnPropertyChanged("RecordBtnText"); }
 		}
 
 		private bool _showReplayTimeline;
@@ -206,13 +228,6 @@ namespace iRacingReplayDirector
 		{
 			get { return _showTimelineNodeList; }
 			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
-		}
-
-		private bool _showRecordUIToggleButtons;
-		public bool ShowRecordUIToggleButtons
-		{
-			get { return _showRecordUIToggleButtons; }
-			set { _showRecordUIToggleButtons = value; OnPropertyChanged("ShowRecordUIToggleButtons"); }
 		}
 
 		private bool _minimizedMode;
