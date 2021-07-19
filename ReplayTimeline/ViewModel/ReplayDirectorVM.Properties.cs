@@ -20,6 +20,8 @@ namespace iRacingReplayDirector
 		public ObservableCollection<Camera> Cameras { get; set; }
 
 
+		private TimelineNode _lastAppliedNode;
+
 		private TimelineNode _currentTimelineNode;
 		public TimelineNode CurrentTimelineNode
 		{
@@ -52,24 +54,7 @@ namespace iRacingReplayDirector
 			get { return _currentFrame; }
 			set
 			{
-				var lastFrame = _currentFrame; // Cache previous value
-				_currentFrame = value; // Update to new value
-
-				// If current frame is the target frame or there was no target frame
-				if (_currentFrame == m_TargetFrame || m_TargetFrame == -1)
-				{
-					// If the frame changed, check if the new frame has stored nodes
-					if (lastFrame != _currentFrame)
-						CheckCurrentFrameForStoredNodes();
-				}
-
-				// If current frame was the target frame
-				if (_currentFrame == m_TargetFrame)
-				{
-					// Reset target frame and disable moving to frame flag
-					m_TargetFrame = -1;
-					MovingToFrame = false;
-				}
+				_currentFrame = value;
 				OnPropertyChanged("CurrentFrame");
 			}
 		}

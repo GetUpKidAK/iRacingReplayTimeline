@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,11 +13,10 @@ namespace iRacingReplayDirector
 	public partial class ReplayDirectorVM : INotifyPropertyChanged
 	{
 		private SDKHelper m_SDKHelper;
-		private int m_TargetFrame = -1;
 		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
-		private const string m_VersionNumber = "1.1";
+		private const string m_VersionNumber = "1.05";
 
 
 		public ReplayDirectorVM()
@@ -152,6 +152,35 @@ namespace iRacingReplayDirector
 
 			// Update driver telemetry info
 			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
+
+			var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
+			if (currentNode == null && !PlaybackEnabled)
+				CurrentTimelineNode = currentNode;
+
+			PlaybackCameraSwitching();
+		}
+
+		private void PlaybackCameraSwitching()
+		{
+			if (!NormalPlaybackSpeedEnabled)
+				return;
+
+			IEnumerable<TimelineNode> OrderedNodes = TimelineNodesView.Cast<TimelineNode>();
+			TimelineNode nodeToApply = OrderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
+
+			//if (nodeToApply != null)
+			//	Console.WriteLine($"Node to Apply: {nodeToApply.Frame}: {nodeToApply.Driver} - {nodeToApply.Camera}");
+
+			if (nodeToApply == null || nodeToApply == _lastAppliedNode)
+				return;
+
+			_lastAppliedNode = nodeToApply;
+			CurrentTimelineNode = nodeToApply;
+			JumpToNode(CurrentTimelineNode);
+
+			//int index = itemsControl.SelectedIndex;
+			//object item = itemsControl.Items.GetItemAt(index);
+			//itemsControl.ScrollIntoView(item);
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)
@@ -265,14 +294,6 @@ namespace iRacingReplayDirector
 				VerifyExistingNodeCameras();
 			}
 		}
-		
-		private void CheckCurrentFrameForStoredNodes()
-		{
-			var foundNode = TimelineNodes.FirstOrDefault(n => n.Frame == CurrentFrame);
-
-			if (CurrentTimelineNode != foundNode)
-				CurrentTimelineNode = foundNode;
-		}
 
 		private void TimelineNodeChanged()
 		{
@@ -299,9 +320,6 @@ namespace iRacingReplayDirector
 
 		public void GoToFrame(int frame)
 		{
-			m_TargetFrame = frame;
-			MovingToFrame = true;
-
 			m_SDKHelper.GoToFrame(frame);
 		}
 

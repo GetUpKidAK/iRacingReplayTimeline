@@ -176,14 +176,14 @@
 						</StackPanel>
 					</Grid>
 
-					<Grid Margin="5" Height="35" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
+					<!--<Grid Margin="5" Height="35" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
 							<Button Content="Record" Command="{Binding PreviousSessionCommand}" Width="100" Margin="0 0 10 0"/>
 							<Button Content="Record From Start" Command="{Binding NextSessionCommand}" Width="100" Margin="0 0 10 0"/>
 							
 							<ToggleButton Content="Toggle iRacing UI" Command="{Binding NextSessionCommand}" IsChecked="True" Width="100" Margin="0 0 10 0"/>
 						</StackPanel>
-					</Grid>
+					</Grid>-->
 				</StackPanel>
 			</Grid>
 		</Grid>

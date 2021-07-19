@@ -28,8 +28,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			if (!ReplayTimelineVM.MovingToFrame)
-				ReplayTimelineVM.GoToFrame(ReplayTimelineVM.CurrentFrame - 1);
+			ReplayTimelineVM.GoToFrame(ReplayTimelineVM.CurrentFrame - 1);
 		}
 	}
 }
