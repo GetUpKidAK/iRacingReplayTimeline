@@ -34,8 +34,6 @@ namespace iRacingReplayDirector
 			ShowDriverCameraPanels = true;
 			ShowTimelineNodeList = true;
 
-			InSimUIEnabled = true;
-
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
@@ -208,6 +206,7 @@ namespace iRacingReplayDirector
 
 					LoadExistingProjectFile();
 
+					InSimUIEnabled = true;
 					SessionInfoLoaded = true;
 				}
 			}
