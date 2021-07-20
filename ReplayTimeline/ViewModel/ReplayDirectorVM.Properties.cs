@@ -150,7 +150,12 @@ namespace iRacingReplayDirector
 		public bool VideoCaptureActive
 		{
 			get { return _videoCaptureActive; }
-			private set { _videoCaptureActive = value; OnPropertyChanged("VideoCaptureActive"); }
+			private set
+			{
+				_videoCaptureActive = value;
+				RecordBtnText = VideoCaptureActive ? "Stop" : "Record";
+				OnPropertyChanged("VideoCaptureActive");
+			}
 		}
 
 		private bool _InSimUIEnabled;
@@ -166,15 +171,6 @@ namespace iRacingReplayDirector
 
 				OnPropertyChanged("InSimUIEnabled");
 			}
-		}
-
-		private bool _recordingInProgress;
-		public bool RecordingInProgress
-		{
-			get { return _recordingInProgress; }
-			set { _recordingInProgress = value;
-				RecordBtnText = RecordingInProgress ? "Stop" : "Record";
-				OnPropertyChanged("RecordingInProgress"); }
 		}
 
 		#endregion

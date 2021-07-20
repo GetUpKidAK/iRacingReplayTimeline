@@ -384,13 +384,11 @@ namespace iRacingReplayDirector
 		public void StartRecording()
 		{
 			m_SDKHelper.EnableVideoCapture();
-			RecordingInProgress = true;
 		}
 
 		public void StopRecording()
 		{
 			m_SDKHelper.DisableVideoCapture();
-			RecordingInProgress = false;
 		}
 	}
 }

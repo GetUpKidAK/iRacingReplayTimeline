@@ -167,7 +167,10 @@
 
 								<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>
 
-								<Button Content="{Binding RecordBtnText}" Command="{Binding StartRecordCommand}" Width="100" Margin="10 0 10 0"/>
+								<Button Content="{Binding RecordBtnText}" Command="{Binding StartRecordCommand}" Width="100" Margin="10 0 10 0"
+										ToolTipService.ShowOnDisabled="True"
+										ToolTipService.IsEnabled="{Binding VideoCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
+										ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
 							</StackPanel>
 						</GroupBox>
 					</Grid>

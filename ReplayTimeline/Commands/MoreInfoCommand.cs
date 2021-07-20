@@ -28,12 +28,12 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			MessageBoxResult confirmationPopUp = MessageBox.Show($"Visit the iRacing forum thread for more info?",
+			MessageBoxResult confirmationPopUp = MessageBox.Show($"Visit the GitHub project page for more info?",
 						"More Info", MessageBoxButton.OKCancel, MessageBoxImage.None, MessageBoxResult.OK);
 
 			if (confirmationPopUp == MessageBoxResult.OK)
 			{
-				var destinationurl = "https://forums.iracing.com/discussion/605/iracing-sequence-director-editing-tool-for-replays";
+				var destinationurl = "https://github.com/GetUpKidAK/iRacingSequenceDirector";
 				var sInfo = new System.Diagnostics.ProcessStartInfo(destinationurl)
 				{
 					UseShellExecute = true,
