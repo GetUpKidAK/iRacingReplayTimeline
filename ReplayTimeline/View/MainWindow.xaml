@@ -31,6 +31,10 @@
 				<MenuItem Header="_Quit" Command="{Binding ApplicationQuitCommand}" />
 			</MenuItem>
 
+			<MenuItem Header="Options">
+				<!--<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}"/>-->
+			</MenuItem>
+
 			<MenuItem Header="View">
 				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
 				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
@@ -86,6 +90,7 @@
 			</Grid.RowDefinitions>
 
 			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
+					  SelectionChanged="ListBox_SelectionChanged"
 					  MinHeight="240" MaxHeight="360" SelectionMode="Single" 
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
 					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >

@@ -29,5 +29,11 @@ namespace iRacingReplayDirector
 
 			vm.ApplicationClosing();
 		}
+
+		private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ListBox listBox = sender as ListBox;
+			listBox.ScrollIntoView(listBox.SelectedItem);
+		}
 	}
 }

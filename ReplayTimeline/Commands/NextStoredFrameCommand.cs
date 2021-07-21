@@ -31,16 +31,17 @@ namespace iRacingReplayDirector
 				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
 					var currentNode = ReplayDirectorVM.CurrentTimelineNode;
+					var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>().ToList();
 
 					if (currentNode != null)
 					{
-						var nodeIndex = ReplayDirectorVM.TimelineNodes.IndexOf(currentNode);
+						var nodeIndex = orderedNodes.IndexOf(currentNode);
 
-						return nodeIndex < ReplayDirectorVM.TimelineNodes.Count - 1;
+						return nodeIndex < orderedNodes.Count - 1;
 					}
 					else
 					{
-						var nearestNode = ReplayDirectorVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
+						var nearestNode = orderedNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
 
 						if (nearestNode != null)
 						{
@@ -55,7 +56,8 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			var targetNode = ReplayDirectorVM.TimelineNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
+			var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>();
+			TimelineNode targetNode = orderedNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
 
 			if (targetNode != null)
 			{
