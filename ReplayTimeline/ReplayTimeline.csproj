@@ -72,43 +72,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\AboutCommand.cs" />
-    <Compile Include="Commands\ApplicationQuitCommand.cs" />
-    <Compile Include="Commands\ConnectSimCommand.cs" />
-    <Compile Include="Commands\DisconnectSimCommand.cs" />
+    <Compile Include="Commands\Menu Items\AboutCommand.cs" />
+    <Compile Include="Commands\Menu Items\ApplicationQuitCommand.cs" />
+    <Compile Include="Commands\Menu Items\ConnectSimCommand.cs" />
+    <Compile Include="Commands\Menu Items\DisconnectSimCommand.cs" />
     <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="Model\TrackSurfaces.cs" />
-    <Compile Include="Commands\MoreInfoCommand.cs" />
-    <Compile Include="Commands\StartRecordCommand.cs" />
+    <Compile Include="Commands\Menu Items\MoreInfoCommand.cs" />
+    <Compile Include="Commands\Playback\StartRecordCommand.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.Properties.cs" />
     <Compile Include="ViewModel\Converters\SecondsToTimeConverter.cs" />
     <Compile Include="ViewModel\Converters\InvertedBoolConverter.cs" />
     <Compile Include="ViewModel\Converters\FlexibleBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Commands\FastForwardCommand.cs" />
-    <Compile Include="Commands\NextLapCommand.cs" />
-    <Compile Include="Commands\NextSessionCommand.cs" />
-    <Compile Include="Commands\PlayPauseCommand.cs" />
-    <Compile Include="Commands\PreviousLapCommand.cs" />
-    <Compile Include="Commands\PreviousSessionCommand.cs" />
-    <Compile Include="Commands\RewindCommand.cs" />
-    <Compile Include="Commands\DeleteStoredFrameCommand.cs" />
+    <Compile Include="Commands\Playback\FastForwardCommand.cs" />
+    <Compile Include="Commands\Session\NextLapCommand.cs" />
+    <Compile Include="Commands\Session\NextSessionCommand.cs" />
+    <Compile Include="Commands\Playback\PlayPauseCommand.cs" />
+    <Compile Include="Commands\Session\PreviousLapCommand.cs" />
+    <Compile Include="Commands\Session\PreviousSessionCommand.cs" />
+    <Compile Include="Commands\Playback\RewindCommand.cs" />
+    <Compile Include="Commands\Nodes\DeleteStoredFrameCommand.cs" />
     <Compile Include="Model\Camera.cs" />
-    <Compile Include="Commands\NextStoredFrameCommand.cs" />
-    <Compile Include="Commands\PreviousStoredFrameCommand.cs" />
+    <Compile Include="Commands\Nodes\NextStoredFrameCommand.cs" />
+    <Compile Include="Commands\Nodes\PreviousStoredFrameCommand.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="Model\TimelineNode.cs" />
-    <Compile Include="Commands\SlowMotionCommand.cs" />
-    <Compile Include="Commands\NextDriverCommand.cs" />
-    <Compile Include="Commands\PreviousDriverCommand.cs" />
-    <Compile Include="Commands\SkipFrameBackCommand.cs" />
-    <Compile Include="Commands\SkipFrameForwardCommand.cs" />
+    <Compile Include="Commands\Playback\SlowMotionCommand.cs" />
+    <Compile Include="Commands\Session\NextDriverCommand.cs" />
+    <Compile Include="Commands\Session\PreviousDriverCommand.cs" />
+    <Compile Include="Commands\Playback\SkipFrameBackCommand.cs" />
+    <Compile Include="Commands\Playback\SkipFrameForwardCommand.cs" />
     <Compile Include="ViewModel\Helpers\SDKHelper.cs" />
     <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />
     <Compile Include="Model\TimelineProject.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.cs" />
-    <Compile Include="Commands\StoreCurrentFrameCommand.cs" />
+    <Compile Include="Commands\Nodes\StoreCurrentFrameCommand.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
