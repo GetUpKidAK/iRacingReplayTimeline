@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using iRacingSdkWrapper;
 
 
 namespace iRacingReplayDirector
@@ -16,6 +17,7 @@ namespace iRacingReplayDirector
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
+		public SessionInfo SessionInfo { get; private set; }
 		public int SessionID { get; private set; }
 		#endregion
 
@@ -270,6 +272,21 @@ namespace iRacingReplayDirector
 			get { return _statusBarText; }
 			set { _statusBarText = value; OnPropertyChanged("StatusBarText"); }
 		}
+
+		private string _statusBarSessionID;
+		public string StatusBarSessionID
+		{
+			get { return _statusBarSessionID; }
+			set { _statusBarSessionID = value; OnPropertyChanged("StatusBarSessionID"); }
+		}
+
+		private string _statusBarCurrentSessionInfo;
+		public string StatusBarCurrentSessionInfo
+		{
+			get { return _statusBarCurrentSessionInfo; }
+			set { _statusBarCurrentSessionInfo = value; OnPropertyChanged("StatusBarCurrentSessionInfo"); }
+		}
+
 		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;

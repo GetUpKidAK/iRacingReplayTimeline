@@ -22,13 +22,12 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			return false;
-			//return !ReplayTimelineVM.IsConnected();
+			return true;
 		}
 
 		public void Execute(object parameter)
 		{
-			//ReplayTimelineVM.ConnectSim();
+			
 		}
 	}
 }

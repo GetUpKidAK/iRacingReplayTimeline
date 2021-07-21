@@ -111,6 +111,7 @@ namespace iRacingReplayDirector
 			Drivers.Clear();
 			Cameras.Clear();
 			TimelineNodes.Clear();
+			StatusBarSessionID = "No Session Loaded.";
 		}
 
 		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
@@ -151,6 +152,12 @@ namespace iRacingReplayDirector
 			// Update driver telemetry info
 			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
 
+			// Update status bar session info
+			var sessionType = SessionInfoHelper.GetCurrentSessionType(SessionInfo, telemetryInfo.SessionNum.Value);
+			var sessionLaps = SessionInfoHelper.GetSessionLapCount(SessionInfo, telemetryInfo.SessionNum.Value);
+			var lapInfo = (CurrentDriver.Lap > -1) ? $"(Lap {CurrentDriver.Lap}/{sessionLaps})" : ""; // Only show lap info if one has started
+			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {lapInfo}";
+
 			var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
 			if (currentNode == null && !PlaybackEnabled)
 				CurrentTimelineNode = currentNode;
@@ -189,9 +196,12 @@ namespace iRacingReplayDirector
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)
 		{
+			SessionInfo = sessionInfo;
+
 			UpdateDriversAndCameras(sessionInfo);
 
 			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
+			StatusBarSessionID = $"Session ID: {SessionID}";
 
 			if (!SessionInfoLoaded)
 			{

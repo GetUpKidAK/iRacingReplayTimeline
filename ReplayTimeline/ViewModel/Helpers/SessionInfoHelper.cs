@@ -13,6 +13,20 @@ namespace iRacingReplayDirector
 			return int.Parse(weekendInfoQuery["SubSessionID"].GetValue("-1"));
 		}
 
+		public static string GetCurrentSessionType(SessionInfo sessionInfo, int currentSession)
+		{
+			YamlQuery query = sessionInfo["SessionInfo"]["Sessions"]["SessionNum", currentSession];
+
+			return query["SessionType"].GetValue("");
+		}
+
+		public static string GetSessionLapCount(SessionInfo sessionInfo, int currentSession)
+		{
+			YamlQuery query = sessionInfo["SessionInfo"]["Sessions"]["SessionNum", currentSession];
+
+			return query["SessionLaps"].GetValue("-1");
+		}
+
 		public static bool IsLiveSession(SessionInfo sessionInfo)
 		{
 			YamlQuery weekendInfoQuery = sessionInfo["WeekendInfo"];
