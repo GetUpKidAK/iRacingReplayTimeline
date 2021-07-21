@@ -282,7 +282,7 @@ namespace iRacingReplayDirector
 
 				foreach (var node in loaddedProject.Nodes)
 				{
-					var foundDriver = Drivers.First(d => d.NumberRaw == node.DriverNumber);
+					var foundDriver = Drivers.FirstOrDefault(d => d.NumberRaw == node.DriverNumber);
 					var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
 
 					if (foundDriver == null)

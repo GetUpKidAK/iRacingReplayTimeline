@@ -34,6 +34,7 @@
 			<MenuItem Header="Options">
 				<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}"/>
 				<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" />
+				<Separator />
 				<MenuItem Header="Stop Recording On Final Node" IsCheckable="True" IsChecked="{Binding StopRecordingOnFinalNode}"
 						  ToolTip="Use last stored node as a placeholder to stop recording."/>
 			</MenuItem>
