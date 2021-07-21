@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace iRacingReplayDirector
 {
-	public class StartRecordCommand : ICommand
+	public class ToggleRecordingCommand : ICommand
 	{
 		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
@@ -16,7 +16,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public StartRecordCommand(ReplayDirectorVM vm)
+		public ToggleRecordingCommand(ReplayDirectorVM vm)
 		{
 			ReplayDirectorVM = vm;
 		}
@@ -42,17 +42,12 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			// Change Playback enabled to new property for recording?
 			if (ReplayDirectorVM.VideoCaptureActive)
 			{
-				ReplayDirectorVM.InSimUIEnabled = true;
-				ReplayDirectorVM.SetPlaybackSpeed(0);
 				ReplayDirectorVM.StopRecording();
 			}
 			else
 			{
-				ReplayDirectorVM.InSimUIEnabled = false;
-				ReplayDirectorVM.SetPlaybackSpeed(1);
 				ReplayDirectorVM.StartRecording();
 			}
 		}

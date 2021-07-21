@@ -98,7 +98,7 @@ namespace iRacingReplayDirector
 		public void EnableUI()
 		{
 			CameraState state = new CameraState();
-			state.Add(CameraStates.UIHidden);
+			state.Remove(CameraStates.UIHidden);
 
 			m_Wrapper.Camera.SetCameraState(state);
 		}
@@ -106,7 +106,7 @@ namespace iRacingReplayDirector
 		public void DisableUI()
 		{
 			CameraState state = new CameraState();
-			state.Remove(CameraStates.UIHidden);
+			state.Add(CameraStates.UIHidden);
 
 			m_Wrapper.Camera.SetCameraState(state);
 		}

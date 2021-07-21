@@ -166,8 +166,8 @@ namespace iRacingReplayDirector
 			{
 				_InSimUIEnabled = value;
 
-				if (InSimUIEnabled) m_SDKHelper.DisableUI();
-				else m_SDKHelper.EnableUI();
+				if (InSimUIEnabled) m_SDKHelper.EnableUI();
+				else m_SDKHelper.DisableUI();
 
 				OnPropertyChanged("InSimUIEnabled");
 			}
@@ -203,6 +203,27 @@ namespace iRacingReplayDirector
 		{
 			get { return _showReplayTimeline; }
 			set { _showReplayTimeline = value; OnPropertyChanged("ShowReplayTimeline"); }
+		}
+
+		private bool _disableSimUIOnPlayback;
+		public bool DisableSimUIOnPlayback
+		{
+			get { return _disableSimUIOnPlayback; }
+			set { _disableSimUIOnPlayback = value; OnPropertyChanged("DisableSimUIOnPlayback"); }
+		}
+
+		private bool _disableUIWhenRecording;
+		public bool DisableUIWhenRecording
+		{
+			get { return _disableUIWhenRecording; }
+			set { _disableUIWhenRecording = value; OnPropertyChanged("DisableUIWhenRecording"); }
+		}
+
+		private bool _stopRecordingOnFinalNode;
+		public bool StopRecordingOnFinalNode
+		{
+			get { return _stopRecordingOnFinalNode; }
+			set { _stopRecordingOnFinalNode = value; OnPropertyChanged("StopRecordingOnFinalNode"); }
 		}
 
 		private bool _showSessionLapSkipButtons;
@@ -272,7 +293,7 @@ namespace iRacingReplayDirector
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
-		public StartRecordCommand StartRecordCommand { get; set; }
+		public ToggleRecordingCommand ToggleRecordingCommand { get; set; }
 
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		public ConnectSimCommand ConnectSimCommand { get; set; }

@@ -29,6 +29,8 @@ namespace iRacingReplayDirector
 			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
 			RecordBtnText = "Record";
+			DisableUIWhenRecording = true;
+
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
 			ShowDriverCameraPanels = true;
@@ -50,7 +52,7 @@ namespace iRacingReplayDirector
 			PreviousSessionCommand = new PreviousSessionCommand(this);
 			NextDriverCommand = new NextDriverCommand(this);
 			PreviousDriverCommand = new PreviousDriverCommand(this);
-			StartRecordCommand = new StartRecordCommand(this);
+			ToggleRecordingCommand = new ToggleRecordingCommand(this);
 
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			ConnectSimCommand = new ConnectSimCommand(this);
@@ -161,22 +163,28 @@ namespace iRacingReplayDirector
 			if (!NormalPlaybackSpeedEnabled)
 				return;
 
-			IEnumerable<TimelineNode> OrderedNodes = TimelineNodesView.Cast<TimelineNode>();
-			TimelineNode nodeToApply = OrderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
-
-			//if (nodeToApply != null)
-			//	Console.WriteLine($"Node to Apply: {nodeToApply.Frame}: {nodeToApply.Driver} - {nodeToApply.Camera}");
+			IEnumerable<TimelineNode> orderedNodes = TimelineNodesView.Cast<TimelineNode>();
+			TimelineNode nodeToApply = orderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
 
 			if (nodeToApply == null || nodeToApply == _lastAppliedNode)
 				return;
 
+			if (StopRecordingOnFinalNode && VideoCaptureActive)
+			{
+				// Check index of node, if last one,....
+				var orderedNodeList = orderedNodes.ToList();
+				var nodeIndex = orderedNodeList.IndexOf(nodeToApply);
+
+				if (nodeIndex == orderedNodeList.Count - 1)
+				{
+					StopRecording();
+					return;
+				}
+			}
+
 			_lastAppliedNode = nodeToApply;
 			CurrentTimelineNode = nodeToApply;
 			JumpToNode(CurrentTimelineNode);
-
-			//int index = itemsControl.SelectedIndex;
-			//object item = itemsControl.Items.GetItemAt(index);
-			//itemsControl.ScrollIntoView(item);
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)
@@ -325,6 +333,13 @@ namespace iRacingReplayDirector
 			// Shouldn't be possible, but lock speeds at 16X for safety
 			if (speed > 16) speed = 16; else if (speed < -16) speed = -16;
 
+			if (speed == 1 && !slowMo)
+				if (DisableSimUIOnPlayback)
+					InSimUIEnabled = false;
+
+			if (speed == 0 && DisableSimUIOnPlayback)
+				InSimUIEnabled = true;
+
 			if (!slowMo) m_SDKHelper.SetPlaybackSpeed(speed);
 			else m_SDKHelper.SetSlowMotionPlaybackSpeed(speed);
 		}
@@ -383,11 +398,16 @@ namespace iRacingReplayDirector
 
 		public void StartRecording()
 		{
+			InSimUIEnabled = !DisableUIWhenRecording;
+			SetPlaybackSpeed(1);
+
 			m_SDKHelper.EnableVideoCapture();
 		}
 
 		public void StopRecording()
 		{
+			InSimUIEnabled = true;
+			SetPlaybackSpeed(0);
 			m_SDKHelper.DisableVideoCapture();
 		}
 	}

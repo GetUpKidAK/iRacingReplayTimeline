@@ -61,7 +61,7 @@ namespace iRacingReplayDirector
 			}
 			else
 			{
-				ReplayDirectorVM.SetPlaybackSpeed(1);
+				ReplayDirectorVM.SetPlaybackSpeed(2);
 			}
 		}
 	}
