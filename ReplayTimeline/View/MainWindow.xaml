@@ -32,10 +32,10 @@
 			</MenuItem>
 
 			<MenuItem Header="Options">
-				<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}"/>
-				<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" />
+				<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}" Command="{Binding ToggleSimUIOnPlaybackCommand}"/>
+				<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" Command="{Binding ToggleSimUIOnRecordingCommand}"/>
 				<Separator />
-				<MenuItem Header="Stop Recording On Final Node" IsCheckable="True" IsChecked="{Binding StopRecordingOnFinalNode}"
+				<MenuItem Header="Stop Recording On Final Node" IsCheckable="True" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
 						  ToolTip="Use last stored node as a placeholder to stop recording."/>
 			</MenuItem>
 
@@ -201,7 +201,8 @@
 
 							<GroupBox Header="UI" Height="55" Padding="5">
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-									<ToggleButton Content="Toggle Sim UI" IsChecked="{Binding InSimUIEnabled}" Width="100" Margin="0 0 10 0"/>
+									<ToggleButton Content="Toggle Sim UI" IsChecked="{Binding InSimUIEnabled}" Command="{Binding ToggleInSimUICommand}"
+												  Width="100" Margin="0 0 10 0"/>
 								</StackPanel>
 							</GroupBox>
 						</StackPanel>

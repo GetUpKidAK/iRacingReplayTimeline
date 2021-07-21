@@ -315,6 +315,11 @@ namespace iRacingReplayDirector
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		public MoreInfoCommand MoreInfoCommand { get; set; }
 		public AboutCommand AboutCommand { get; set; }
+
+		public ToggleInSimUICommand ToggleInSimUICommand { get; set; }
+		public ToggleSimUIOnPlaybackCommand ToggleSimUIOnPlaybackCommand { get; set; }
+		public ToggleSimUIOnRecordingCommand ToggleSimUIOnRecordingCommand { get; set; }
+		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
 		#endregion
 	}
 }

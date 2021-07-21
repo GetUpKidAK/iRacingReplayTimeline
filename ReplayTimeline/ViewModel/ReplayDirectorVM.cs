@@ -54,6 +54,11 @@ namespace iRacingReplayDirector
 			PreviousDriverCommand = new PreviousDriverCommand(this);
 			ToggleRecordingCommand = new ToggleRecordingCommand(this);
 
+			ToggleInSimUICommand = new ToggleInSimUICommand(this);
+			ToggleSimUIOnPlaybackCommand = new ToggleSimUIOnPlaybackCommand(this);
+			ToggleSimUIOnRecordingCommand = new ToggleSimUIOnRecordingCommand(this);
+			ToggleRecordingOnFinalNodeCommand = new ToggleRecordingOnFinalNodeCommand(this);
+
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
