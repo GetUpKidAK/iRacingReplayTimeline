@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,8 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />
     <Compile Include="Commands\Menu Items\ApplicationQuitCommand.cs" />
-    <Compile Include="Commands\Menu Items\ConnectSimCommand.cs" />
-    <Compile Include="Commands\Menu Items\DisconnectSimCommand.cs" />
+    <Compile Include="ViewModel\Helpers\ExternalProcessHelper.cs" />
     <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="Model\TrackSurfaces.cs" />
     <Compile Include="Commands\Menu Items\MoreInfoCommand.cs" />

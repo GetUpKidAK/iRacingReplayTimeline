@@ -55,8 +55,6 @@ namespace iRacingReplayDirector
 			ToggleRecordingCommand = new ToggleRecordingCommand(this);
 
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
-			ConnectSimCommand = new ConnectSimCommand(this);
-			DisconnectSimCommand = new DisconnectSimCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
 

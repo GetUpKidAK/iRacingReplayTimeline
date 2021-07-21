@@ -51,8 +51,7 @@
 			
 			<!-- DEBUG MENU - HIDE ME -->
 			<!--<MenuItem Header="Debug Menu">
-				<MenuItem Header="Connect Sim" Command="{Binding ConnectSimCommand}"/>
-				<MenuItem Header="Disconnect Sim" Command="{Binding DisconnectSimCommand}"/>
+				<MenuItem Header="Placeholder" Command="{Binding ConnectSimCommand}"/>
 			</MenuItem>-->
 
 			<MenuItem Header="Help">
