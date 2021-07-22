@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace iRacingReplayDirector
 {
-	public class ApplicationQuitCommand : ICommand
+	public class ToggleUseInSimCaptureCommand : ICommand
 	{
 		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
@@ -15,23 +15,21 @@ namespace iRacingReplayDirector
 		}
 
 
-		public ApplicationQuitCommand(ReplayDirectorVM vm)
+		public ToggleUseInSimCaptureCommand(ReplayDirectorVM vm)
 		{
 			ReplayDirectorVM = vm;
 		}
 
 		public bool CanExecute(object parameter)
 		{
-			return true;
+			return !ReplayDirectorVM.IsCaptureActive();
 		}
 
 		public void Execute(object parameter)
 		{
-			App.Current.Shutdown();
-			ReplayDirectorVM.SetPlaybackSpeed(0);
+			ReplayDirectorVM.UseInSimCapture = true;
 
-			if (ReplayDirectorVM.IsCaptureActive()) ReplayDirectorVM.StopRecording();
-			Environment.Exit(0);
+			ReplayDirectorVM.UseOBSCapture = !ReplayDirectorVM.UseInSimCapture;
 		}
 	}
 }

@@ -163,7 +163,6 @@ namespace iRacingReplayDirector
 		{
 			get { return _inSimCaptureActive; }
 			private set { _inSimCaptureActive = value;
-				RecordBtnText = InSimCaptureActive ? "Stop" : "Record"; // TODO: Move
 				OnPropertyChanged("InSimCaptureActive"); }
 		}
 
@@ -237,6 +236,27 @@ namespace iRacingReplayDirector
 			get { return _stopRecordingOnFinalNode; }
 			set { _stopRecordingOnFinalNode = value;
 				OnPropertyChanged("StopRecordingOnFinalNode"); }
+		}
+
+		private bool _useInSimCapture;
+		public bool UseInSimCapture
+		{
+			get { return _useInSimCapture; }
+			set { _useInSimCapture = value; OnPropertyChanged("UseInSimCapture"); }
+		}
+
+		private bool _useOBSCapture;
+		public bool UseOBSCapture
+		{
+			get { return _useOBSCapture; }
+			set { _useOBSCapture = value; OnPropertyChanged("UseOBSCapture"); }
+		}
+
+		private bool _externalCaptureActive;
+		public bool ExternalCaptureActive
+		{
+			get { return _externalCaptureActive; }
+			set { _externalCaptureActive = value; OnPropertyChanged("ExternalCaptureActive"); }
 		}
 
 		private bool _showSessionLapSkipButtons;
@@ -334,6 +354,8 @@ namespace iRacingReplayDirector
 		public ToggleSimUIOnPlaybackCommand ToggleSimUIOnPlaybackCommand { get; set; }
 		public ToggleSimUIOnRecordingCommand ToggleSimUIOnRecordingCommand { get; set; }
 		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
+		public ToggleUseInSimCaptureCommand ToggleUseInSimCaptureCommand { get; set; }
+		public ToggleUseOBSCaptureCommand ToggleUseOBSCaptureCommand { get; set; }
 		#endregion
 	}
 }

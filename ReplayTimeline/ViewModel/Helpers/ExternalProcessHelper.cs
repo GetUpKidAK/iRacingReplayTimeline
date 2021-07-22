@@ -11,8 +11,9 @@ namespace iRacingReplayDirector
 		[DllImport("User32.dll")]
 		static extern int SetForegroundWindow(IntPtr point);
 
-		public static Process GetObsProcess()
+		public static Process GetExternalProcess()
 		{
+			// Just OBS for now...
 			return Process.GetProcessesByName("obs64").FirstOrDefault();
 		}
 
@@ -20,6 +21,8 @@ namespace iRacingReplayDirector
 		{
 			IntPtr h = p.MainWindowHandle;
 			SetForegroundWindow(h);
+
+			// Fixed Shift+Ctrl+R shortcut for now...
 			System.Windows.Forms.SendKeys.SendWait("^+(R)");
 		}
 	}

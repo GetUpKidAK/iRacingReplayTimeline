@@ -37,6 +37,11 @@
 				<Separator />
 				<MenuItem Header="Stop Recording On Final Node" IsCheckable="True" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
 						  ToolTip="Use last stored node as a placeholder to stop recording."/>
+				<Separator/>
+				<MenuItem Header="Recording Capture Method">
+					<MenuItem Header="iRacing Capture" IsCheckable="True" IsChecked="{Binding UseInSimCapture}" Command="{Binding ToggleUseInSimCaptureCommand}"/>
+					<MenuItem Header="OBS" IsCheckable="True" IsChecked="{Binding UseOBSCapture}" Command="{Binding ToggleUseOBSCaptureCommand}"/>
+				</MenuItem>
 			</MenuItem>
 
 			<MenuItem Header="View">

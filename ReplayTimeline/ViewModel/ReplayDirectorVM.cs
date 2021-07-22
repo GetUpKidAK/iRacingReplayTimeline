@@ -30,6 +30,8 @@ namespace iRacingReplayDirector
 			StoreFrameBtnText = "Store Node";
 			RecordBtnText = "Record";
 			DisableUIWhenRecording = true;
+			UseInSimCapture = true;
+			UseOBSCapture = false;
 
 			ShowReplayTimeline = true;
 			ShowSessionLapSkipButtons = true;
@@ -58,6 +60,9 @@ namespace iRacingReplayDirector
 			ToggleSimUIOnPlaybackCommand = new ToggleSimUIOnPlaybackCommand(this);
 			ToggleSimUIOnRecordingCommand = new ToggleSimUIOnRecordingCommand(this);
 			ToggleRecordingOnFinalNodeCommand = new ToggleRecordingOnFinalNodeCommand(this);
+
+			ToggleUseInSimCaptureCommand = new ToggleUseInSimCaptureCommand(this);
+			ToggleUseOBSCaptureCommand = new ToggleUseOBSCaptureCommand(this);
 
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
@@ -416,22 +421,45 @@ namespace iRacingReplayDirector
 
 		public bool IsCaptureActive()
 		{
-			return InSimCaptureActive;
+			return InSimCaptureActive || ExternalCaptureActive;
 		}
 
 		public void StartRecording()
 		{
 			InSimUIEnabled = !DisableUIWhenRecording;
 			SetPlaybackSpeed(1);
+			RecordBtnText = "Stop Rec";
 
-			m_SDKHelper.EnableVideoCapture();
+			ToggleRecording(true);
 		}
 
 		public void StopRecording()
 		{
 			InSimUIEnabled = true;
 			SetPlaybackSpeed(0);
-			m_SDKHelper.DisableVideoCapture();
+			RecordBtnText = "Record";
+
+			ToggleRecording(false);
+		}
+
+		private void ToggleRecording(bool enabled)
+		{
+			if (UseOBSCapture)
+			{
+				var obsProcess = ExternalProcessHelper.GetExternalProcess();
+				if (obsProcess != null)
+				{
+					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
+					ExternalCaptureActive = enabled;
+				}
+				return;
+			}
+
+			if (UseInSimCapture)
+			{
+				if (enabled) m_SDKHelper.EnableVideoCapture();
+				else m_SDKHelper.DisableVideoCapture();
+			}
 		}
 	}
 }
