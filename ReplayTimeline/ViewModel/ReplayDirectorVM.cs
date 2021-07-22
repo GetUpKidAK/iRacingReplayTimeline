@@ -455,9 +455,17 @@ namespace iRacingReplayDirector
 					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
 					ExternalCaptureActive = enabled;
 				}
+				else
+				{
+					MessageBox.Show("Couldn't find OBS process, pleas ensure the application is running.", "Error");
+
+					InSimUIEnabled = true;
+					SetPlaybackSpeed(0);
+					RecordBtnText = "Record";
+				}
 				return;
 			}
-
+			
 			if (UseInSimCapture)
 			{
 				if (enabled) m_SDKHelper.EnableVideoCapture();
