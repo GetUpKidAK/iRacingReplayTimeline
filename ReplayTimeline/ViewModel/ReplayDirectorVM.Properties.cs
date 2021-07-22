@@ -167,9 +167,7 @@ namespace iRacingReplayDirector
 			set
 			{
 				_InSimUIEnabled = value;
-
-				if (InSimUIEnabled) m_SDKHelper.EnableUI();
-				else m_SDKHelper.DisableUI();
+				m_SDKHelper.ToggleUI(_InSimUIEnabled);
 
 				OnPropertyChanged("InSimUIEnabled");
 			}

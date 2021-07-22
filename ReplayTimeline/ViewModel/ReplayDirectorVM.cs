@@ -130,8 +130,8 @@ namespace iRacingReplayDirector
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
 			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
-			VideoCaptureSettingEnabled = m_SDKHelper.VideoCaptureEnabled.Value;
-			VideoCaptureActive = m_SDKHelper.VideoCaptureActive.Value;
+			VideoCaptureSettingEnabled = m_SDKHelper.InSimCaptureAvailable.Value;
+			VideoCaptureActive = m_SDKHelper.InSimCaptureActive.Value;
 
 			// Get current car ID and current camera group from sim
 			var currentCarId = telemetryInfo.CamCarIdx.Value;

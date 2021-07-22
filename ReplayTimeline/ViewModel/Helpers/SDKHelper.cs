@@ -10,9 +10,9 @@ namespace iRacingReplayDirector
 		private SdkWrapper m_Wrapper;
 
 		// Is Video Capture mode enabled in user settings?
-		public TelemetryValue<bool> VideoCaptureEnabled { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
+		public TelemetryValue<bool> InSimCaptureAvailable { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
 		// Is video capture currently recording?
-		public TelemetryValue<bool> VideoCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
+		public TelemetryValue<bool> InSimCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
 
 
 		public SDKHelper(ReplayDirectorVM vm)
@@ -95,18 +95,12 @@ namespace iRacingReplayDirector
 			m_Wrapper.Replay.Jump(replayEvent);
 		}
 
-		public void EnableUI()
+		public void ToggleUI(bool enabled)
 		{
 			CameraState state = new CameraState();
-			state.Remove(CameraStates.UIHidden);
 
-			m_Wrapper.Camera.SetCameraState(state);
-		}
-
-		public void DisableUI()
-		{
-			CameraState state = new CameraState();
-			state.Add(CameraStates.UIHidden);
+			if (enabled) state.Remove(CameraStates.UIHidden);
+			else state.Add(CameraStates.UIHidden);
 
 			m_Wrapper.Camera.SetCameraState(state);
 		}
@@ -123,10 +117,16 @@ namespace iRacingReplayDirector
 			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
 		}
 
-		public void ToggleVideoCapture()
+		public void ToggleVideoCapture(bool enabled)
 		{
-			// Pass '3' as parameter to toggle recording
-			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 3, 0);
+			if (enabled) EnableVideoCapture();
+			else DisableVideoCapture();
 		}
+
+		//public void ToggleVideoCapture()
+		//{
+		//	// Pass '3' as parameter to toggle recording
+		//	m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 3, 0);
+		//}
 	}
 }
