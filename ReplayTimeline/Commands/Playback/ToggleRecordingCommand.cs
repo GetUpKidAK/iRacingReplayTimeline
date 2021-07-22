@@ -24,16 +24,13 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Disabled if in-sim recording is disabled
-			if (!ReplayDirectorVM.VideoCaptureSettingEnabled)
+			if (!ReplayDirectorVM.IsCaptureAvailable())
 				return false;
 
 			// Enabled while paused and as a stop recording button when recording. Needs extra property to get recording status
-			var playbackEnabled = ReplayDirectorVM.PlaybackEnabled;
-			var recordingInProgress = ReplayDirectorVM.VideoCaptureActive;
-
-			if (playbackEnabled)
+			if (ReplayDirectorVM.PlaybackEnabled)
 			{
-				if (recordingInProgress) return true;
+				if (ReplayDirectorVM.IsCaptureActive()) return true;
 				else return false;
 			}
 
@@ -42,7 +39,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			if (ReplayDirectorVM.VideoCaptureActive)
+			if (ReplayDirectorVM.IsCaptureActive())
 			{
 				ReplayDirectorVM.StopRecording();
 			}

@@ -24,7 +24,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			if (ReplayDirectorVM.VideoCaptureActive)
+			if (ReplayDirectorVM.IsCaptureActive())
 			{
 				// If capture is active disable the button if the final node is already gone
 				IEnumerable<TimelineNode> orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>();

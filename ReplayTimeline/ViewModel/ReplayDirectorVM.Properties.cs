@@ -28,8 +28,6 @@ namespace iRacingReplayDirector
 		public ObservableCollection<Camera> Cameras { get; set; }
 
 
-		private TimelineNode _lastAppliedNode;
-
 		private TimelineNode _currentTimelineNode;
 		public TimelineNode CurrentTimelineNode
 		{
@@ -42,18 +40,24 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private TimelineNode _lastAppliedNode;
+
 		private Driver _currentDriver;
 		public Driver CurrentDriver
 		{
 			get { return _currentDriver; }
-			set { _currentDriver = value; OnPropertyChanged("CurrentDriver"); DriverChanged(); }
+			set { _currentDriver = value;
+				OnPropertyChanged("CurrentDriver");
+				DriverChanged(); }
 		}
 
 		private Camera _currentCamera;
 		public Camera CurrentCamera
 		{
 			get { return _currentCamera; }
-			set { _currentCamera = value; OnPropertyChanged("CurrentCamera"); CameraChanged(); }
+			set { _currentCamera = value;
+				OnPropertyChanged("CurrentCamera");
+				CameraChanged(); }
 		}
 
 		private int _currentFrame;
@@ -71,7 +75,8 @@ namespace iRacingReplayDirector
 		public double SessionTime
 		{
 			get { return _sessionTime; }
-			set { _sessionTime = value; OnPropertyChanged("SessionTime"); }
+			set { _sessionTime = value;
+				OnPropertyChanged("SessionTime"); }
 		}
 
 
@@ -79,21 +84,24 @@ namespace iRacingReplayDirector
 		public bool MovingToFrame
 		{
 			get { return _movingToFrame; }
-			private set { _movingToFrame = value; OnPropertyChanged("MovingToFrame"); }
+			private set { _movingToFrame = value;
+				OnPropertyChanged("MovingToFrame"); }
 		}
 
 		private int _finalFrame;
 		public int FinalFrame
 		{
 			get { return _finalFrame; }
-			set { _finalFrame = value; OnPropertyChanged("FinalFrame"); }
+			set { _finalFrame = value;
+				OnPropertyChanged("FinalFrame"); }
 		}
 
 		private bool _slowMotionEnabled;
 		public bool SlowMotionEnabled
 		{
 			get { return _slowMotionEnabled; }
-			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); }
+			set { _slowMotionEnabled = value;
+				OnPropertyChanged("SlowMotionEnabled"); }
 		}
 
 		private int _currentPlaybackSpeed;
@@ -113,7 +121,8 @@ namespace iRacingReplayDirector
 		public string PlaybackSpeedText
 		{
 			get { return _playbackSpeedText; }
-			set { _playbackSpeedText = value; OnPropertyChanged("PlaybackSpeedText"); }
+			set { _playbackSpeedText = value;
+				OnPropertyChanged("PlaybackSpeedText"); }
 		}
 
 
@@ -141,23 +150,21 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		private bool _videoCaptureSettingEnabled;
-		public bool VideoCaptureSettingEnabled
+		private bool _inSimCaptureSettingEnabled;
+		public bool InSimCaptureSettingEnabled
 		{
-			get { return _videoCaptureSettingEnabled; }
-			private set { _videoCaptureSettingEnabled = value; OnPropertyChanged("VideoCaptureSettingEnabled"); }
+			get { return _inSimCaptureSettingEnabled; }
+			private set { _inSimCaptureSettingEnabled = value;
+				OnPropertyChanged("InSimCaptureSettingEnabled"); }
 		}
 
-		private bool _videoCaptureActive;
-		public bool VideoCaptureActive
+		private bool _inSimCaptureActive;
+		public bool InSimCaptureActive
 		{
-			get { return _videoCaptureActive; }
-			private set
-			{
-				_videoCaptureActive = value;
-				RecordBtnText = VideoCaptureActive ? "Stop" : "Record";
-				OnPropertyChanged("VideoCaptureActive");
-			}
+			get { return _inSimCaptureActive; }
+			private set { _inSimCaptureActive = value;
+				RecordBtnText = InSimCaptureActive ? "Stop" : "Record"; // TODO: Move
+				OnPropertyChanged("InSimCaptureActive"); }
 		}
 
 		private bool _InSimUIEnabled;
@@ -168,7 +175,6 @@ namespace iRacingReplayDirector
 			{
 				_InSimUIEnabled = value;
 				m_SDKHelper.ToggleUI(_InSimUIEnabled);
-
 				OnPropertyChanged("InSimUIEnabled");
 			}
 		}
@@ -181,70 +187,80 @@ namespace iRacingReplayDirector
 		public string StoreFrameBtnText
 		{
 			get { return _storeFrameBtnText; }
-			set { _storeFrameBtnText = value; OnPropertyChanged("StoreFrameBtnText"); }
+			set { _storeFrameBtnText = value;
+				OnPropertyChanged("StoreFrameBtnText"); }
 		}
 
 		private string _playPauseBtnText;
 		public string PlayPauseBtnText
 		{
 			get { return _playPauseBtnText; }
-			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
+			set { _playPauseBtnText = value;
+				OnPropertyChanged("PlayPauseBtnText"); }
 		}
 
 		private string _recordBtnText;
 		public string RecordBtnText
 		{
 			get { return _recordBtnText; }
-			set { _recordBtnText = value; OnPropertyChanged("RecordBtnText"); }
+			set { _recordBtnText = value;
+				OnPropertyChanged("RecordBtnText"); }
 		}
 
 		private bool _showReplayTimeline;
 		public bool ShowReplayTimeline
 		{
 			get { return _showReplayTimeline; }
-			set { _showReplayTimeline = value; OnPropertyChanged("ShowReplayTimeline"); }
+			set { _showReplayTimeline = value;
+				OnPropertyChanged("ShowReplayTimeline"); }
 		}
 
 		private bool _disableSimUIOnPlayback;
 		public bool DisableSimUIOnPlayback
 		{
 			get { return _disableSimUIOnPlayback; }
-			set { _disableSimUIOnPlayback = value; OnPropertyChanged("DisableSimUIOnPlayback"); }
+			set { _disableSimUIOnPlayback = value;
+				OnPropertyChanged("DisableSimUIOnPlayback"); }
 		}
 
 		private bool _disableUIWhenRecording;
 		public bool DisableUIWhenRecording
 		{
 			get { return _disableUIWhenRecording; }
-			set { _disableUIWhenRecording = value; OnPropertyChanged("DisableUIWhenRecording"); }
+			set { _disableUIWhenRecording = value;
+				OnPropertyChanged("DisableUIWhenRecording"); }
 		}
 
 		private bool _stopRecordingOnFinalNode;
 		public bool StopRecordingOnFinalNode
 		{
 			get { return _stopRecordingOnFinalNode; }
-			set { _stopRecordingOnFinalNode = value; OnPropertyChanged("StopRecordingOnFinalNode"); }
+			set { _stopRecordingOnFinalNode = value;
+				OnPropertyChanged("StopRecordingOnFinalNode"); }
 		}
 
 		private bool _showSessionLapSkipButtons;
 		public bool ShowSessionLapSkipButtons
 		{
 			get { return _showSessionLapSkipButtons; }
-			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
+			set { _showSessionLapSkipButtons = value;
+				OnPropertyChanged("ShowSessionLapSkipButtons"); }
 		}
 
 		private bool _showDriverCameraPanels;
 		public bool ShowDriverCameraPanels
 		{
 			get { return _showDriverCameraPanels; }
-			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
+			set { _showDriverCameraPanels = value;
+				OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
 		private bool _showTimelineNodeList;
 		public bool ShowTimelineNodeList
 		{
 			get { return _showTimelineNodeList; }
-			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
+			set { _showTimelineNodeList = value;
+				OnPropertyChanged("ShowTimelineNodeList"); }
 		}
 
 		private bool _minimizedMode;

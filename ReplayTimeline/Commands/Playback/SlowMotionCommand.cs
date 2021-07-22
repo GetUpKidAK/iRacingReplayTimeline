@@ -24,7 +24,7 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Disable at max speed?
-			return ReplayDirectorVM.SessionInfoLoaded && !ReplayDirectorVM.VideoCaptureActive;
+			return ReplayDirectorVM.SessionInfoLoaded && !ReplayDirectorVM.IsCaptureActive();
 		}
 
 		public void Execute(object parameter)

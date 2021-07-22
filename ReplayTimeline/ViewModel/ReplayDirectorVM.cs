@@ -130,8 +130,8 @@ namespace iRacingReplayDirector
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
 			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
-			VideoCaptureSettingEnabled = m_SDKHelper.InSimCaptureAvailable.Value;
-			VideoCaptureActive = m_SDKHelper.InSimCaptureActive.Value;
+			InSimCaptureSettingEnabled = m_SDKHelper.InSimCaptureAvailable.Value;
+			InSimCaptureActive = m_SDKHelper.InSimCaptureActive.Value;
 
 			// Get current car ID and current camera group from sim
 			var currentCarId = telemetryInfo.CamCarIdx.Value;
@@ -179,7 +179,7 @@ namespace iRacingReplayDirector
 			if (nodeToApply == null || nodeToApply == _lastAppliedNode)
 				return;
 
-			if (StopRecordingOnFinalNode && VideoCaptureActive)
+			if (StopRecordingOnFinalNode && IsCaptureActive())
 			{
 				// Check index of node, if last one,....
 				var orderedNodeList = orderedNodes.ToList();
@@ -407,6 +407,16 @@ namespace iRacingReplayDirector
 		public void SaveProjectChanges()
 		{
 			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
+		}
+
+		public bool IsCaptureAvailable()
+		{
+			return InSimCaptureSettingEnabled;
+		}
+
+		public bool IsCaptureActive()
+		{
+			return InSimCaptureActive;
 		}
 
 		public void StartRecording()
