@@ -79,7 +79,7 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("SessionTime"); }
 		}
 
-
+		// TODO: Delete?
 		private bool _movingToFrame;
 		public bool MovingToFrame
 		{
@@ -206,12 +206,12 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("RecordBtnText"); }
 		}
 
-		private bool _showReplayTimeline;
-		public bool ShowReplayTimeline
+		private bool _showVisualTimeline;
+		public bool ShowVisualTimeline
 		{
-			get { return _showReplayTimeline; }
-			set { _showReplayTimeline = value;
-				OnPropertyChanged("ShowReplayTimeline"); }
+			get { return _showVisualTimeline; }
+			set { _showVisualTimeline = value;
+				OnPropertyChanged("ShowVisualTimeline"); }
 		}
 
 		private bool _disableSimUIOnPlayback;
@@ -291,7 +291,7 @@ namespace iRacingReplayDirector
 			{
 				_minimizedMode = value;
 
-				ShowReplayTimeline = !_minimizedMode;
+				ShowVisualTimeline = !_minimizedMode;
 				ShowSessionLapSkipButtons = !_minimizedMode;
 				ShowDriverCameraPanels = !_minimizedMode;
 				ShowTimelineNodeList = !_minimizedMode;

@@ -29,8 +29,10 @@ namespace iRacingReplayDirector
 		{
 			App.Current.Shutdown();
 			ReplayDirectorVM.SetPlaybackSpeed(0);
-
 			if (ReplayDirectorVM.IsCaptureActive()) ReplayDirectorVM.StopRecording();
+
+			SaveLoadHelper.SaveSettings(ReplayDirectorVM);
+
 			Environment.Exit(0);
 		}
 	}

@@ -46,7 +46,7 @@
 
 			<MenuItem Header="View">
 				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
-				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowReplayTimeline}"/>
+				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}"/>
 				<MenuItem Header="Prev/Next Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
 				<Separator/>
 				<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
@@ -130,7 +130,7 @@
 
 			<Grid Grid.Row="1" Margin="5">
 				<StackPanel>
-					<Grid Margin="5" Height="30" Visibility="{Binding ShowReplayTimeline, Converter={StaticResource VisibilityConverter}}">
+					<Grid Margin="5" Height="30" Visibility="{Binding ShowVisualTimeline, Converter={StaticResource VisibilityConverter}}">
 						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
 						
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -182,7 +182,7 @@
 
 								<Button Content="{Binding RecordBtnText}" Command="{Binding ToggleRecordingCommand}" Width="100" Margin="10 0 10 0"
 										ToolTipService.ShowOnDisabled="True"
-										ToolTipService.IsEnabled="{Binding VideoCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
+										ToolTipService.IsEnabled="{Binding InSimCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
 										ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
 							</StackPanel>
 						</GroupBox>

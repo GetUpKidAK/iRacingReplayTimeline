@@ -29,14 +29,8 @@ namespace iRacingReplayDirector
 			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
 			RecordBtnText = "Record";
-			DisableUIWhenRecording = true;
-			UseInSimCapture = true;
-			UseOBSCapture = false;
 
-			ShowReplayTimeline = true;
-			ShowSessionLapSkipButtons = true;
-			ShowDriverCameraPanels = true;
-			ShowTimelineNodeList = true;
+			GetAppSettings();
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
@@ -69,6 +63,37 @@ namespace iRacingReplayDirector
 			AboutCommand = new AboutCommand(this);
 
 			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
+		}
+
+		private void GetAppSettings()
+		{
+			ShowVisualTimeline = true;
+			ShowSessionLapSkipButtons = true;
+			ShowDriverCameraPanels = true;
+			ShowTimelineNodeList = true;
+			DisableSimUIOnPlayback = false;
+			DisableUIWhenRecording = true;
+			StopRecordingOnFinalNode = false;
+			UseInSimCapture = true;
+			UseOBSCapture = false;
+
+			var loadedSettings = SaveLoadHelper.LoadSettings();
+
+			if (loadedSettings != null)
+			{
+				ShowVisualTimeline = loadedSettings.ShowVisualTimeline;
+				ShowSessionLapSkipButtons = loadedSettings.ShowSessionLapSkipButtons;
+				ShowDriverCameraPanels = loadedSettings.ShowDriverCameraPanels;
+				ShowTimelineNodeList = loadedSettings.ShowTimelineNodeList;
+				DisableSimUIOnPlayback = loadedSettings.DisableSimUIOnPlayback;
+				DisableUIWhenRecording = loadedSettings.DisableUIWhenRecording;
+				StopRecordingOnFinalNode = loadedSettings.StopRecordingOnFinalNode;
+				UseInSimCapture = loadedSettings.UseInSimCapture;
+				UseOBSCapture = loadedSettings.UseOBSCapture;
+
+				if (UseInSimCapture && UseOBSCapture)
+					UseOBSCapture = false;
+			}
 		}
 
 		public void ApplicationClosing()
