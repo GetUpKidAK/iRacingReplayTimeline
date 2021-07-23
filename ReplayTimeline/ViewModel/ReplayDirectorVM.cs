@@ -196,6 +196,12 @@ namespace iRacingReplayDirector
 				var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
 				_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
 				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
+
+				if (IsCaptureActive())
+				{
+					// Stop recording if playback is stopped (usually at end of replay...)
+					StopRecording();
+				}
 			}
 
 			PlaybackCameraSwitching();
@@ -477,8 +483,8 @@ namespace iRacingReplayDirector
 				var obsProcess = ExternalProcessHelper.GetExternalProcess();
 				if (obsProcess != null)
 				{
-					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
 					ExternalCaptureActive = enabled;
+					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
 				}
 				else
 				{
