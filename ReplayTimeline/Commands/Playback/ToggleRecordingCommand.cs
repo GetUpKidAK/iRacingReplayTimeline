@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 
@@ -26,6 +28,20 @@ namespace iRacingReplayDirector
 			// Disabled if in-sim recording is disabled
 			if (!ReplayDirectorVM.IsCaptureAvailable())
 				return false;
+
+			if (ReplayDirectorVM.StopRecordingOnFinalNode)
+			{
+				if (ReplayDirectorVM.TimelineNodes.Count > 0)
+				{
+					var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>().ToList();
+					var finalNode = orderedNodes[orderedNodes.Count - 1];
+
+					if (ReplayDirectorVM.CurrentFrame >= finalNode.Frame)
+					{
+						return false;
+					}
+				}
+			}
 
 			// Enabled while paused and as a stop recording button when recording. Needs extra property to get recording status
 			if (ReplayDirectorVM.PlaybackEnabled)

@@ -194,9 +194,9 @@ namespace iRacingReplayDirector
 			if (!PlaybackEnabled)
 			{
 				var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
-					_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
+				_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
+				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
 			}
-			
 
 			PlaybackCameraSwitching();
 		}
@@ -209,21 +209,20 @@ namespace iRacingReplayDirector
 			IEnumerable<TimelineNode> orderedNodes = TimelineNodesView.Cast<TimelineNode>();
 			TimelineNode nodeToApply = orderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
 
-			if (nodeToApply == null || nodeToApply == _lastAppliedNode)
-				return;
-
 			if (StopRecordingOnFinalNode && IsCaptureActive())
 			{
-				// Check index of node, if last one,....
-				var orderedNodeList = orderedNodes.ToList();
-				var nodeIndex = orderedNodeList.IndexOf(nodeToApply);
+				var orderedNodesList = orderedNodes.ToList();
+				var finalNode = orderedNodesList[orderedNodesList.Count - 1];
 
-				if (nodeIndex == orderedNodeList.Count - 1)
+				if (CurrentFrame >= finalNode.Frame)
 				{
 					StopRecording();
 					return;
 				}
 			}
+
+			if (nodeToApply == null || nodeToApply == _lastAppliedNode)
+				return;
 
 			_lastAppliedNode = nodeToApply;
 			CurrentTimelineNode = nodeToApply;
@@ -348,8 +347,6 @@ namespace iRacingReplayDirector
 
 		private void TimelineNodeChanged()
 		{
-			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
-
 			if (CurrentTimelineNode != null)
 				JumpToNode(CurrentTimelineNode);
 		}
