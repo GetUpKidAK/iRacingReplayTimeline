@@ -29,6 +29,9 @@ namespace iRacingReplayDirector
 			if (!ReplayDirectorVM.IsCaptureAvailable())
 				return false;
 
+			if ((ReplayDirectorVM.CurrentFrame + 1) >= ReplayDirectorVM.FinalFrame)
+				return false;
+
 			if (ReplayDirectorVM.StopRecordingOnFinalNode)
 			{
 				if (ReplayDirectorVM.TimelineNodes.Count > 0)

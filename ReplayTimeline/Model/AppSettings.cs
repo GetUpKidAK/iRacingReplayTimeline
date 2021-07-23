@@ -5,6 +5,7 @@ namespace iRacingReplayDirector
 	public class AppSettings
 	{
 		public bool ShowVisualTimeline { get; set; } = true;
+		public bool ShowRecordingButtons { get; set; } = true;
 		public bool ShowSessionLapSkipButtons { get; set; } = true;
 		public bool ShowDriverCameraPanels { get; set; } = true;
 		public bool ShowTimelineNodeList { get; set; } = true;

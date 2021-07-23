@@ -68,6 +68,7 @@ namespace iRacingReplayDirector
 		private void GetAppSettings()
 		{
 			ShowVisualTimeline = true;
+			ShowRecordingButtons = true;
 			ShowSessionLapSkipButtons = true;
 			ShowDriverCameraPanels = true;
 			ShowTimelineNodeList = true;
@@ -82,6 +83,7 @@ namespace iRacingReplayDirector
 			if (loadedSettings != null)
 			{
 				ShowVisualTimeline = loadedSettings.ShowVisualTimeline;
+				ShowRecordingButtons = loadedSettings.ShowRecordingButtons;
 				ShowSessionLapSkipButtons = loadedSettings.ShowSessionLapSkipButtons;
 				ShowDriverCameraPanels = loadedSettings.ShowDriverCameraPanels;
 				ShowTimelineNodeList = loadedSettings.ShowTimelineNodeList;
@@ -195,7 +197,8 @@ namespace iRacingReplayDirector
 			{
 				var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
 				_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
-				StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
+
+				UpdateUILabels();
 
 				if (IsCaptureActive())
 				{
@@ -233,6 +236,15 @@ namespace iRacingReplayDirector
 			_lastAppliedNode = nodeToApply;
 			CurrentTimelineNode = nodeToApply;
 			JumpToNode(CurrentTimelineNode);
+		}
+
+		private void UpdateUILabels()
+		{
+			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
+
+			CaptureModeText = "Capture Mode: None";
+			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";
+			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
 		}
 
 		public void SessionInfoUpdated(SessionInfo sessionInfo)

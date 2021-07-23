@@ -197,6 +197,13 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("RecordBtnText"); }
 		}
 
+		private string _captureModeText;
+		public string CaptureModeText
+		{
+			get { return _captureModeText; }
+			set { _captureModeText = value; OnPropertyChanged("CaptureModeText"); }
+		}
+
 		private bool _showVisualTimeline;
 		public bool ShowVisualTimeline
 		{
@@ -250,6 +257,17 @@ namespace iRacingReplayDirector
 			set { _externalCaptureActive = value; OnPropertyChanged("ExternalCaptureActive"); }
 		}
 
+		private bool _showRecordingButtons;
+		public bool ShowRecordingButtons
+		{
+			get { return _showRecordingButtons; }
+			set
+			{
+				_showRecordingButtons = value;
+				OnPropertyChanged("ShowRecordingButtons");
+			}
+		}
+
 		private bool _showSessionLapSkipButtons;
 		public bool ShowSessionLapSkipButtons
 		{
@@ -283,6 +301,7 @@ namespace iRacingReplayDirector
 				_minimizedMode = value;
 
 				ShowVisualTimeline = !_minimizedMode;
+				ShowRecordingButtons = !_minimizedMode;
 				ShowSessionLapSkipButtons = !_minimizedMode;
 				ShowDriverCameraPanels = !_minimizedMode;
 				ShowTimelineNodeList = !_minimizedMode;

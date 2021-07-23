@@ -20,6 +20,7 @@ namespace iRacingReplayDirector
 			AppSettings appSettings = new AppSettings()
 			{
 				ShowVisualTimeline = vm.ShowVisualTimeline,
+				ShowRecordingButtons = vm.ShowRecordingButtons,
 				ShowSessionLapSkipButtons = vm.ShowSessionLapSkipButtons,
 				ShowDriverCameraPanels = vm.ShowDriverCameraPanels,
 				ShowTimelineNodeList = vm.ShowTimelineNodeList,
