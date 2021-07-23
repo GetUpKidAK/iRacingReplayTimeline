@@ -459,16 +459,16 @@ namespace iRacingReplayDirector
 		{
 			SetPlaybackSpeed(1);
 			InSimUIEnabled = !DisableUIWhenRecording;
-			RecordBtnText = "Stop Rec";
 
+			RecordBtnText = "Stop Rec";
 			ToggleRecording(true);
 		}
 
 		public void StopRecording()
 		{
-			ToggleRecording(false);
-
 			SetPlaybackSpeed(0);
+			ToggleRecording(false);
+			
 			RecordBtnText = "Record";
 			InSimUIEnabled = true;
 		}
