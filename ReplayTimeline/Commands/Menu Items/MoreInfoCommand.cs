@@ -28,8 +28,8 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			MessageBoxResult confirmationPopUp = MessageBox.Show($"Visit the GitHub project page for more info?",
-						"More Info", MessageBoxButton.OKCancel, MessageBoxImage.None, MessageBoxResult.OK);
+			MessageBoxResult confirmationPopUp = MessageBox.Show($"This will open the GitHub project page containing more details and some usage guides.",
+						"More Info / Guides", MessageBoxButton.OKCancel, MessageBoxImage.None, MessageBoxResult.OK);
 
 			if (confirmationPopUp == MessageBoxResult.OK)
 			{

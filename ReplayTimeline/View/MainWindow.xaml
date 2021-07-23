@@ -60,7 +60,7 @@
 			</MenuItem>-->
 
 			<MenuItem Header="Help">
-				<MenuItem Header="More Info" Command="{Binding MoreInfoCommand}"/>
+				<MenuItem Header="More Info / Guides" Command="{Binding MoreInfoCommand}"/>
 				<MenuItem Header="About" Command="{Binding AboutCommand}"/>
 			</MenuItem>
 		</Menu>
