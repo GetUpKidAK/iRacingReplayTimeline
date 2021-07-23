@@ -4,7 +4,7 @@ An editing tool for iRacing replays. Create a sequence of 'nodes' consisting of 
 
 Each replay has its own save file so no need to edit everything in one session.
 
-![App screenshot](https://i.ibb.co/6n5zJXq/image.png)
+![App screenshot](https://i.ibb.co/D1czQ68/image.png)
 
 ## Installation
 
