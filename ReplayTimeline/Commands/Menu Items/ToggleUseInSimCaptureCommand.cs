@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 
@@ -27,9 +28,17 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			ReplayDirectorVM.UseInSimCapture = true;
+			if (ReplayDirectorVM.InSimCaptureSettingEnabled)
+			{
+				ReplayDirectorVM.UseInSimCapture = true;
+				ReplayDirectorVM.UseOBSCapture = false;
+			}
+			else
+			{
+				ReplayDirectorVM.UseInSimCapture = false;
 
-			ReplayDirectorVM.UseOBSCapture = !ReplayDirectorVM.UseInSimCapture;
+				MessageBox.Show("The In-Sim capture setting is not enabled.\n\nPlease enable this under Options - Misc and restart the Sim.", "Error");
+			}
 		}
 	}
 }

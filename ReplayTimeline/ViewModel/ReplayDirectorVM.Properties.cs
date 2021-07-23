@@ -79,15 +79,6 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("SessionTime"); }
 		}
 
-		// TODO: Delete?
-		private bool _movingToFrame;
-		public bool MovingToFrame
-		{
-			get { return _movingToFrame; }
-			private set { _movingToFrame = value;
-				OnPropertyChanged("MovingToFrame"); }
-		}
-
 		private int _finalFrame;
 		public int FinalFrame
 		{

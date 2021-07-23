@@ -32,21 +32,15 @@ namespace iRacingReplayDirector
 
 			if (obsProcess != null)
 			{
-				ToggleOBSCaptureSetting(true);
+				ReplayDirectorVM.UseOBSCapture = true;
+				ReplayDirectorVM.UseInSimCapture = false;
 			}
 			else
 			{
-				ToggleOBSCaptureSetting(false);
+				ReplayDirectorVM.UseOBSCapture = false;
 
 				MessageBox.Show("Couldn't find OBS process, please ensure the application is running.", "Error");
 			}
-		}
-
-		private void ToggleOBSCaptureSetting(bool enabled)
-		{
-			ReplayDirectorVM.UseOBSCapture = enabled;
-
-			ReplayDirectorVM.UseInSimCapture = !ReplayDirectorVM.UseOBSCapture;
 		}
 	}
 }
