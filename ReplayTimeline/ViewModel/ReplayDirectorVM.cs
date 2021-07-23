@@ -191,9 +191,12 @@ namespace iRacingReplayDirector
 			var lapInfo = (CurrentDriver.Lap > -1) ? $"(Lap {CurrentDriver.Lap}/{sessionLaps})" : ""; // Only show lap info if one has started
 			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {lapInfo}";
 
-			var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
-			if (currentNode == null && !PlaybackEnabled)
-				CurrentTimelineNode = currentNode;
+			if (!PlaybackEnabled)
+			{
+				var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
+					_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
+			}
+			
 
 			PlaybackCameraSwitching();
 		}
