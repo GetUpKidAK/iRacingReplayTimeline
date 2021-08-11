@@ -48,7 +48,7 @@ namespace iRacingReplayDirector
 
 				string driverName = query["UserName"].GetValue("");
 
-				if (!string.IsNullOrEmpty(driverName) && driverName != "Pace Car")
+				if (!string.IsNullOrEmpty(driverName))
 				{
 					// Get driver if driver is in previous list
 					newDriver = currentDrivers.FirstOrDefault(d => d.Name == driverName);
