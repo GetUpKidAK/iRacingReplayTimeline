@@ -19,12 +19,17 @@ namespace iRacingReplayDirector
 			TimelineNodes = new ObservableCollection<TimelineNode>();
 			TimelineNodesView = CollectionViewSource.GetDefaultView(TimelineNodes);
 			Drivers = new ObservableCollection<Driver>();
+			DriversView = CollectionViewSource.GetDefaultView(Drivers);
 			Cameras = new ObservableCollection<Camera>();
 
 			TimelineNodesView.SortDescriptions.Clear();
 
 			SortDescription frameSort = new SortDescription("Frame", ListSortDirection.Ascending);
 			TimelineNodesView.SortDescriptions.Add(frameSort);
+
+			SortDescription idSort = new SortDescription("NumberRaw", ListSortDirection.Ascending);
+			DriversView.SortDescriptions.Add(idSort);
+			SortDriversById = true;
 
 			StatusBarText = "iRacing Not Connected.";
 			StoreFrameBtnText = "Store Node";
@@ -48,6 +53,7 @@ namespace iRacingReplayDirector
 			PreviousSessionCommand = new PreviousSessionCommand(this);
 			NextDriverCommand = new NextDriverCommand(this);
 			PreviousDriverCommand = new PreviousDriverCommand(this);
+			ToggleDriverSortOptionCommand = new ToggleDriverSortOptionCommand(this);
 			ToggleRecordingCommand = new ToggleRecordingCommand(this);
 
 			ToggleInSimUICommand = new ToggleInSimUICommand(this);
@@ -207,7 +213,22 @@ namespace iRacingReplayDirector
 				}
 			}
 
+			RefreshDriversView();
 			PlaybackCameraSwitching();
+		}
+
+		// Used to limit updates on refreshing driver position ordering
+		int updateCounter = 0;
+		int updateRefreshRate = 90;
+
+		private void RefreshDriversView()
+		{
+			updateCounter++;
+			if (updateCounter > updateRefreshRate)
+			{
+				updateCounter = 0;
+				DriversView.Refresh();
+			}
 		}
 
 		private void PlaybackCameraSwitching()

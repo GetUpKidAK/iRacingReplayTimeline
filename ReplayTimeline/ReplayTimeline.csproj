@@ -82,6 +82,7 @@
     <Compile Include="Commands\Menu Items\ToggleInSimUICommand.cs" />
     <Compile Include="Commands\Menu Items\ToggleUseInSimCaptureCommand.cs" />
     <Compile Include="Commands\Menu Items\ToggleUseOBSCaptureCommand.cs" />
+    <Compile Include="Commands\Session\ToggleDriverSortOptionCommand.cs" />
     <Compile Include="ViewModel\Helpers\ExternalProcessHelper.cs" />
     <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="Model\TrackSurfaces.cs" />

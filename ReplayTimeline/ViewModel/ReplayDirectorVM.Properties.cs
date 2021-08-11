@@ -25,6 +25,7 @@ namespace iRacingReplayDirector
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
 		public ICollectionView TimelineNodesView { get; private set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
+		public ICollectionView DriversView { get; private set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
 
@@ -166,6 +167,18 @@ namespace iRacingReplayDirector
 				_InSimUIEnabled = value;
 				m_SDKHelper.ToggleUI(_InSimUIEnabled);
 				OnPropertyChanged("InSimUIEnabled");
+			}
+		}
+
+		private bool _sortDriversById;
+		public bool SortDriversById
+		{
+			get { return _sortDriversById; }
+			set
+			{
+				_sortDriversById = value;
+				DriverSortButtonLabel = _sortDriversById ? "Sort By Pos" : "Sort By ID";
+				OnPropertyChanged("SortDriversById");
 			}
 		}
 
@@ -331,6 +344,13 @@ namespace iRacingReplayDirector
 			set { _statusBarCurrentSessionInfo = value; OnPropertyChanged("StatusBarCurrentSessionInfo"); }
 		}
 
+		private string _driverSortButtonLabel;
+		public string DriverSortButtonLabel
+		{
+			get { return _driverSortButtonLabel; }
+			set { _driverSortButtonLabel = value; OnPropertyChanged("DriverSortButtonLabel"); }
+		}
+
 		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -354,6 +374,7 @@ namespace iRacingReplayDirector
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
+		public ToggleDriverSortOptionCommand ToggleDriverSortOptionCommand { get; set; }
 		public ToggleRecordingCommand ToggleRecordingCommand { get; set; }
 
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }

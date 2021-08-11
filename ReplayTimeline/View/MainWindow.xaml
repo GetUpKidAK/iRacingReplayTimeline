@@ -76,7 +76,10 @@
 						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Number}">
 							<GridViewColumnHeader Content="Car #" IsEnabled="False" />
 						</GridViewColumn>
-						<GridViewColumn Width="165" DisplayMemberBinding="{Binding TeamName}">
+						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Position}">
+							<GridViewColumnHeader Content="Pos" IsEnabled="False" />
+						</GridViewColumn>
+						<GridViewColumn Width="160" DisplayMemberBinding="{Binding TeamName}">
 							<GridViewColumnHeader Content="Driver/Team Name" IsEnabled="False" />
 						</GridViewColumn>
 					</GridView>
@@ -84,8 +87,9 @@
 			</ListView>
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="25">
-				<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" />
-				<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
+				<Button Content="Car Behind" Command="{Binding PreviousDriverCommand}" Width="80" />
+				<Button Content="Car Ahead" Command="{Binding NextDriverCommand}" Width="80" />
+				<Button Content="{Binding DriverSortButtonLabel}" Command="{Binding ToggleDriverSortOptionCommand}" Width="80" Margin="5 0 0 0" />
 			</StackPanel>
 		</Grid>
 

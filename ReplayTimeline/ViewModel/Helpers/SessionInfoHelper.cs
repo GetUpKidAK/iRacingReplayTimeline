@@ -135,6 +135,18 @@ namespace iRacingReplayDirector
 				driver.LapDistance = lapDistances[driver.Id];
 				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
 			}
+
+			var orderedDriverList = driverList.OrderByDescending(d => d.Lap).ThenByDescending(d => d.LapDistance).ToList();
+			for (int i = 0; i < orderedDriverList.Count; i++)
+			{
+				orderedDriverList[i].Position = (i + 1);
+
+				if (orderedDriverList[i].NumberRaw == 0) // Pace Car always placed in last place
+				{
+					orderedDriverList[i].Position = 999;
+				}
+			}
+			
 		}
 	}
 }
