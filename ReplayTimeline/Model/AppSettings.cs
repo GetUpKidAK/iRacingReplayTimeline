@@ -4,6 +4,7 @@ namespace iRacingReplayDirector
 {
 	public class AppSettings
 	{
+		public bool WindowAlwaysOnTop { get; set; } = false;
 		public bool ShowVisualTimeline { get; set; } = true;
 		public bool ShowRecordingButtons { get; set; } = true;
 		public bool ShowSessionLapSkipButtons { get; set; } = true;

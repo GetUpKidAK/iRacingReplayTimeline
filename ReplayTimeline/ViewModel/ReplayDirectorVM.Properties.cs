@@ -182,6 +182,13 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private bool _windowAlwaysOnTop;
+		public bool WindowAlwaysOnTop
+		{
+			get { return _windowAlwaysOnTop; }
+			set { _windowAlwaysOnTop = value; OnPropertyChanged("WindowAlwaysOnTop"); }
+		}
+
 		#endregion
 
 		#region Label Properties

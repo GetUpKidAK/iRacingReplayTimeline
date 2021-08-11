@@ -88,6 +88,7 @@ namespace iRacingReplayDirector
 
 			if (loadedSettings != null)
 			{
+				WindowAlwaysOnTop = loadedSettings.WindowAlwaysOnTop;
 				ShowVisualTimeline = loadedSettings.ShowVisualTimeline;
 				ShowRecordingButtons = loadedSettings.ShowRecordingButtons;
 				ShowSessionLapSkipButtons = loadedSettings.ShowSessionLapSkipButtons;

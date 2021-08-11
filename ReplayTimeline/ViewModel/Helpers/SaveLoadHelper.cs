@@ -19,6 +19,7 @@ namespace iRacingReplayDirector
 		{
 			AppSettings appSettings = new AppSettings()
 			{
+				WindowAlwaysOnTop = vm.WindowAlwaysOnTop,
 				ShowVisualTimeline = vm.ShowVisualTimeline,
 				ShowRecordingButtons = vm.ShowRecordingButtons,
 				ShowSessionLapSkipButtons = vm.ShowSessionLapSkipButtons,
