@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Linq;
 using System.Windows.Input;
 
@@ -62,7 +63,7 @@ namespace iRacingReplayDirector
 			if (targetNode != null)
 			{
 				ReplayDirectorVM.CurrentTimelineNode = targetNode;
-				ReplayDirectorVM.GoToFrame(targetNode.Frame);
+				Sim.Instance.Sdk.Replay.SetPosition(targetNode.Frame);
 			}
 		}
 	}

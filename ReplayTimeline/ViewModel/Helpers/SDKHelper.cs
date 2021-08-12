@@ -6,122 +6,122 @@ namespace iRacingReplayDirector
 {
 	public class SDKHelper
 	{
-		private ReplayDirectorVM m_DirectorVM;
-		private SdkWrapper m_Wrapper;
+		//private ReplayDirectorVM m_DirectorVM;
+		//private SdkWrapper m_Wrapper;
 
-		// Is Video Capture mode enabled in user settings?
-		public TelemetryValue<bool> InSimCaptureAvailable { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
-		// Is video capture currently recording?
-		public TelemetryValue<bool> InSimCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
-
-
-		public SDKHelper(ReplayDirectorVM vm)
-		{
-			m_DirectorVM = vm;
-
-			m_Wrapper = new SdkWrapper();
-
-			m_Wrapper.Connected += SdkConnected;
-			m_Wrapper.Disconnected += SdkDisconnected;
-			m_Wrapper.TelemetryUpdated += TelemetryUpdated;
-			m_Wrapper.SessionInfoUpdated += SessionInfoUpdated;
-
-			m_Wrapper.Start();
-		}
-
-		public void Stop()
-		{
-			m_Wrapper.Connected -= SdkConnected;
-			m_Wrapper.Disconnected -= SdkDisconnected;
-			m_Wrapper.TelemetryUpdated -= TelemetryUpdated;
-			m_Wrapper.SessionInfoUpdated -= SessionInfoUpdated;
-
-			m_Wrapper.Stop();
-		}
-
-		private void SdkConnected(object sender, System.EventArgs e)
-		{
-			m_DirectorVM.SdkConnected();
-		}
-
-		private void SdkDisconnected(object sender, System.EventArgs e)
-		{
-			m_DirectorVM.SdkDisconnected();
-		}
-
-		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
-		{
-			m_DirectorVM.TelemetryUpdated(e.TelemetryInfo);
-		}
-
-		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
-		{
-			m_DirectorVM.SessionInfoUpdated(e.SessionInfo);
-		}
+		//// Is Video Capture mode enabled in user settings?
+		//public TelemetryValue<bool> InSimCaptureAvailable { get => m_Wrapper.GetTelemetryValue<bool>("VidCapEnabled"); }
+		//// Is video capture currently recording?
+		//public TelemetryValue<bool> InSimCaptureActive { get => m_Wrapper.GetTelemetryValue<bool>("VidCapActive"); }
 
 
-		public void SetPlaybackSpeed(int playbackSpeed)
-		{
-			m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed);
-		}
+		//public SDKHelper(ReplayDirectorVM vm)
+		//{
+		//	m_DirectorVM = vm;
 
-		public void SetSlowMotionPlaybackSpeed(int playbackSpeed)
-		{
-			m_Wrapper.Replay.SetSlowmotionPlaybackSpeed(playbackSpeed);
-		}
+		//	m_Wrapper = new SdkWrapper();
 
-		public void SetCamera(Camera camera)
-		{
-			m_Wrapper.Camera.SwitchGroup(camera.GroupNum);
-		}
+		//	m_Wrapper.Connected += SdkConnected;
+		//	m_Wrapper.Disconnected += SdkDisconnected;
+		//	m_Wrapper.TelemetryUpdated += TelemetryUpdated;
+		//	m_Wrapper.SessionInfoUpdated += SessionInfoUpdated;
 
-		public void SetDriver(Driver driver)
-		{
-			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw);
-		}
+		//	m_Wrapper.Start();
+		//}
 
-		public void SetDriver(Driver driver, Camera camera)
-		{
-			m_Wrapper.Camera.SwitchToCar(driver.NumberRaw, camera.GroupNum);
-		}
+		//public void Stop()
+		//{
+		//	m_Wrapper.Connected -= SdkConnected;
+		//	m_Wrapper.Disconnected -= SdkDisconnected;
+		//	m_Wrapper.TelemetryUpdated -= TelemetryUpdated;
+		//	m_Wrapper.SessionInfoUpdated -= SessionInfoUpdated;
 
-		public void GoToFrame(int frameNumber)
-		{
-			m_Wrapper.Replay.SetPosition(frameNumber);
-		}
+		//	m_Wrapper.Stop();
+		//}
 
-		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
-		{
-			m_Wrapper.Replay.Jump(replayEvent);
-		}
+		//private void SdkConnected(object sender, System.EventArgs e)
+		//{
+		//	m_DirectorVM.SdkConnected();
+		//}
 
-		public void ToggleUI(bool enabled)
-		{
-			CameraState state = new CameraState();
+		//private void SdkDisconnected(object sender, System.EventArgs e)
+		//{
+		//	m_DirectorVM.SdkDisconnected();
+		//}
 
-			if (enabled) state.Remove(CameraStates.UIHidden);
-			else state.Add(CameraStates.UIHidden);
+		//private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
+		//{
+		//	m_DirectorVM.TelemetryUpdated(e.TelemetryInfo);
+		//}
 
-			m_Wrapper.Camera.SetCameraState(state);
-		}
+		//private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
+		//{
+		//	m_DirectorVM.SessionInfoUpdated(e.SessionInfo);
+		//}
 
-		public void EnableVideoCapture()
-		{
-			// Pass '1' as parameter to start recording
-			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
-		}
 
-		public void DisableVideoCapture()
-		{
-			// Pass '2' as parameter to stop recording
-			m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
-		}
+		//public void SetPlaybackSpeed(int playbackSpeed)
+		//{
+		//	m_Wrapper.Replay.SetPlaybackSpeed(playbackSpeed);
+		//}
 
-		public void ToggleVideoCapture(bool enabled)
-		{
-			if (enabled) EnableVideoCapture();
-			else DisableVideoCapture();
-		}
+		//public void SetSlowMotionPlaybackSpeed(int playbackSpeed)
+		//{
+		//	m_Wrapper.Replay.SetSlowmotionPlaybackSpeed(playbackSpeed);
+		//}
+
+		//public void SetCamera(Camera camera)
+		//{
+		//	m_Wrapper.Camera.SwitchGroup(camera.GroupNum);
+		//}
+
+		//public void SetDriver(Driver driver)
+		//{
+		//	m_Wrapper.Camera.SwitchToCar(driver.NumberRaw);
+		//}
+
+		//public void SetDriver(Driver driver, Camera camera)
+		//{
+		//	m_Wrapper.Camera.SwitchToCar(driver.NumberRaw, camera.GroupNum);
+		//}
+
+		//public void GoToFrame(int frameNumber)
+		//{
+		//	m_Wrapper.Replay.SetPosition(frameNumber);
+		//}
+
+		//public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
+		//{
+		//	m_Wrapper.Replay.Jump(replayEvent);
+		//}
+
+		//public void ToggleUI(bool enabled)
+		//{
+		//	CameraState state = new CameraState();
+
+		//	if (enabled) state.Remove(CameraStates.UIHidden);
+		//	else state.Add(CameraStates.UIHidden);
+
+		//	m_Wrapper.Camera.SetCameraState(state);
+		//}
+
+		//public void EnableVideoCapture()
+		//{
+		//	// Pass '1' as parameter to start recording
+		//	m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
+		//}
+
+		//public void DisableVideoCapture()
+		//{
+		//	// Pass '2' as parameter to stop recording
+		//	m_Wrapper.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
+		//}
+
+		//public void ToggleVideoCapture(bool enabled)
+		//{
+		//	if (enabled) EnableVideoCapture();
+		//	else DisableVideoCapture();
+		//}
 
 		//public void ToggleVideoCapture()
 		//{

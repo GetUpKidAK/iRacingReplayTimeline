@@ -136,11 +136,11 @@
 			<Grid Grid.Row="1" Margin="5">
 				<StackPanel>
 					<Grid Margin="5" Height="30" Visibility="{Binding ShowVisualTimeline, Converter={StaticResource VisibilityConverter}}">
-						<ProgressBar Value="{Binding CurrentFrame}" Maximum="{Binding FinalFrame}"/>
+						<ProgressBar Value="{Binding CurrentFrame, Mode=OneWay}" Maximum="{Binding FinalFrame}"/>
 						
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding CurrentFrame}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding CurrentFrame, Mode=OneWay}" HorizontalAlignment="Center"/>
 							<TextBlock Text=" | Session Time: " HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding SessionTime, Converter={StaticResource SecondsToTimeConverter}}" HorizontalAlignment="Center"/>
 						</StackPanel>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Windows.Input;
 
 
@@ -29,7 +30,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			ReplayDirectorVM.GoToFrame(ReplayDirectorVM.CurrentFrame + 1);
+			Sim.Instance.Sdk.Replay.SetPosition(ReplayDirectorVM.CurrentFrame + 1);
 		}
 	}
 }

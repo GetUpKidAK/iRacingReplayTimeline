@@ -42,6 +42,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\iRacingSdkWrapper\iRacingSimulator\bin\Release\iRacingSdkWrapper.dll</HintPath>
     </Reference>
+    <Reference Include="iRacingSimulator">
+      <HintPath>..\..\iRacingSdkWrapper\iRacingSimulator\bin\Release\iRacingSimulator.dll</HintPath>
+    </Reference>
     <Reference Include="iRSDKSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\iRacingSdkWrapper\iRacingSimulator\bin\Release\iRSDKSharp.dll</HintPath>

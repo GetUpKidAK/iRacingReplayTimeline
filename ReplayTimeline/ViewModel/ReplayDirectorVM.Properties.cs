@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using iRacingSdkWrapper;
-
+using iRacingSdkWrapper.Bitfields;
+using iRacingSimulator;
 
 namespace iRacingReplayDirector
 {
 	public partial class ReplayDirectorVM
 	{
-		private SDKHelper m_SDKHelper;
 		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
@@ -17,7 +17,6 @@ namespace iRacingReplayDirector
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
-		public SessionInfo SessionInfo { get; private set; }
 		public int SessionID { get; private set; }
 		#endregion
 
@@ -68,6 +67,7 @@ namespace iRacingReplayDirector
 			set
 			{
 				_currentFrame = value;
+
 				OnPropertyChanged("CurrentFrame");
 			}
 		}
@@ -165,9 +165,19 @@ namespace iRacingReplayDirector
 			set
 			{
 				_InSimUIEnabled = value;
-				m_SDKHelper.ToggleUI(_InSimUIEnabled);
+				ToggleUI(_InSimUIEnabled);
 				OnPropertyChanged("InSimUIEnabled");
 			}
+		}
+
+		private void ToggleUI(bool enabled)
+		{
+			CameraState state = new CameraState();
+
+			if (enabled) state.Remove(CameraStates.UIHidden);
+			else state.Add(CameraStates.UIHidden);
+
+			Sim.Instance.Sdk.Camera.SetCameraState(state);
 		}
 
 		private bool _sortDriversById;

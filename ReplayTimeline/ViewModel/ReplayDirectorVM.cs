@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using iRacingSdkWrapper;
+using iRacingSimulator;
 
 
 namespace iRacingReplayDirector
@@ -14,7 +15,12 @@ namespace iRacingReplayDirector
 	{
 		public ReplayDirectorVM()
 		{
-			m_SDKHelper = new SDKHelper(this);
+			Sim.Instance.Connected += SdkConnected;
+			Sim.Instance.Disconnected += SdkDisconnected;
+			Sim.Instance.SessionInfoUpdated += SessionInfoUpdated;
+			Sim.Instance.TelemetryUpdated += TelemetryUpdated;
+
+			Sim.Instance.Start();
 
 			TimelineNodes = new ObservableCollection<TimelineNode>();
 			TimelineNodesView = CollectionViewSource.GetDefaultView(TimelineNodes);
@@ -107,7 +113,12 @@ namespace iRacingReplayDirector
 
 		public void ApplicationClosing()
 		{
-			m_SDKHelper.Stop();
+			Sim.Instance.Connected -= SdkConnected;
+			Sim.Instance.Disconnected -= SdkDisconnected;
+			Sim.Instance.SessionInfoUpdated -= SessionInfoUpdated;
+			Sim.Instance.TelemetryUpdated -= TelemetryUpdated;
+
+			Sim.Instance.Stop();
 
 			ApplicationQuitCommand.Execute(this);
 		}
@@ -139,12 +150,12 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		public void SdkConnected()
+		private void SdkConnected(object sender, System.EventArgs e)
 		{
 			StatusBarText = "iRacing Connected.";
 		}
 
-		public void SdkDisconnected()
+		private void SdkDisconnected(object sender, System.EventArgs e)
 		{
 			StatusBarText = "iRacing Disconnected.";
 
@@ -154,27 +165,71 @@ namespace iRacingReplayDirector
 			Cameras.Clear();
 			TimelineNodes.Clear();
 			StatusBarSessionID = "No Session Loaded.";
+			StatusBarCurrentSessionInfo = "";
 		}
 
-		public void TelemetryUpdated(TelemetryInfo telemetryInfo)
+		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
+		{
+			UpdateDriversAndCameras();
+
+			YamlQuery weekendInfoQuery = e.SessionInfo["WeekendInfo"];
+			SessionID = int.Parse(weekendInfoQuery["SubSessionID"].GetValue("-1"));
+			StatusBarSessionID = $"Session ID: {SessionID}";
+
+			if (!SessionInfoLoaded)
+			{
+				InitSession();
+			}
+		}
+
+		private void InitSession()
+		{
+			if (!m_LiveSessionPopupVisible)
+			{
+				var simMode = Sim.Instance.SessionInfo["WeekendInfo"]["SimMode"].GetValue();
+				var isLiveSession = simMode.ToLower().Contains("replay") ? false : true;
+
+				if (isLiveSession)
+				{
+					m_LiveSessionPopupVisible = true;
+
+					var sessionWarningResult = MessageBox.Show("You seem to be running a live session.\n\nThis tool is designed for replays. Some stuff may work, but it's not supported.",
+						"Viewing a Live session", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+					if (sessionWarningResult == MessageBoxResult.OK || sessionWarningResult == MessageBoxResult.Cancel)
+					{
+						m_LiveSessionPopupVisible = false;
+
+						StatusBarText = "iRacing Connected. Running a live session, not currently supported.";
+					}
+				}
+
+				LoadExistingProjectFile();
+
+				InSimUIEnabled = true;
+				SessionInfoLoaded = true;
+			}
+		}
+
+		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
 		{
 			// Leave now if the session info hasn't already been loaded
 			if (!SessionInfoLoaded)
 				return;
 
-			CurrentFrame = telemetryInfo.ReplayFrameNum.Value;
-			FinalFrame = CurrentFrame + telemetryInfo.ReplayFrameNumEnd.Value;
-			SessionTime = telemetryInfo.SessionTime.Value;
-			CurrentPlaybackSpeed = telemetryInfo.ReplayPlaySpeed.Value;
+			CurrentFrame = e.TelemetryInfo.ReplayFrameNum.Value;
+			FinalFrame = CurrentFrame + e.TelemetryInfo.ReplayFrameNumEnd.Value;
+			SessionTime = e.TelemetryInfo.SessionTime.Value;
+			CurrentPlaybackSpeed = e.TelemetryInfo.ReplayPlaySpeed.Value;
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
-			SlowMotionEnabled = telemetryInfo.ReplayPlaySlowMotion.Value;
+			SlowMotionEnabled = e.TelemetryInfo.ReplayPlaySlowMotion.Value;
 			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
-			InSimCaptureSettingEnabled = m_SDKHelper.InSimCaptureAvailable.Value;
-			InSimCaptureActive = m_SDKHelper.InSimCaptureActive.Value;
+			InSimCaptureSettingEnabled = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;
+			InSimCaptureActive = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapActive").Value;
 
 			// Get current car ID and current camera group from sim
-			var currentCarId = telemetryInfo.CamCarIdx.Value;
-			var currentCamGroup = telemetryInfo.CamGroupNumber.Value;
+			var currentCarId = e.TelemetryInfo.CamCarIdx.Value;
+			var currentCamGroup = e.TelemetryInfo.CamGroupNumber.Value;
 
 			if (CurrentDriver == null || CurrentCamera == null)
 			{
@@ -192,11 +247,13 @@ namespace iRacingReplayDirector
 			}
 
 			// Update driver telemetry info
-			SessionInfoHelper.UpdateDriverTelemetry(telemetryInfo, Drivers);
+			UpdateDriverTelemetry();
 
 			// Update status bar session info
-			var sessionType = SessionInfoHelper.GetCurrentSessionType(SessionInfo, telemetryInfo.SessionNum.Value);
-			var sessionLaps = SessionInfoHelper.GetSessionLapCount(SessionInfo, telemetryInfo.SessionNum.Value);
+			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", e.TelemetryInfo.SessionNum.Value];
+			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
+			var sessionLaps = sessionInfoQuery["SessionLaps"].GetValue("-1");
+
 			var lapInfo = (CurrentDriver.Lap > -1) ? $"(Lap {CurrentDriver.Lap}/{sessionLaps})" : ""; // Only show lap info if one has started
 			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {lapInfo}";
 
@@ -216,6 +273,34 @@ namespace iRacingReplayDirector
 
 			RefreshDriversView();
 			PlaybackCameraSwitching();
+		}
+
+		private void UpdateDriverTelemetry()
+		{
+			var laps = Sim.Instance.Telemetry.CarIdxLap.Value;
+			var lapDistances = Sim.Instance.Telemetry.CarIdxLapDistPct.Value;
+			var trackSurfaces = Sim.Instance.Telemetry.CarIdxTrackSurface.Value;
+
+			// Loop through the list of current drivers
+			foreach (Driver driver in Drivers)
+			{
+				// Set the details belonging to this driver
+				driver.Lap = laps[driver.Id];
+				driver.LapDistance = lapDistances[driver.Id];
+				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
+			}
+
+			var orderedDriverList = Drivers.OrderByDescending(d => d.Lap).ThenByDescending(d => d.LapDistance).ToList();
+			for (int i = 0; i < orderedDriverList.Count; i++)
+			{
+				orderedDriverList[i].Position = (i + 1);
+
+				if (orderedDriverList[i].NumberRaw == 0) // Pace Car always placed in last place
+				{
+					orderedDriverList[i].Position = 999;
+				}
+			}
+
 		}
 
 		// Used to limit updates on refreshing driver position ordering
@@ -269,52 +354,16 @@ namespace iRacingReplayDirector
 			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
 		}
 
-		public void SessionInfoUpdated(SessionInfo sessionInfo)
+		private void UpdateDriversAndCameras()
 		{
-			SessionInfo = sessionInfo;
-
-			UpdateDriversAndCameras(sessionInfo);
-
-			SessionID = SessionInfoHelper.GetSessionID(sessionInfo);
-			StatusBarSessionID = $"Session ID: {SessionID}";
-
-			if (!SessionInfoLoaded)
-			{
-				if (!m_LiveSessionPopupVisible)
-				{
-					if (SessionInfoHelper.IsLiveSession(sessionInfo))
-					{
-						m_LiveSessionPopupVisible = true;
-
-						var sessionWarningResult = MessageBox.Show("You seem to be running a live session.\n\nThis tool is designed for replays. Some stuff may work, but it's not supported.",
-							"Viewing a Live session", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-						if (sessionWarningResult == MessageBoxResult.OK || sessionWarningResult == MessageBoxResult.Cancel)
-						{
-							m_LiveSessionPopupVisible = false;
-
-							StatusBarText = "iRacing Connected. Running a live session, not currently supported.";
-						}
-					}
-
-					LoadExistingProjectFile();
-
-					InSimUIEnabled = true;
-					SessionInfoLoaded = true;
-				}
-			}
-		}
-
-		private void UpdateDriversAndCameras(SessionInfo sessionInfo)
-		{
-			var sessionDrivers = SessionInfoHelper.GetSessionDrivers(sessionInfo, Drivers);
+			var sessionDrivers = GetSessionDrivers();
 			Drivers.Clear();
 			foreach (var newDriver in sessionDrivers)
 			{
 				Drivers.Add(newDriver);
 			}
 
-			var sessionCameras = SessionInfoHelper.GetSessionCameras(sessionInfo, Cameras);
+			var sessionCameras = GetSessionCameras();
 			Cameras.Clear();
 			foreach (var newCamera in sessionCameras)
 			{
@@ -322,6 +371,90 @@ namespace iRacingReplayDirector
 			}
 
 			VerifyExistingNodeCameras();
+		}
+
+		private List<Driver> GetSessionDrivers()
+		{
+			YamlQuery weekendOptionsQuery = Sim.Instance.SessionInfo["WeekendInfo"]["WeekendOptions"];
+			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
+
+			var sessionDrivers = new List<Driver>();
+
+			for (int i = 0; i < currentStarters; i++)
+			{
+				YamlQuery query = Sim.Instance.SessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
+				Driver newDriver;
+
+				string driverName = query["UserName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(driverName))
+				{
+					// Get driver if driver is in previous list
+					newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
+
+					// If not...
+					if (newDriver == null)
+					{
+						// Populate driver info
+						newDriver = new Driver()
+						{
+							Id = i,
+							Name = driverName,
+							CustomerId = int.Parse(query["UserID"].GetValue("0")), // default value 0
+							Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'), // trim the quotes
+							NumberRaw = int.Parse(query["CarNumberRaw"].GetValue("")),
+							TeamName = query["TeamName"].GetValue("")
+						};
+					}
+
+					// Add to drivers list
+					sessionDrivers.Add(newDriver);
+				}
+			}
+
+			return sessionDrivers.OrderBy(d => d.NumberRaw).ToList();
+		}
+
+		private List<Camera> GetSessionCameras()
+		{
+			int id = 1;
+			Camera newCam;
+
+			var sessionCameras = new List<Camera>();
+
+			// Loop through cameras until none are found anymore
+			do
+			{
+				newCam = null;
+				YamlQuery query = Sim.Instance.SessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
+
+				// Get Camera Group name
+				string groupName = query["GroupName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(groupName))
+				{
+					// Get Camera if it is in previous list
+					newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
+
+					// Create new camera if not in previous lsit
+					if (newCam == null)
+					{
+						newCam = new Camera() { GroupName = groupName, GroupNum = id };
+					}
+					else
+					{
+						// If it does exist, update the group number to ensure it matches
+						newCam.GroupNum = id;
+					}
+
+					sessionCameras.Add(newCam);
+
+					id++;
+				}
+			}
+			while (newCam != null);
+
+			return sessionCameras;
 		}
 
 		private void VerifyExistingNodeCameras()
@@ -403,12 +536,7 @@ namespace iRacingReplayDirector
 
 			// If playback is disabled, skip to the frame
 			if (!PlaybackEnabled)
-				GoToFrame(node.Frame);
-		}
-
-		public void GoToFrame(int frame)
-		{
-			m_SDKHelper.GoToFrame(frame);
+				Sim.Instance.Sdk.Replay.SetPosition(node.Frame);
 		}
 
 		public void SetPlaybackSpeed(int speed, bool slowMo = false)
@@ -423,8 +551,8 @@ namespace iRacingReplayDirector
 			if (speed == 0 && DisableSimUIOnPlayback)
 				InSimUIEnabled = true;
 
-			if (!slowMo) m_SDKHelper.SetPlaybackSpeed(speed);
-			else m_SDKHelper.SetSlowMotionPlaybackSpeed(speed);
+			if (!slowMo) Sim.Instance.Sdk.Replay.SetPlaybackSpeed(speed);
+			else Sim.Instance.Sdk.Replay.SetSlowmotionPlaybackSpeed(speed);
 		}
 
 		private void UpdatePlaybackButtonText()
@@ -448,7 +576,7 @@ namespace iRacingReplayDirector
 
 		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
 		{
-			m_SDKHelper.JumpToEvent(replayEvent);
+			Sim.Instance.Sdk.Replay.Jump(replayEvent);
 		}
 
 		private void DriverChanged()
@@ -456,7 +584,7 @@ namespace iRacingReplayDirector
 			if (CurrentDriver == null)
 				return;
 
-			m_SDKHelper.SetDriver(CurrentDriver);
+			Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw);
 		}
 
 		private void CameraChanged()
@@ -466,11 +594,11 @@ namespace iRacingReplayDirector
 
 			if (CurrentDriver == null)
 			{
-				m_SDKHelper.SetCamera(CurrentCamera);
+				Sim.Instance.Sdk.Camera.SwitchGroup(CurrentCamera.GroupNum);
 			}
 			else
 			{
-				m_SDKHelper.SetDriver(CurrentDriver, CurrentCamera);
+				Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw, CurrentCamera.GroupNum);
 			}
 		}
 
@@ -533,8 +661,8 @@ namespace iRacingReplayDirector
 			
 			if (UseInSimCapture)
 			{
-				if (enabled) m_SDKHelper.EnableVideoCapture();
-				else m_SDKHelper.DisableVideoCapture();
+				if (enabled) Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
+				else Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
 			}
 		}
 	}
