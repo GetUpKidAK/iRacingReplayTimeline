@@ -539,7 +539,6 @@ namespace iRacingReplayDirector
 			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
 			InSimUIEnabled = !DisableUIWhenRecording;
 
-			RecordBtnText = "Stop Rec";
 			ToggleRecording(true);
 		}
 
@@ -548,7 +547,6 @@ namespace iRacingReplayDirector
 			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
 			ToggleRecording(false);
 			
-			RecordBtnText = "Record";
 			InSimUIEnabled = true;
 		}
 
@@ -559,7 +557,7 @@ namespace iRacingReplayDirector
 				var obsProcess = ExternalProcessHelper.GetExternalProcess();
 				if (obsProcess != null)
 				{
-					RecordBtnText = "Stop Rec";
+					RecordBtnText = enabled ? "Stop Rec" : "Record";
 					ExternalCaptureActive = enabled;
 					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
 				}
