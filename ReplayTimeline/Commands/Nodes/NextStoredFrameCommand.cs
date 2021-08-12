@@ -63,7 +63,6 @@ namespace iRacingReplayDirector
 			if (targetNode != null)
 			{
 				ReplayDirectorVM.CurrentTimelineNode = targetNode;
-				Sim.Instance.Sdk.Replay.SetPosition(targetNode.Frame);
 			}
 		}
 	}
