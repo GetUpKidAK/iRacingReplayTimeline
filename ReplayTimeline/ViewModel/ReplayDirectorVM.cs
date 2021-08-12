@@ -191,7 +191,7 @@ namespace iRacingReplayDirector
 
 			var sessionDrivers = new List<Driver>();
 
-			for (int i = 0; i < currentStarters; i++)
+			for (int i = 0; i < currentStarters+1; i++)
 			{
 				YamlQuery query = Sim.Instance.SessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
 				Driver newDriver;
@@ -223,10 +223,8 @@ namespace iRacingReplayDirector
 				}
 			}
 
-			var orderedDrivers = sessionDrivers.OrderBy(d => d.NumberRaw).ToList();
-
 			Drivers.Clear();
-			foreach (var newDriver in orderedDrivers)
+			foreach (var newDriver in sessionDrivers)
 			{
 				Drivers.Add(newDriver);
 			}
@@ -355,12 +353,7 @@ namespace iRacingReplayDirector
 			UpdateDriverTelemetry();
 
 			// Update status bar session info
-			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", e.TelemetryInfo.SessionNum.Value];
-			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
-			var sessionLaps = sessionInfoQuery["SessionLaps"].GetValue("-1");
-
-			var lapInfo = (CurrentDriver.Lap > -1) ? $"(Lap {CurrentDriver.Lap}/{sessionLaps})" : ""; // Only show lap info if one has started
-			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {lapInfo}";
+			UpdateSessionInformation();
 
 			if (!PlaybackEnabled)
 			{
@@ -406,6 +399,33 @@ namespace iRacingReplayDirector
 				}
 			}
 
+		}
+
+		private void UpdateSessionInformation()
+		{
+			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
+			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
+			var sessionLaps = sessionInfoQuery["SessionLaps"].GetValue("-1");
+			var sessionTime = sessionInfoQuery["SessionTime"].GetValue("-1");
+			var currentLap = CurrentDriver.Lap;
+
+			string sessionDetail;
+
+			if (sessionLaps.Contains("unlimited"))
+			{
+				var sessionTimeInSecs = float.Parse(sessionTime.Replace("sec", ""));
+				TimeSpan sessionTimeSpan = TimeSpan.FromSeconds(sessionTimeInSecs);
+				var totalSessionTime = sessionTimeSpan.ToString(@"hh\:mm\:ss");
+				var currentLapCount = (currentLap > -1) ? $"Lap {currentLap} - " : ""; // Only show lap info if one has started
+
+				sessionDetail = $"({currentLapCount}{totalSessionTime})";
+			}
+			else
+			{
+				sessionDetail = (currentLap > -1) ? $"(Lap {currentLap}/{sessionLaps})" : ""; // Only show lap info if one has started
+			}
+			
+			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {sessionDetail}";
 		}
 
 		// Used to limit updates on refreshing driver position ordering
