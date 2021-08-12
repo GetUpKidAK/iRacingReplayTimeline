@@ -34,9 +34,12 @@ namespace iRacingReplayDirector
 			get { return _currentTimelineNode; }
 			set
 			{
-				_currentTimelineNode = value;
-				OnPropertyChanged("CurrentTimelineNode");
-				TimelineNodeChanged();
+				if (_currentTimelineNode != value && value != null)
+				{
+					_currentTimelineNode = value;
+					_currentTimelineNode.ApplyNode();
+					OnPropertyChanged("CurrentTimelineNode");
+				}
 			}
 		}
 
@@ -46,18 +49,31 @@ namespace iRacingReplayDirector
 		public Driver CurrentDriver
 		{
 			get { return _currentDriver; }
-			set { _currentDriver = value;
-				OnPropertyChanged("CurrentDriver");
-				DriverChanged(); }
+			set
+			{
+				if (_currentDriver != value && value != null)
+				{
+					_currentDriver = value;
+					Sim.Instance.Sdk.Camera.SwitchToCar(_currentDriver.NumberRaw);
+					OnPropertyChanged("CurrentDriver");
+				}
+			}
 		}
 
 		private Camera _currentCamera;
 		public Camera CurrentCamera
 		{
 			get { return _currentCamera; }
-			set { _currentCamera = value;
-				OnPropertyChanged("CurrentCamera");
-				CameraChanged(); }
+			set
+			{
+				if (_currentCamera != value && value != null)
+				{
+					_currentCamera = value;
+					Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw, _currentCamera.GroupNum);
+
+					OnPropertyChanged("CurrentCamera");
+				}
+			}
 		}
 
 		private int _currentFrame;

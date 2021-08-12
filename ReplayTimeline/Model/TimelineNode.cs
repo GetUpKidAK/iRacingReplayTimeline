@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using iRacingSimulator;
+using System.ComponentModel;
 
 
 namespace iRacingReplayDirector
@@ -31,6 +32,23 @@ namespace iRacingReplayDirector
 		{
 			get { return _camera; }
 			set { _camera = value; OnPropertyChanged("Camera"); }
+		}
+
+
+		public void ApplyNode()
+		{
+			bool playbackEnabled = Sim.Instance.Telemetry.ReplayPlaySpeed.Value != 0;
+
+			// If replay is playing back AND node is disabled, skip it...
+			if (playbackEnabled && !Enabled)
+				return;
+
+			// Otherwise, switch driver and camera
+			Sim.Instance.Sdk.Camera.SwitchToCar(Driver.NumberRaw, Camera.GroupNum);
+
+			// If playback is disabled, skip to the frame
+			if (!playbackEnabled)
+				Sim.Instance.Sdk.Replay.SetPosition(Frame);
 		}
 
 

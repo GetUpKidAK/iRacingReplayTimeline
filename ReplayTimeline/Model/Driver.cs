@@ -138,7 +138,7 @@ namespace iRacingReplayDirector
 
 		public override string ToString()
 		{
-			return $"{Name} #{Number}";
+			return $"{Name} (#{Number})";
 		}
 	}
 }

@@ -170,7 +170,9 @@ namespace iRacingReplayDirector
 
 		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
 		{
-			UpdateDriversAndCameras();
+			GetSessionDrivers();
+			GetSessionCameras();
+			VerifyExistingNodeCameras();
 
 			YamlQuery weekendInfoQuery = e.SessionInfo["WeekendInfo"];
 			SessionID = int.Parse(weekendInfoQuery["SubSessionID"].GetValue("-1"));
@@ -179,6 +181,124 @@ namespace iRacingReplayDirector
 			if (!SessionInfoLoaded)
 			{
 				InitSession();
+			}
+		}
+
+		private void GetSessionDrivers()
+		{
+			YamlQuery weekendOptionsQuery = Sim.Instance.SessionInfo["WeekendInfo"]["WeekendOptions"];
+			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
+
+			var sessionDrivers = new List<Driver>();
+
+			for (int i = 0; i < currentStarters; i++)
+			{
+				YamlQuery query = Sim.Instance.SessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
+				Driver newDriver;
+
+				string driverName = query["UserName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(driverName))
+				{
+					// Get driver if driver is in previous list
+					newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
+
+					// If not...
+					if (newDriver == null)
+					{
+						// Populate driver info
+						newDriver = new Driver()
+						{
+							Id = i,
+							Name = driverName,
+							CustomerId = int.Parse(query["UserID"].GetValue("0")), // default value 0
+							Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'), // trim the quotes
+							NumberRaw = int.Parse(query["CarNumberRaw"].GetValue("")),
+							TeamName = query["TeamName"].GetValue("")
+						};
+					}
+
+					// Add to drivers list
+					sessionDrivers.Add(newDriver);
+				}
+			}
+
+			var orderedDrivers = sessionDrivers.OrderBy(d => d.NumberRaw).ToList();
+
+			Drivers.Clear();
+			foreach (var newDriver in orderedDrivers)
+			{
+				Drivers.Add(newDriver);
+			}
+		}
+
+		private void GetSessionCameras()
+		{
+			int id = 1;
+			Camera newCam;
+
+			var sessionCameras = new List<Camera>();
+
+			// Loop through cameras until none are found anymore
+			do
+			{
+				newCam = null;
+				YamlQuery query = Sim.Instance.SessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
+
+				// Get Camera Group name
+				string groupName = query["GroupName"].GetValue("");
+
+				if (!string.IsNullOrEmpty(groupName))
+				{
+					// Get Camera if it is in previous list
+					newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
+
+					// Create new camera if not in previous lsit
+					if (newCam == null)
+					{
+						newCam = new Camera() { GroupName = groupName, GroupNum = id };
+					}
+					else
+					{
+						// If it does exist, update the group number to ensure it matches
+						newCam.GroupNum = id;
+					}
+
+					sessionCameras.Add(newCam);
+
+					id++;
+				}
+			}
+			while (newCam != null);
+
+			Cameras.Clear();
+			foreach (var newCamera in sessionCameras)
+			{
+				Cameras.Add(newCamera);
+			}
+		}
+
+		private void VerifyExistingNodeCameras()
+		{
+			foreach (var node in TimelineNodes)
+			{
+				// Check for node camera in camera list, based on name
+				var existingCameraInSession = Cameras.FirstOrDefault(c => c.GroupName == node.Camera.GroupName);
+
+				if (existingCameraInSession == null)
+				{
+					// Disable node if it wasn't found
+					node.Enabled = false;
+				}
+				else
+				{
+					// If a camera is found but the group number is different...
+					if (node.Camera.GroupNum != existingCameraInSession.GroupNum)
+					{
+						// Set the camera group number to the one in the active camera liust
+						node.Camera.GroupNum = existingCameraInSession.GroupNum;
+					}
+				}
 			}
 		}
 
@@ -227,24 +347,9 @@ namespace iRacingReplayDirector
 			InSimCaptureSettingEnabled = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;
 			InSimCaptureActive = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapActive").Value;
 
-			// Get current car ID and current camera group from sim
-			var currentCarId = e.TelemetryInfo.CamCarIdx.Value;
-			var currentCamGroup = e.TelemetryInfo.CamGroupNumber.Value;
-
-			if (CurrentDriver == null || CurrentCamera == null)
-			{
-				// Set the current driver and camera if they were null
-				CurrentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId);
-				CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup);
-			}
-
-			if (CurrentDriver != null && CurrentCamera != null)
-			{
-				// If the sim car/camera doesn't match the currently selected ones in the UI (i.e. it changed in sim), then update it
-				// OnPropertyChanged is called and not the property directly so that there's no recursive loop of changing the driver again, causing stutters
-				if (currentCarId != CurrentDriver.Id) _currentDriver = Drivers.FirstOrDefault(d => d.Id == currentCarId); OnPropertyChanged("CurrentDriver");
-				if (currentCamGroup != CurrentCamera.GroupNum) _currentCamera = Cameras.FirstOrDefault(c => c.GroupNum == currentCamGroup); OnPropertyChanged("CurrentCamera");
-			}
+			// Set current car/camera based on sim selections (won't update unless different to app)
+			CurrentDriver = Drivers.FirstOrDefault(d => d.Id == e.TelemetryInfo.CamCarIdx.Value);
+			CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == e.TelemetryInfo.CamGroupNumber.Value);
 
 			// Update driver telemetry info
 			UpdateDriverTelemetry();
@@ -342,7 +447,7 @@ namespace iRacingReplayDirector
 
 			_lastAppliedNode = nodeToApply;
 			CurrentTimelineNode = nodeToApply;
-			JumpToNode(CurrentTimelineNode);
+			//JumpToNode(CurrentTimelineNode);
 		}
 
 		private void UpdateUILabels()
@@ -352,133 +457,6 @@ namespace iRacingReplayDirector
 			CaptureModeText = "Capture Mode: None";
 			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";
 			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
-		}
-
-		private void UpdateDriversAndCameras()
-		{
-			var sessionDrivers = GetSessionDrivers();
-			Drivers.Clear();
-			foreach (var newDriver in sessionDrivers)
-			{
-				Drivers.Add(newDriver);
-			}
-
-			var sessionCameras = GetSessionCameras();
-			Cameras.Clear();
-			foreach (var newCamera in sessionCameras)
-			{
-				Cameras.Add(newCamera);
-			}
-
-			VerifyExistingNodeCameras();
-		}
-
-		private List<Driver> GetSessionDrivers()
-		{
-			YamlQuery weekendOptionsQuery = Sim.Instance.SessionInfo["WeekendInfo"]["WeekendOptions"];
-			int currentStarters = int.Parse(weekendOptionsQuery["NumStarters"].GetValue());
-
-			var sessionDrivers = new List<Driver>();
-
-			for (int i = 0; i < currentStarters; i++)
-			{
-				YamlQuery query = Sim.Instance.SessionInfo["DriverInfo"]["Drivers"]["CarIdx", i];
-				Driver newDriver;
-
-				string driverName = query["UserName"].GetValue("");
-
-				if (!string.IsNullOrEmpty(driverName))
-				{
-					// Get driver if driver is in previous list
-					newDriver = Drivers.FirstOrDefault(d => d.Name == driverName);
-
-					// If not...
-					if (newDriver == null)
-					{
-						// Populate driver info
-						newDriver = new Driver()
-						{
-							Id = i,
-							Name = driverName,
-							CustomerId = int.Parse(query["UserID"].GetValue("0")), // default value 0
-							Number = query["CarNumber"].GetValue("").TrimStart('\"').TrimEnd('\"'), // trim the quotes
-							NumberRaw = int.Parse(query["CarNumberRaw"].GetValue("")),
-							TeamName = query["TeamName"].GetValue("")
-						};
-					}
-
-					// Add to drivers list
-					sessionDrivers.Add(newDriver);
-				}
-			}
-
-			return sessionDrivers.OrderBy(d => d.NumberRaw).ToList();
-		}
-
-		private List<Camera> GetSessionCameras()
-		{
-			int id = 1;
-			Camera newCam;
-
-			var sessionCameras = new List<Camera>();
-
-			// Loop through cameras until none are found anymore
-			do
-			{
-				newCam = null;
-				YamlQuery query = Sim.Instance.SessionInfo["CameraInfo"]["Groups"]["GroupNum", id];
-
-				// Get Camera Group name
-				string groupName = query["GroupName"].GetValue("");
-
-				if (!string.IsNullOrEmpty(groupName))
-				{
-					// Get Camera if it is in previous list
-					newCam = Cameras.FirstOrDefault(c => c.GroupName == groupName);
-
-					// Create new camera if not in previous lsit
-					if (newCam == null)
-					{
-						newCam = new Camera() { GroupName = groupName, GroupNum = id };
-					}
-					else
-					{
-						// If it does exist, update the group number to ensure it matches
-						newCam.GroupNum = id;
-					}
-
-					sessionCameras.Add(newCam);
-
-					id++;
-				}
-			}
-			while (newCam != null);
-
-			return sessionCameras;
-		}
-
-		private void VerifyExistingNodeCameras()
-		{
-			foreach (var node in TimelineNodes)
-			{
-				// Check for node camera in camera list, based on name
-				var existingCameraInSession = Cameras.FirstOrDefault(c => c.GroupName == node.Camera.GroupName);
-
-				if (existingCameraInSession == null)
-				{
-					// Disable node if it wasn't found
-					node.Enabled = false;
-				}
-				else
-				{
-					// If a camera is found but the group number is different...
-					if (node.Camera.GroupNum != existingCameraInSession.GroupNum)
-					{
-						// Set the camera group number to the one in the active camera liust
-						node.Camera.GroupNum = existingCameraInSession.GroupNum;
-					}
-				}
-			}
 		}
 
 		private void LoadExistingProjectFile()
@@ -518,27 +496,6 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		private void TimelineNodeChanged()
-		{
-			if (CurrentTimelineNode != null)
-				JumpToNode(CurrentTimelineNode);
-		}
-
-		private void JumpToNode(TimelineNode node)
-		{
-			// If replay is playing back AND node is disabled, skip it...
-			if (PlaybackEnabled && !node.Enabled)
-				return;
-
-			// Otherwise, switch driver and camera
-			CurrentDriver = node.Driver;
-			CurrentCamera = node.Camera;
-
-			// If playback is disabled, skip to the frame
-			if (!PlaybackEnabled)
-				Sim.Instance.Sdk.Replay.SetPosition(node.Frame);
-		}
-
 		public void SetPlaybackSpeed(int speed, bool slowMo = false)
 		{
 			// Shouldn't be possible, but lock speeds at 16X for safety
@@ -571,29 +528,6 @@ namespace iRacingReplayDirector
 					if (PlaybackEnabled) PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/2x" : $"RW";
 					else PlaybackSpeedText = "Paused";
 				}
-			}
-		}
-
-		private void DriverChanged()
-		{
-			if (CurrentDriver == null)
-				return;
-
-			Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw);
-		}
-
-		private void CameraChanged()
-		{
-			if (CurrentCamera == null)
-				return;
-
-			if (CurrentDriver == null)
-			{
-				Sim.Instance.Sdk.Camera.SwitchGroup(CurrentCamera.GroupNum);
-			}
-			else
-			{
-				Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw, CurrentCamera.GroupNum);
 			}
 		}
 
