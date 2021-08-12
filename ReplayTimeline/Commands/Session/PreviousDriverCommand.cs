@@ -23,6 +23,9 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
+			if (ReplayDirectorVM.PlaybackEnabled)
+				return false;
+
 			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
 				return ReplayDirectorVM.CurrentDriver != null;
