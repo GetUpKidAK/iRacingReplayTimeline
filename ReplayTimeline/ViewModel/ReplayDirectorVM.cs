@@ -370,8 +370,8 @@ namespace iRacingReplayDirector
 				}
 			}
 
-			RefreshDriversView();
 			PlaybackCameraSwitching();
+			RateLimitedChecks();
 		}
 
 		private void UpdateDriverTelemetry()
@@ -457,8 +457,9 @@ namespace iRacingReplayDirector
 		int updateCounter = 0;
 		int updateRefreshRate = 90;
 
-		private void RefreshDriversView()
+		private void RateLimitedChecks()
 		{
+			// Any updates that require less frequent checks can go here
 			updateCounter++;
 			if (updateCounter > updateRefreshRate)
 			{
