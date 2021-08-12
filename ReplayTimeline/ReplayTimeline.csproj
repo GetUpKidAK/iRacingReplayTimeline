@@ -114,8 +114,6 @@
     <Compile Include="Commands\Session\PreviousDriverCommand.cs" />
     <Compile Include="Commands\Playback\SkipFrameBackCommand.cs" />
     <Compile Include="Commands\Playback\SkipFrameForwardCommand.cs" />
-    <Compile Include="ViewModel\Helpers\SDKHelper.cs" />
-    <Compile Include="ViewModel\Helpers\SessionInfoHelper.cs" />
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />
     <Compile Include="Model\TimelineProject.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.cs" />
