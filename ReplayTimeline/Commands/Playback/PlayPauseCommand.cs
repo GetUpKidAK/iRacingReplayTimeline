@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Windows.Input;
 
 
@@ -29,11 +30,17 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayDirectorVM.PlaybackEnabled)
 			{
-				ReplayDirectorVM.SetPlaybackSpeed(0);
+				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
+
+				if (ReplayDirectorVM.DisableSimUIOnPlayback)
+				{
+					ReplayDirectorVM.InSimUIEnabled = true;
+				}
 			}
 			else
 			{
-				ReplayDirectorVM.SetPlaybackSpeed(1);
+				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
+				ReplayDirectorVM.InSimUIEnabled = !ReplayDirectorVM.DisableSimUIOnPlayback;
 			}
 		}
 	}

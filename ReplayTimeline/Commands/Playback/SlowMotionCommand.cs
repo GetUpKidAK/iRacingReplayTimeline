@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Windows.Input;
 
 
@@ -57,18 +58,17 @@ namespace iRacingReplayDirector
 						break;
 				}
 
-				// Add new speed
-				ReplayDirectorVM.SetPlaybackSpeed(newSpeed, true);
+				Sim.Instance.Sdk.Replay.SetSlowmotionPlaybackSpeed(newSpeed);
 			}
 			else
 			{
 				if (ReplayDirectorVM.CurrentPlaybackSpeed >= 0)
 				{
-					ReplayDirectorVM.SetPlaybackSpeed(1, true);
+					Sim.Instance.Sdk.Replay.SetSlowmotionPlaybackSpeed(1);
 				}
 				else
 				{
-					ReplayDirectorVM.SetPlaybackSpeed(-1, true);
+					Sim.Instance.Sdk.Replay.SetSlowmotionPlaybackSpeed(-1);
 				}
 			}
 		}

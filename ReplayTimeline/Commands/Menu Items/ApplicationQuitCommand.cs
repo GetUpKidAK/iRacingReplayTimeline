@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Windows.Input;
 
 
@@ -28,7 +29,7 @@ namespace iRacingReplayDirector
 		public void Execute(object parameter)
 		{
 			App.Current.Shutdown();
-			ReplayDirectorVM.SetPlaybackSpeed(0);
+			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
 			if (ReplayDirectorVM.IsCaptureActive()) ReplayDirectorVM.StopRecording();
 
 			SaveLoadHelper.SaveSettings(ReplayDirectorVM);

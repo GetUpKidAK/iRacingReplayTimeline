@@ -116,6 +116,25 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private void UpdatePlaybackButtonText()
+		{
+			PlayPauseBtnText = PlaybackEnabled ? "Pause" : "Play";
+
+			if (CurrentPlaybackSpeed > 1)
+				PlaybackSpeedText = SlowMotionEnabled ? $"FF 1/{CurrentPlaybackSpeed + 1}x" : $"FF {CurrentPlaybackSpeed}x";
+			else if (CurrentPlaybackSpeed < -1)
+				PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/{-CurrentPlaybackSpeed + 1}x" : $"RW {-CurrentPlaybackSpeed}x";
+			else
+			{
+				if (CurrentPlaybackSpeed > 0) PlaybackSpeedText = SlowMotionEnabled ? "FF 1/2x" : $"{CurrentPlaybackSpeed}x";
+				else
+				{
+					if (PlaybackEnabled) PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/2x" : $"RW";
+					else PlaybackSpeedText = "Paused";
+				}
+			}
+		}
+
 		private string _playbackSpeedText;
 		public string PlaybackSpeedText
 		{

@@ -388,11 +388,12 @@ namespace iRacingReplayDirector
 				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
 			}
 
+			// Order list by lap then lap distance (sort by position)
 			var orderedDriverList = Drivers.OrderByDescending(d => d.Lap).ThenByDescending(d => d.LapDistance).ToList();
 			for (int i = 0; i < orderedDriverList.Count; i++)
 			{
+				// Set driver position
 				orderedDriverList[i].Position = (i + 1);
-
 				if (orderedDriverList[i].NumberRaw == 0) // Pace Car always placed in last place
 				{
 					orderedDriverList[i].Position = 999;
@@ -467,7 +468,6 @@ namespace iRacingReplayDirector
 
 			_lastAppliedNode = nodeToApply;
 			CurrentTimelineNode = nodeToApply;
-			//JumpToNode(CurrentTimelineNode);
 		}
 
 		private void UpdateUILabels()
@@ -516,41 +516,6 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		public void SetPlaybackSpeed(int speed, bool slowMo = false)
-		{
-			// Shouldn't be possible, but lock speeds at 16X for safety
-			if (speed > 16) speed = 16; else if (speed < -16) speed = -16;
-
-			if (speed == 1 && !slowMo)
-				if (DisableSimUIOnPlayback)
-					InSimUIEnabled = false;
-
-			if (speed == 0 && DisableSimUIOnPlayback)
-				InSimUIEnabled = true;
-
-			if (!slowMo) Sim.Instance.Sdk.Replay.SetPlaybackSpeed(speed);
-			else Sim.Instance.Sdk.Replay.SetSlowmotionPlaybackSpeed(speed);
-		}
-
-		private void UpdatePlaybackButtonText()
-		{
-			PlayPauseBtnText = PlaybackEnabled ? "Pause" : "Play";
-			
-			if (CurrentPlaybackSpeed > 1)
-				PlaybackSpeedText = SlowMotionEnabled ? $"FF 1/{CurrentPlaybackSpeed + 1}x" : $"FF {CurrentPlaybackSpeed}x";
-			else if (CurrentPlaybackSpeed < -1)
-				PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/{-CurrentPlaybackSpeed + 1}x" : $"RW {-CurrentPlaybackSpeed}x";
-			else
-			{
-				if (CurrentPlaybackSpeed > 0) PlaybackSpeedText = SlowMotionEnabled ? "FF 1/2x" : $"{CurrentPlaybackSpeed}x";
-				else
-				{
-					if (PlaybackEnabled) PlaybackSpeedText = SlowMotionEnabled ? $"RW 1/2x" : $"RW";
-					else PlaybackSpeedText = "Paused";
-				}
-			}
-		}
-
 		public void SaveProjectChanges()
 		{
 			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
@@ -571,7 +536,7 @@ namespace iRacingReplayDirector
 
 		public void StartRecording()
 		{
-			SetPlaybackSpeed(1);
+			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
 			InSimUIEnabled = !DisableUIWhenRecording;
 
 			RecordBtnText = "Stop Rec";
@@ -580,7 +545,7 @@ namespace iRacingReplayDirector
 
 		public void StopRecording()
 		{
-			SetPlaybackSpeed(0);
+			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
 			ToggleRecording(false);
 			
 			RecordBtnText = "Record";
@@ -594,24 +559,33 @@ namespace iRacingReplayDirector
 				var obsProcess = ExternalProcessHelper.GetExternalProcess();
 				if (obsProcess != null)
 				{
+					RecordBtnText = "Stop Rec";
 					ExternalCaptureActive = enabled;
 					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
 				}
 				else
 				{
-					MessageBox.Show("Couldn't find OBS process, pleas ensure the application is running.", "Error");
+					MessageBox.Show("Couldn't find OBS process, please ensure the application is running.", "Error");
 
 					InSimUIEnabled = true;
-					SetPlaybackSpeed(0);
+					Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
 					RecordBtnText = "Record";
 				}
 				return;
 			}
-			
+
 			if (UseInSimCapture)
 			{
-				if (enabled) Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
-				else Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
+				if (enabled)
+				{
+					RecordBtnText = "Stop Rec";
+					Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
+				}
+				else
+				{
+					RecordBtnText = "Record";
+					Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
+				}
 			}
 		}
 	}
