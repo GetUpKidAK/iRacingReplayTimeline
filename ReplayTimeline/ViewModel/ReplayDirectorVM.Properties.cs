@@ -70,7 +70,6 @@ namespace iRacingReplayDirector
 				{
 					_currentCamera = value;
 					Sim.Instance.Sdk.Camera.SwitchToCar(CurrentDriver.NumberRaw, _currentCamera.GroupNum);
-
 					OnPropertyChanged("CurrentCamera");
 				}
 			}
@@ -80,36 +79,28 @@ namespace iRacingReplayDirector
 		public int CurrentFrame
 		{
 			get { return _currentFrame; }
-			set
-			{
-				_currentFrame = value;
-
-				OnPropertyChanged("CurrentFrame");
-			}
+			set { _currentFrame = value; OnPropertyChanged("CurrentFrame"); }
 		}
 
 		private double _sessionTime;
 		public double SessionTime
 		{
 			get { return _sessionTime; }
-			set { _sessionTime = value;
-				OnPropertyChanged("SessionTime"); }
+			set { _sessionTime = value; OnPropertyChanged("SessionTime"); }
 		}
 
 		private int _finalFrame;
 		public int FinalFrame
 		{
 			get { return _finalFrame; }
-			set { _finalFrame = value;
-				OnPropertyChanged("FinalFrame"); }
+			set { _finalFrame = value; OnPropertyChanged("FinalFrame"); }
 		}
 
 		private bool _slowMotionEnabled;
 		public bool SlowMotionEnabled
 		{
 			get { return _slowMotionEnabled; }
-			set { _slowMotionEnabled = value;
-				OnPropertyChanged("SlowMotionEnabled"); }
+			set { _slowMotionEnabled = value; OnPropertyChanged("SlowMotionEnabled"); }
 		}
 
 		private int _currentPlaybackSpeed;
@@ -129,8 +120,7 @@ namespace iRacingReplayDirector
 		public string PlaybackSpeedText
 		{
 			get { return _playbackSpeedText; }
-			set { _playbackSpeedText = value;
-				OnPropertyChanged("PlaybackSpeedText"); }
+			set { _playbackSpeedText = value; OnPropertyChanged("PlaybackSpeedText"); }
 		}
 
 
@@ -162,16 +152,14 @@ namespace iRacingReplayDirector
 		public bool InSimCaptureSettingEnabled
 		{
 			get { return _inSimCaptureSettingEnabled; }
-			private set { _inSimCaptureSettingEnabled = value;
-				OnPropertyChanged("InSimCaptureSettingEnabled"); }
+			private set { _inSimCaptureSettingEnabled = value; OnPropertyChanged("InSimCaptureSettingEnabled"); }
 		}
 
 		private bool _inSimCaptureActive;
 		public bool InSimCaptureActive
 		{
 			get { return _inSimCaptureActive; }
-			private set { _inSimCaptureActive = value;
-				OnPropertyChanged("InSimCaptureActive"); }
+			private set { _inSimCaptureActive = value; OnPropertyChanged("InSimCaptureActive"); }
 		}
 
 		private bool _InSimUIEnabled;
@@ -223,24 +211,21 @@ namespace iRacingReplayDirector
 		public string StoreFrameBtnText
 		{
 			get { return _storeFrameBtnText; }
-			set { _storeFrameBtnText = value;
-				OnPropertyChanged("StoreFrameBtnText"); }
+			set { _storeFrameBtnText = value; OnPropertyChanged("StoreFrameBtnText"); }
 		}
 
 		private string _playPauseBtnText;
 		public string PlayPauseBtnText
 		{
 			get { return _playPauseBtnText; }
-			set { _playPauseBtnText = value;
-				OnPropertyChanged("PlayPauseBtnText"); }
+			set { _playPauseBtnText = value; OnPropertyChanged("PlayPauseBtnText"); }
 		}
 
 		private string _recordBtnText;
 		public string RecordBtnText
 		{
 			get { return _recordBtnText; }
-			set { _recordBtnText = value;
-				OnPropertyChanged("RecordBtnText"); }
+			set { _recordBtnText = value; OnPropertyChanged("RecordBtnText"); }
 		}
 
 		private string _captureModeText;
@@ -254,32 +239,28 @@ namespace iRacingReplayDirector
 		public bool ShowVisualTimeline
 		{
 			get { return _showVisualTimeline; }
-			set { _showVisualTimeline = value;
-				OnPropertyChanged("ShowVisualTimeline"); }
+			set { _showVisualTimeline = value; OnPropertyChanged("ShowVisualTimeline"); }
 		}
 
 		private bool _disableSimUIOnPlayback;
 		public bool DisableSimUIOnPlayback
 		{
 			get { return _disableSimUIOnPlayback; }
-			set { _disableSimUIOnPlayback = value;
-				OnPropertyChanged("DisableSimUIOnPlayback"); }
+			set { _disableSimUIOnPlayback = value;OnPropertyChanged("DisableSimUIOnPlayback"); }
 		}
 
 		private bool _disableUIWhenRecording;
 		public bool DisableUIWhenRecording
 		{
 			get { return _disableUIWhenRecording; }
-			set { _disableUIWhenRecording = value;
-				OnPropertyChanged("DisableUIWhenRecording"); }
+			set { _disableUIWhenRecording = value; OnPropertyChanged("DisableUIWhenRecording"); }
 		}
 
 		private bool _stopRecordingOnFinalNode;
 		public bool StopRecordingOnFinalNode
 		{
 			get { return _stopRecordingOnFinalNode; }
-			set { _stopRecordingOnFinalNode = value;
-				OnPropertyChanged("StopRecordingOnFinalNode"); }
+			set { _stopRecordingOnFinalNode = value; OnPropertyChanged("StopRecordingOnFinalNode"); }
 		}
 
 		private bool _useInSimCapture;
@@ -307,35 +288,28 @@ namespace iRacingReplayDirector
 		public bool ShowRecordingButtons
 		{
 			get { return _showRecordingButtons; }
-			set
-			{
-				_showRecordingButtons = value;
-				OnPropertyChanged("ShowRecordingButtons");
-			}
+			set { _showRecordingButtons = value; OnPropertyChanged("ShowRecordingButtons");}
 		}
 
 		private bool _showSessionLapSkipButtons;
 		public bool ShowSessionLapSkipButtons
 		{
 			get { return _showSessionLapSkipButtons; }
-			set { _showSessionLapSkipButtons = value;
-				OnPropertyChanged("ShowSessionLapSkipButtons"); }
+			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
 		}
 
 		private bool _showDriverCameraPanels;
 		public bool ShowDriverCameraPanels
 		{
 			get { return _showDriverCameraPanels; }
-			set { _showDriverCameraPanels = value;
-				OnPropertyChanged("ShowDriverCameraPanels"); }
+			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
 		private bool _showTimelineNodeList;
 		public bool ShowTimelineNodeList
 		{
 			get { return _showTimelineNodeList; }
-			set { _showTimelineNodeList = value;
-				OnPropertyChanged("ShowTimelineNodeList"); }
+			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
 		}
 
 		private bool _minimizedMode;
