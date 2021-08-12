@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRacingSimulator;
+using System;
 using System.Windows.Input;
 
 
@@ -27,7 +28,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			ReplayDirectorVM.JumpToEvent(iRSDKSharp.ReplaySearchModeTypes.NextLap);
+			Sim.Instance.Sdk.Replay.Jump(iRSDKSharp.ReplaySearchModeTypes.NextLap);
 		}
 	}
 }

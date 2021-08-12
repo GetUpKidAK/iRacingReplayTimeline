@@ -574,11 +574,6 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		public void JumpToEvent(iRSDKSharp.ReplaySearchModeTypes replayEvent)
-		{
-			Sim.Instance.Sdk.Replay.Jump(replayEvent);
-		}
-
 		private void DriverChanged()
 		{
 			if (CurrentDriver == null)
