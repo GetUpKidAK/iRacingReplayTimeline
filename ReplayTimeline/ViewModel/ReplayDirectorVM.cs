@@ -105,6 +105,7 @@ namespace iRacingReplayDirector
 				StopRecordingOnFinalNode = loadedSettings.StopRecordingOnFinalNode;
 				UseInSimCapture = loadedSettings.UseInSimCapture;
 				UseOBSCapture = loadedSettings.UseOBSCapture;
+				MinimizedModeStatusCheck();
 
 				if (UseInSimCapture && UseOBSCapture)
 					UseOBSCapture = false;

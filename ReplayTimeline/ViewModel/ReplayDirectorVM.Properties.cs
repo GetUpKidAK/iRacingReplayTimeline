@@ -14,12 +14,18 @@ namespace iRacingReplayDirector
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
 		private const string m_VersionNumber = "1.21";
 
+		/// <summary>
+		/// PROPERTIES
+		/// </summary>
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
 		public int SessionID { get; private set; }
 		#endregion
 
+		/// <summary>
+		/// BINDING PROPERTIES
+		/// </summary>
 		#region Binding Properties
 		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
 		public ICollectionView TimelineNodesView { get; private set; }
@@ -224,6 +230,9 @@ namespace iRacingReplayDirector
 
 		#endregion
 
+		/// <summary>
+		/// LABEL PROPERTIES
+		/// </summary>
 		#region Label Properties
 
 		private string _storeFrameBtnText;
@@ -252,13 +261,6 @@ namespace iRacingReplayDirector
 		{
 			get { return _captureModeText; }
 			set { _captureModeText = value; OnPropertyChanged("CaptureModeText"); }
-		}
-
-		private bool _showVisualTimeline;
-		public bool ShowVisualTimeline
-		{
-			get { return _showVisualTimeline; }
-			set { _showVisualTimeline = value; OnPropertyChanged("ShowVisualTimeline"); }
 		}
 
 		private bool _disableSimUIOnPlayback;
@@ -303,32 +305,47 @@ namespace iRacingReplayDirector
 			set { _externalCaptureActive = value; OnPropertyChanged("ExternalCaptureActive"); }
 		}
 
+		private bool _showVisualTimeline;
+		public bool ShowVisualTimeline
+		{
+			get { return _showVisualTimeline; }
+			set
+			{
+				_showVisualTimeline = value; MinimizedModeStatusCheck();
+				OnPropertyChanged("ShowVisualTimeline");
+			}
+		}
+
 		private bool _showRecordingButtons;
 		public bool ShowRecordingButtons
 		{
 			get { return _showRecordingButtons; }
-			set { _showRecordingButtons = value; OnPropertyChanged("ShowRecordingButtons");}
+			set { _showRecordingButtons = value; MinimizedModeStatusCheck();
+					OnPropertyChanged("ShowRecordingButtons");}
 		}
 
 		private bool _showSessionLapSkipButtons;
 		public bool ShowSessionLapSkipButtons
 		{
 			get { return _showSessionLapSkipButtons; }
-			set { _showSessionLapSkipButtons = value; OnPropertyChanged("ShowSessionLapSkipButtons"); }
+			set { _showSessionLapSkipButtons = value; MinimizedModeStatusCheck();
+					OnPropertyChanged("ShowSessionLapSkipButtons"); }
 		}
 
 		private bool _showDriverCameraPanels;
 		public bool ShowDriverCameraPanels
 		{
 			get { return _showDriverCameraPanels; }
-			set { _showDriverCameraPanels = value; OnPropertyChanged("ShowDriverCameraPanels"); }
+			set { _showDriverCameraPanels = value; MinimizedModeStatusCheck();
+				OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
 		private bool _showTimelineNodeList;
 		public bool ShowTimelineNodeList
 		{
 			get { return _showTimelineNodeList; }
-			set { _showTimelineNodeList = value; OnPropertyChanged("ShowTimelineNodeList"); }
+			set { _showTimelineNodeList = value; MinimizedModeStatusCheck();
+				OnPropertyChanged("ShowTimelineNodeList"); }
 		}
 
 		private bool _minimizedMode;
@@ -339,12 +356,27 @@ namespace iRacingReplayDirector
 			{
 				_minimizedMode = value;
 
-				ShowVisualTimeline = !_minimizedMode;
-				ShowRecordingButtons = !_minimizedMode;
-				ShowSessionLapSkipButtons = !_minimizedMode;
-				ShowDriverCameraPanels = !_minimizedMode;
-				ShowTimelineNodeList = !_minimizedMode;
+				_showVisualTimeline = !_minimizedMode; OnPropertyChanged("ShowVisualTimeline");
+				_showRecordingButtons = !_minimizedMode; OnPropertyChanged("ShowRecordingButtons");
+				_showSessionLapSkipButtons = !_minimizedMode; OnPropertyChanged("ShowSessionLapSkipButtons");
+				_showDriverCameraPanels = !_minimizedMode; OnPropertyChanged("ShowDriverCameraPanels");
+				_showTimelineNodeList = !_minimizedMode; OnPropertyChanged("ShowTimelineNodeList");
 
+				OnPropertyChanged("MinimizedMode");
+			}
+		}
+
+		private void MinimizedModeStatusCheck()
+		{
+			if (ShowVisualTimeline || ShowRecordingButtons || ShowSessionLapSkipButtons ||
+				ShowDriverCameraPanels || ShowTimelineNodeList)
+			{
+				_minimizedMode = false;
+				OnPropertyChanged("MinimizedMode");
+			}
+			else
+			{
+				_minimizedMode = true;
 				OnPropertyChanged("MinimizedMode");
 			}
 		}
@@ -381,8 +413,10 @@ namespace iRacingReplayDirector
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		
 
+		/// <summary>
+		/// COMMANDS
+		/// </summary>
 		#region Commands
 		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
