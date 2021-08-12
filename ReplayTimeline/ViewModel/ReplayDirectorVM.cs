@@ -399,11 +399,22 @@ namespace iRacingReplayDirector
 					orderedDriverList[i].Position = 999;
 				}
 			}
-
 		}
+
+		int currentSessionId = -1;
 
 		private void UpdateSessionInformation()
 		{
+			// Cache session ID to check for changes
+			if (currentSessionId != Sim.Instance.Telemetry.SessionNum.Value)
+			{
+				// If session has changed, force sorting command to sort by ID
+				SortDriversById = false;
+				ToggleDriverSortOptionCommand.Execute(this);
+
+				currentSessionId = Sim.Instance.Telemetry.SessionNum.Value;
+			}
+
 			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
 			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
 			var sessionLaps = sessionInfoQuery["SessionLaps"].GetValue("-1");

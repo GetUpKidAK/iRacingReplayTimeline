@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iRacingSdkWrapper;
+using iRacingSimulator;
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -24,7 +26,13 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Should only be enabled during race sessions
-			return true;
+			if (!ReplayDirectorVM.SessionInfoLoaded)
+				return false;
+
+			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
+			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
+
+			return sessionType.Contains("Race");
 		}
 
 		public void Execute(object parameter)
