@@ -79,7 +79,7 @@
 						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Number}">
 							<GridViewColumnHeader Content="Car #" IsEnabled="False" />
 						</GridViewColumn>
-						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Position}">
+						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Position, Converter={StaticResource CarPositionConverter}}">
 							<GridViewColumnHeader Content="Pos" IsEnabled="False" />
 						</GridViewColumn>
 						<GridViewColumn Width="160" DisplayMemberBinding="{Binding TeamName}">

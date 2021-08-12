@@ -388,19 +388,31 @@ namespace iRacingReplayDirector
 				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
 			}
 
+			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
+			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
+			
 			// Order list by lap then lap distance (sort by position)
 			var orderedDriverList = Drivers.OrderByDescending(d => d.Lap).ThenByDescending(d => d.LapDistance).ToList();
 			for (int i = 0; i < orderedDriverList.Count; i++)
 			{
-				// Set driver position
-				orderedDriverList[i].Position = (i + 1);
-				if (orderedDriverList[i].NumberRaw == 0) // Pace Car always placed in last place
+				// Set position in race session, otherwise set to 999
+				if (sessionType.Contains("Race"))
+				{
+					// Set driver position
+					orderedDriverList[i].Position = (i + 1);
+					if (orderedDriverList[i].NumberRaw == 0) // Pace Car always placed in last place
+					{
+						orderedDriverList[i].Position = 999;
+					}
+				}
+				else
 				{
 					orderedDriverList[i].Position = 999;
 				}
-			}
+			}	
 		}
 
+		// Cached session number
 		int currentSessionId = -1;
 
 		private void UpdateSessionInformation()

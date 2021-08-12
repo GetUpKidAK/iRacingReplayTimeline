@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />
     <Compile Include="Commands\Menu Items\ApplicationQuitCommand.cs" />

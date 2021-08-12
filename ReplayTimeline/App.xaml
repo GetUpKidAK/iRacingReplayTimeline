@@ -8,5 +8,6 @@
 		<local:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
 		<local:FlexibleBooleanToVisibilityConverter x:Key="FlexibleBooleanToVisibilityConverter"/>
 		<local:SecondsToTimeConverter x:Key="SecondsToTimeConverter"/>
+		<local:CarPositionConverter x:Key="CarPositionConverter" />
 	</Application.Resources>
 </Application>
