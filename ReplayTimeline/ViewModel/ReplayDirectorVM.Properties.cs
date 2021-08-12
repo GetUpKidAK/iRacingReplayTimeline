@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using iRacingSdkWrapper;
 using iRacingSdkWrapper.Bitfields;
 using iRacingSimulator;
+
 
 namespace iRacingReplayDirector
 {
