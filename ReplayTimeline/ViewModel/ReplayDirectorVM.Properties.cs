@@ -360,7 +360,7 @@ namespace iRacingReplayDirector
 				_showRecordingButtons = !_minimizedMode; OnPropertyChanged("ShowRecordingButtons");
 				_showSessionLapSkipButtons = !_minimizedMode; OnPropertyChanged("ShowSessionLapSkipButtons");
 				_showDriverCameraPanels = !_minimizedMode; OnPropertyChanged("ShowDriverCameraPanels");
-				_showTimelineNodeList = !_minimizedMode; OnPropertyChanged("ShowTimelineNodeList");
+				//_showTimelineNodeList = !_minimizedMode; OnPropertyChanged("ShowTimelineNodeList");
 
 				OnPropertyChanged("MinimizedMode");
 			}
@@ -369,7 +369,7 @@ namespace iRacingReplayDirector
 		private void MinimizedModeStatusCheck()
 		{
 			if (ShowVisualTimeline || ShowRecordingButtons || ShowSessionLapSkipButtons ||
-				ShowDriverCameraPanels || ShowTimelineNodeList)
+				ShowDriverCameraPanels /*|| ShowTimelineNodeList*/)
 			{
 				_minimizedMode = false;
 				OnPropertyChanged("MinimizedMode");

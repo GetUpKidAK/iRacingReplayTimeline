@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:iRacingReplayDirector"
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
-        Title="{Binding WindowTitle}"
-		MinHeight="200" MaxHeight="800" MinWidth="500" MaxWidth="1200"
+		MinHeight="200" MaxHeight="600" Height="600"
+		MinWidth="500" MaxWidth="1200" Width="1000"
+		SizeToContent="Width" ResizeMode="CanMinimize" Topmost="{Binding WindowAlwaysOnTop}"
 		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
-		SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-		Topmost="{Binding WindowAlwaysOnTop}">
+		Title="{Binding WindowTitle}">
 	<Window.DataContext>
 		<vm:ReplayDirectorVM/>
 	</Window.DataContext>
@@ -21,265 +21,276 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" MinWidth="480" />
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
-
-		<Menu Grid.ColumnSpan="3">
-			<MenuItem Header="_File">
-				<MenuItem Header="_Quit" Command="{Binding ApplicationQuitCommand}" />
-			</MenuItem>
-
-			<MenuItem Header="Options">
-				<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}" Command="{Binding ToggleSimUIOnPlaybackCommand}"/>
-				<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" Command="{Binding ToggleSimUIOnRecordingCommand}"/>
-				<Separator/>
-				<MenuItem Header="Recording Capture Method">
-					<MenuItem Header="iRacing Capture" IsCheckable="True" IsChecked="{Binding UseInSimCapture}" Command="{Binding ToggleUseInSimCaptureCommand}"/>
-					<MenuItem Header="OBS" IsCheckable="True" IsChecked="{Binding UseOBSCapture}" Command="{Binding ToggleUseOBSCaptureCommand}"/>
+		<!-- MENU -->
+		<Grid Grid.Row="0">
+			<Menu>
+				<MenuItem Header="_File">
+					<MenuItem Header="_Quit" Command="{Binding ApplicationQuitCommand}" />
 				</MenuItem>
-				<Separator />
-				<MenuItem Header="Clear All Nodes" Command="{Binding ClearAllNodesCommand}" />
-			</MenuItem>
 
-			<MenuItem Header="View">
-				<MenuItem Header="Always On Top" IsCheckable="True" IsChecked="{Binding WindowAlwaysOnTop}" />
-				<Separator />
-				<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>
-				<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}"/>
-				<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingButtons}" />
-				<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
-				<Separator/>
-				<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
-				<Separator/>
-				<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
-			</MenuItem>
-			
-			<!-- DEBUG MENU - HIDE ME -->
-			<!--<MenuItem Header="Debug Menu">
-				<MenuItem Header="Placeholder" Command="{Binding ConnectSimCommand}"/>
-			</MenuItem>-->
+				<MenuItem Header="Options">
+					<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}" Command="{Binding ToggleSimUIOnPlaybackCommand}"/>
+					<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" Command="{Binding ToggleSimUIOnRecordingCommand}"/>
+					<Separator/>
+					<MenuItem Header="Recording Capture Method">
+						<MenuItem Header="iRacing Capture" IsCheckable="True" IsChecked="{Binding UseInSimCapture}" Command="{Binding ToggleUseInSimCaptureCommand}"/>
+						<MenuItem Header="OBS" IsCheckable="True" IsChecked="{Binding UseOBSCapture}" Command="{Binding ToggleUseOBSCaptureCommand}"/>
+					</MenuItem>
+					<Separator />
+					<MenuItem Header="Clear All Nodes" Command="{Binding ClearAllNodesCommand}" />
+				</MenuItem>
 
-			<MenuItem Header="Help">
-				<MenuItem Header="More Info / Guides" Command="{Binding MoreInfoCommand}"/>
-				<MenuItem Header="About" Command="{Binding AboutCommand}"/>
-			</MenuItem>
-		</Menu>
+				<MenuItem Header="View">
+					<MenuItem Header="Always On Top" IsCheckable="True" IsChecked="{Binding WindowAlwaysOnTop}" />
+					<Separator />
+					<!--<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>-->
+					<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}"/>
+					<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingButtons}" />
+					<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
+					<Separator/>
+					<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
+					<Separator/>
+					<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
+				</MenuItem>
 
-		<Grid Grid.Row="1" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"
-			  Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="50"/>
-			</Grid.RowDefinitions>
+				<MenuItem Header="Help">
+					<MenuItem Header="More Info / Guides" Command="{Binding MoreInfoCommand}"/>
+					<MenuItem Header="About" Command="{Binding AboutCommand}"/>
+				</MenuItem>
 
-			<ListView ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" SelectionMode="Single"
-					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}">
-				<ListView.View>
-					<GridView>
-						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Number}">
-							<GridViewColumnHeader Content="Car #" IsEnabled="False" />
-						</GridViewColumn>
-						<GridViewColumn Width="40" DisplayMemberBinding="{Binding Position, Converter={StaticResource CarPositionConverter}}">
-							<GridViewColumnHeader Content="Pos" IsEnabled="False" />
-						</GridViewColumn>
-						<GridViewColumn Width="160" DisplayMemberBinding="{Binding TeamName}">
-							<GridViewColumnHeader Content="Driver/Team Name" IsEnabled="False" />
-						</GridViewColumn>
-					</GridView>
-				</ListView.View>
-			</ListView>
-
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="25">
-				<Button Content="Car Behind" Command="{Binding PreviousDriverCommand}" Width="80" />
-				<Button Content="Car Ahead" Command="{Binding NextDriverCommand}" Width="80" />
-				<Button Content="{Binding DriverSortButtonLabel}" Command="{Binding ToggleDriverSortOptionCommand}" Width="80" Margin="5 0 0 0" />
-			</StackPanel>
+				<!-- DEBUG MENU - HIDE ME -->
+				<!--<MenuItem Header="Debug Menu">
+					<MenuItem Header="Placeholder" Command="{Binding ConnectSimCommand}"/>
+				</MenuItem>-->
+			</Menu>
 		</Grid>
+		
+		<!-- MAIN WINDOW AREA -->
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			
+			<!-- DRIVER PANEL -->
+			<DockPanel Grid.Column="0" Margin="5" Width="250" 
+					   Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="0 5 0 5" Height="25">
+					<Button Content="Car Behind" Command="{Binding PreviousDriverCommand}" Width="80" />
+					<Button Content="Car Ahead" Command="{Binding NextDriverCommand}" Width="80" />
+					<Button Content="{Binding DriverSortButtonLabel}" Command="{Binding ToggleDriverSortOptionCommand}" Width="80" Margin="5 0 0 0" />
+				</StackPanel>
 
-		<Grid Grid.Row="1" Grid.Column="1" Margin="5">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
+				<ListView DockPanel.Dock="Top" ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" SelectionMode="Single"
+					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}">
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Width="40" DisplayMemberBinding="{Binding Number}">
+								<GridViewColumnHeader Content="Car #" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="40" DisplayMemberBinding="{Binding Position, Converter={StaticResource CarPositionConverter}}">
+								<GridViewColumnHeader Content="Pos" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="160" DisplayMemberBinding="{Binding TeamName}">
+								<GridViewColumnHeader Content="Driver/Team Name" IsEnabled="False" />
+							</GridViewColumn>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</DockPanel>
 
-			<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
-					  SelectionChanged="ListBox_SelectionChanged"
-					  MinHeight="200" MaxHeight="360" SelectionMode="Single" 
-					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
-					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" >
-				<ListView.View>
-					<GridView>
-						<GridViewColumn Width="40">
-							<GridViewColumnHeader IsEnabled="False" />
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<CheckBox Margin="5, 0" IsChecked="{Binding Enabled}"/>
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</GridViewColumn>
-						
-						<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
-							<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
-						</GridViewColumn>
-
-						<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.TeamName}">
-							<GridViewColumnHeader Content="Driver/Team name" IsEnabled="False" />
-						</GridViewColumn>
-
-						<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
-							<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
-						</GridViewColumn>
-					</GridView>
-				</ListView.View>
-			</ListView>
-
-			<Grid Grid.Row="1" Margin="5">
-				<StackPanel>
-					<Grid Margin="5" Height="30" Visibility="{Binding ShowVisualTimeline, Converter={StaticResource VisibilityConverter}}">
-						<ProgressBar Value="{Binding CurrentFrame, Mode=OneWay}" Maximum="{Binding FinalFrame}"/>
-						
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-							<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding CurrentFrame, Mode=OneWay}" HorizontalAlignment="Center"/>
-							<TextBlock Text=" | Session Time: " HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding SessionTime, Converter={StaticResource SecondsToTimeConverter}}" HorizontalAlignment="Center"/>
-						</StackPanel>
-					</Grid>
-
-					<Grid Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="35">
-							<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="210" Margin="5"
-									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
-							<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="210" Margin="5"
-									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
-						</StackPanel>
-					</Grid>
-
-					<Grid Margin="5 5 5 0" Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Height="20">
-							<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" Margin="0 0 10 0" />
-							<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
-						</StackPanel>
-					</Grid>
-
-					<Grid Margin="5" Height="55">
-						<GroupBox Header="Nodes" Padding="5" Height="55">
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-								<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-								<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
-								<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
-
-								<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
+			<!-- CENTRAL PANEL -->
+			<DockPanel Grid.Column="1" Margin="5">
+				<DockPanel.Resources>
+					<Style TargetType="Grid">
+						<Setter Property="Grid.Margin" Value="5"/>
+					</Style>
+					<Style TargetType="GroupBox">
+						<Setter Property="Padding" Value="5"/>
+					</Style>
+				</DockPanel.Resources>
+				
+				<!-- SESSION CONTROLS -->
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+						<GroupBox Header="Session Skip">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+								<Button Content="Prev" Command="{Binding PreviousSessionCommand}" Width="60"/>
+								<Button Content="Next" Command="{Binding NextSessionCommand}" Width="60" Margin="0 0 10 0"/>
 							</StackPanel>
 						</GroupBox>
-					</Grid>
 
-					<Grid Margin="5" Height="55">
-						<GroupBox Header="Playback" Height="55" Padding="5">
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
-								<Button Content="&lt;" ToolTip="Back One Frame" Width="35" Command="{Binding SkipFrameBackCommand}"/>
-								<Button Content="&lt;&lt;" Width="35" Command="{Binding RewindCommand}"/>
-								<Button Content="{Binding PlayPauseBtnText}" Width="80" Command="{Binding PlayPauseCommand}" />
-								<Button Content="&gt;&gt;" Width="35" Command="{Binding FastForwardCommand}"/>
-								<Button Content="&gt;" ToolTip="Forward One Frame" Width="35" Command="{Binding SkipFrameForwardCommand}"/>
-
-								<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PlaybackSpeedText}" Width="50" Margin="5 0 5 0"/>
-
-								<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>
-
-								<ToggleButton Content="Toggle Sim UI" IsChecked="{Binding InSimUIEnabled}" Command="{Binding ToggleInSimUICommand}"
-												  Width="100" Margin="10 0 0 0"/>
+						<GroupBox Header="Lap Skip">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+								<Button Content="Prev" Command="{Binding PreviousLapCommand}" Width="60"/>
+								<Button Content="Next" Command="{Binding NextLapCommand}" Width="60" Margin="0 0 10 0"/>
 							</StackPanel>
 						</GroupBox>
-					</Grid>
+					</StackPanel>
+				</Grid>
 
-					<Grid Margin="5" Height="55" Visibility="{Binding ShowRecordingButtons, Converter={StaticResource VisibilityConverter}}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-							<GroupBox Header="Recording" Height="55" Padding="5">
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-									<Button Content="{Binding RecordBtnText}" Command="{Binding ToggleRecordingCommand}" Width="100" Margin="10 0 10 0"
+				<!-- RECORDING CONTROLS -->
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowRecordingButtons, Converter={StaticResource VisibilityConverter}}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<GroupBox Header="Recording" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+								<Button Content="{Binding RecordBtnText}" Command="{Binding ToggleRecordingCommand}" Width="100" Margin="10 0 10 0"
 										ToolTipService.ShowOnDisabled="True"
 										ToolTipService.IsEnabled="{Binding InSimCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
 										ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
-									<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
+								<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
 												  ToolTip="Use last stored node as a placeholder to stop recording." />
-									<TextBlock Padding="10 2" Text="{Binding CaptureModeText}"/>
-								</StackPanel>
-							</GroupBox>
+								<TextBlock Padding="10 2" Text="{Binding CaptureModeText}"/>
+							</StackPanel>
+						</GroupBox>
+					</StackPanel>
+				</Grid>
+
+				<!-- PLAYBACK CONTROLS -->
+				<Grid DockPanel.Dock="Bottom" >
+					<GroupBox Header="Playback">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<!--<Button Content="&lt;" ToolTip="Back One Frame" Width="35" Command="{Binding SkipFrameBackCommand}"/>-->
+							<Button Content="&lt;&lt;" Width="35" Command="{Binding RewindCommand}"/>
+							<Button Content="{Binding PlayPauseBtnText}" Width="80" Command="{Binding PlayPauseCommand}" />
+							<Button Content="&gt;&gt;" Width="35" Command="{Binding FastForwardCommand}"/>
+							<!--<Button Content="&gt;" ToolTip="Forward One Frame" Width="35" Command="{Binding SkipFrameForwardCommand}"/>-->
+
+							<TextBlock VerticalAlignment="Center" TextAlignment="Center" Text="{Binding PlaybackSpeedText}" Width="50" Margin="5 0 5 0"/>
+
+							<!--<Button Content="Slow-Mo" Width="60" Command="{Binding SlowMotionCommand}" Margin="0 0 0 0"/>-->
+
+							<ToggleButton Content="Toggle Sim UI" IsChecked="{Binding InSimUIEnabled}" Command="{Binding ToggleInSimUICommand}"
+												  Width="100" Margin="10 0 0 0"/>
 						</StackPanel>
-					</Grid>
+					</GroupBox>
+				</Grid>
 
-					<Grid Margin="5" Height="55" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-							<GroupBox Header="Session" Height="55" Padding="5">
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-									<Button Content="Prev" Command="{Binding PreviousSessionCommand}" Width="60"/>
-									<Button Content="Next" Command="{Binding NextSessionCommand}" Width="60" Margin="0 0 10 0"/>
-								</StackPanel>
-							</GroupBox>
+				<!-- NODE CONTROLS -->
+				<Grid DockPanel.Dock="Bottom">
+					<GroupBox Header="Nodes">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
+							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
+							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
 
-							<GroupBox Header="Lap" Height="55" Padding="5">
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-									<Button Content="Prev" Command="{Binding PreviousLapCommand}" Width="60"/>
-									<Button Content="Next" Command="{Binding NextLapCommand}" Width="60" Margin="0 0 10 0"/>
-								</StackPanel>
-							</GroupBox>
+							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
 						</StackPanel>
-					</Grid>
+					</GroupBox>
+				</Grid>
 
-					
-				</StackPanel>
-			</Grid>
-		</Grid>
+				<!-- NEXT/PREVIOUS DRIVER BUTTONS -->
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowDriverCameraPanels,
+					Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<Button Content="Driver Behind" Command="{Binding PreviousDriverCommand}" Width="110" Margin="0 0 10 0" />
+						<Button Content="Driver Ahead" Command="{Binding NextDriverCommand}" Width="110" />
+					</StackPanel>
+				</Grid>
 
-		<Grid Grid.Row="1" Grid.Column="2" Margin="5" Width="250" Height="Auto" VerticalAlignment="Top"
-			  Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
-			<ListView ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" SelectionMode="Single"
+				<!-- DRIVER/CAMERA DROPDOWNS -->
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowDriverCameraPanels,
+					Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="210" Margin="5"
+									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
+						<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="210" Margin="5"
+									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
+					</StackPanel>
+				</Grid>
+
+				<!-- VISUAL TIMELINE -->
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowVisualTimeline, Converter={StaticResource VisibilityConverter}}">
+					<ProgressBar Value="{Binding CurrentFrame, Mode=OneWay}" Maximum="{Binding FinalFrame}" Height="30"/>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock Text="Current Frame: " HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding CurrentFrame, Mode=OneWay}" HorizontalAlignment="Center"/>
+						<TextBlock Text=" | Session Time: " HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding SessionTime, Converter={StaticResource SecondsToTimeConverter}}" HorizontalAlignment="Center"/>
+					</StackPanel>
+				</Grid>
+
+				<!-- NODES LIST -->
+				<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
+					  SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" 
+					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
+					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" DockPanel.Dock="Top">
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Width="40">
+								<GridViewColumnHeader IsEnabled="False" />
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<CheckBox Margin="5, 0" IsChecked="{Binding Enabled}"/>
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+
+							<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
+								<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.TeamName}">
+								<GridViewColumnHeader Content="Driver/Team name" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
+								<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
+							</GridViewColumn>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</DockPanel>
+
+			<!-- CAMERA PANEL -->
+			<DockPanel Grid.Column="2" Margin="5" Width="250" Visibility="{Binding ShowDriverCameraPanels,
+				Converter={StaticResource VisibilityConverter}}">
+				<ListView DockPanel.Dock="Top" ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" SelectionMode="Single"
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}">
-				<ListView.View>
-					<GridView>
-						<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
-							<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
-						</GridViewColumn>
-						<GridViewColumn Width="50" DisplayMemberBinding="{Binding GroupNum}">
-							<GridViewColumnHeader Content="Group #" IsEnabled="False" />
-						</GridViewColumn>
-					</GridView>
-				</ListView.View>
-			</ListView>
+					<ListView.View>
+						<GridView>
+							<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
+								<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="50" DisplayMemberBinding="{Binding GroupNum}">
+								<GridViewColumnHeader Content="Group #" IsEnabled="False" />
+							</GridViewColumn>
+						</GridView>
+					</ListView.View>
+				</ListView>
+			</DockPanel>
 		</Grid>
+		
+		<!-- STATUS BAR -->
+		<Grid Grid.Row="2">
+			<StatusBar Grid.Row="3" Grid.ColumnSpan="3">
+				<StatusBar.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+						</Grid>
+					</ItemsPanelTemplate>
+				</StatusBar.ItemsPanel>
 
-		<StatusBar Grid.Row="3" Grid.ColumnSpan="3">
-			<StatusBar.ItemsPanel>
-				<ItemsPanelTemplate>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="*"/>
-						</Grid.ColumnDefinitions>
-					</Grid>
-				</ItemsPanelTemplate>
-			</StatusBar.ItemsPanel>
+				<StatusBar.Resources>
+					<Style TargetType="TextBlock">
+						<Setter Property="Margin" Value="10 3"/>
+					</Style>
+				</StatusBar.Resources>
 
-			<StatusBar.Resources>
-				<Style TargetType="TextBlock">
-					<Setter Property="Margin" Value="10 3"/>
-				</Style>
-			</StatusBar.Resources>
-
-			<StatusBarItem>
-				<TextBlock Text="{Binding StatusBarText}" />
-			</StatusBarItem>
-			<StatusBarItem Grid.Column="1" HorizontalContentAlignment="Center">
-				<TextBlock Text="{Binding StatusBarCurrentSessionInfo}" />
-			</StatusBarItem>
-			<StatusBarItem Grid.Column="2" HorizontalContentAlignment="Right">
-				<TextBlock Text="{Binding StatusBarSessionID}"/>
-			</StatusBarItem>
-		</StatusBar>
+				<StatusBarItem>
+					<TextBlock Text="{Binding StatusBarText}" />
+				</StatusBarItem>
+				<StatusBarItem Grid.Column="1" HorizontalContentAlignment="Center">
+					<TextBlock Text="{Binding StatusBarCurrentSessionInfo}" />
+				</StatusBarItem>
+				<StatusBarItem Grid.Column="2" HorizontalContentAlignment="Right">
+					<TextBlock Text="{Binding StatusBarSessionID}"/>
+				</StatusBarItem>
+			</StatusBar>
+		</Grid>
 	</Grid>
 </Window>

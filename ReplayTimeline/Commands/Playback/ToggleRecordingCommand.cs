@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
@@ -26,7 +25,7 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Disabled if in-sim recording is disabled
-			if (!ReplayDirectorVM.IsCaptureAvailable())
+			if (!ReplayDirectorVM.SessionInfoLoaded || !ReplayDirectorVM.IsCaptureAvailable())
 				return false;
 
 			if ((ReplayDirectorVM.CurrentFrame + 1) >= ReplayDirectorVM.FinalFrame)

@@ -24,6 +24,9 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
+			if (!ReplayDirectorVM.SessionInfoLoaded)
+				return false;
+
 			if (ReplayDirectorVM.IsCaptureActive())
 			{
 				// If capture is active disable the button if the final node is already gone
