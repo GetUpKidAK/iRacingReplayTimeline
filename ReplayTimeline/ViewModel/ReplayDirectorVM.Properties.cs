@@ -419,6 +419,7 @@ namespace iRacingReplayDirector
 		/// </summary>
 		#region Commands
 		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
+		public ClearAllNodesCommand ClearAllNodesCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
 		public DeleteStoredFrameCommand DeleteStoredFrameCommand { get; set; }

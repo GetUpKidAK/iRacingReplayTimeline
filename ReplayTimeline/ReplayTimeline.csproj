@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Nodes\ClearAllNodesCommand.cs" />
     <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />

@@ -44,6 +44,7 @@ namespace iRacingReplayDirector
 			GetAppSettings();
 
 			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
+			ClearAllNodesCommand = new ClearAllNodesCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
 			DeleteStoredFrameCommand = new DeleteStoredFrameCommand(this);

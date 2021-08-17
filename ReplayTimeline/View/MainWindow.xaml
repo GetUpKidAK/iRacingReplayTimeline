@@ -40,6 +40,8 @@
 					<MenuItem Header="iRacing Capture" IsCheckable="True" IsChecked="{Binding UseInSimCapture}" Command="{Binding ToggleUseInSimCaptureCommand}"/>
 					<MenuItem Header="OBS" IsCheckable="True" IsChecked="{Binding UseOBSCapture}" Command="{Binding ToggleUseOBSCaptureCommand}"/>
 				</MenuItem>
+				<Separator />
+				<MenuItem Header="Clear All Nodes" Command="{Binding ClearAllNodesCommand}" />
 			</MenuItem>
 
 			<MenuItem Header="View">
