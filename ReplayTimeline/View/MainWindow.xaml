@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:iRacingReplayDirector"
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
-		MinHeight="200" MaxHeight="600" Height="600"
-		MinWidth="500" MaxWidth="1000" Width="1000"
-		SizeToContent="Width" ResizeMode="CanMinimize" Topmost="{Binding WindowAlwaysOnTop}"
+		MinWidth="500" MaxWidth="1000" Width="{Binding WindowWidth, Mode=TwoWay}"
+		MinHeight="400" MaxHeight="800" Height="{Binding WindowHeight, Mode=TwoWay}"
+		Topmost="{Binding WindowAlwaysOnTop}"
 		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
+		SizeChanged="Window_SizeChanged"
 		Title="{Binding WindowTitle}">
 	<Window.DataContext>
 		<vm:ReplayDirectorVM/>
@@ -43,14 +44,9 @@
 				<MenuItem Header="View">
 					<MenuItem Header="Always On Top" IsCheckable="True" IsChecked="{Binding WindowAlwaysOnTop}" />
 					<Separator />
-					<!--<MenuItem Header="Timeline Node List" IsCheckable="True" IsChecked="{Binding ShowTimelineNodeList}"/>-->
-					<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}"/>
-					<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingButtons}" />
-					<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipButtons}"/>
-					<Separator/>
-					<MenuItem Header="Driver/Camera Panels" IsCheckable="True" IsChecked="{Binding ShowDriverCameraPanels}"/>
-					<Separator/>
-					<MenuItem Header="Minimized Mode" IsCheckable="True" IsChecked="{Binding MinimizedMode}"/>
+					<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}" Command="{Binding ToggleVisualTimelineCommand}"/>
+					<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingControls}" Command="{Binding ToggleRecordingControlsCommand}" />
+					<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipControls}" Command="{Binding ToggleSessionLapSkipCommand}" />
 				</MenuItem>
 
 				<MenuItem Header="Help">
@@ -112,7 +108,7 @@
 				</DockPanel.Resources>
 				
 				<!-- SESSION CONTROLS -->
-				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowSessionLapSkipButtons, Converter={StaticResource VisibilityConverter}}">
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowSessionLapSkipControls, Converter={StaticResource VisibilityConverter}}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
 						<GroupBox Header="Session Skip">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -131,7 +127,7 @@
 				</Grid>
 
 				<!-- RECORDING CONTROLS -->
-				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowRecordingButtons, Converter={StaticResource VisibilityConverter}}">
+				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowRecordingControls, Converter={StaticResource VisibilityConverter}}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<GroupBox Header="Recording" >
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -214,8 +210,7 @@
 				<!-- NODES LIST -->
 				<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
 					  SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" 
-					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"
-					  Visibility="{Binding ShowTimelineNodeList, Converter={StaticResource VisibilityConverter}}" DockPanel.Dock="Top">
+					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" DockPanel.Dock="Top">
 					<ListView.View>
 						<GridView>
 							<GridViewColumn Width="40">

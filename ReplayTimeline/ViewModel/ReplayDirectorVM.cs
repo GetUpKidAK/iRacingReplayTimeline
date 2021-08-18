@@ -13,6 +13,22 @@ namespace iRacingReplayDirector
 {
 	public partial class ReplayDirectorVM : INotifyPropertyChanged
 	{
+		private int _windowWidth;
+		public int WindowWidth
+		{
+			get { return _windowWidth; }
+			set { _windowWidth = value; OnPropertyChanged("WindowWidth"); }
+		}
+
+		private int _windowHeight;
+		public int WindowHeight
+		{
+			get { return _windowHeight; }
+			set { _windowHeight = value; OnPropertyChanged("WindowHeight"); }
+		}
+
+
+
 		public ReplayDirectorVM()
 		{
 			Sim.Instance.Connected += SdkConnected;
@@ -75,45 +91,55 @@ namespace iRacingReplayDirector
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
 
+			ToggleDriverCameraPanelsCommand = new ToggleDriverCameraPanelsCommand(this);
+			ToggleVisualTimelineCommand = new ToggleVisualTimelineCommand(this);
+			ToggleRecordingControlsCommand = new ToggleRecordingControlsCommand(this);
+			ToggleSessionLapSkipCommand = new ToggleSessionLapSkipCommand(this);
+
 			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
 		}
 
 		private void GetAppSettings()
 		{
-			ShowVisualTimeline = true;
-			ShowRecordingButtons = true;
-			ShowSessionLapSkipButtons = true;
-			ShowDriverCameraPanels = true;
-			ShowTimelineNodeList = true;
-			DisableSimUIOnPlayback = false;
-			DisableUIWhenRecording = true;
-			StopRecordingOnFinalNode = false;
-			UseInSimCapture = true;
-			UseOBSCapture = false;
-
 			var loadedSettings = SaveLoadHelper.LoadSettings();
 
 			if (loadedSettings != null)
 			{
-				WindowAlwaysOnTop = loadedSettings.WindowAlwaysOnTop;
-				ShowVisualTimeline = loadedSettings.ShowVisualTimeline;
-				ShowRecordingButtons = loadedSettings.ShowRecordingButtons;
-				ShowSessionLapSkipButtons = loadedSettings.ShowSessionLapSkipButtons;
-				ShowDriverCameraPanels = loadedSettings.ShowDriverCameraPanels;
-				ShowTimelineNodeList = loadedSettings.ShowTimelineNodeList;
-				DisableSimUIOnPlayback = loadedSettings.DisableSimUIOnPlayback;
-				DisableUIWhenRecording = loadedSettings.DisableUIWhenRecording;
-				StopRecordingOnFinalNode = loadedSettings.StopRecordingOnFinalNode;
-				UseInSimCapture = loadedSettings.UseInSimCapture;
-				UseOBSCapture = loadedSettings.UseOBSCapture;
-				MinimizedModeStatusCheck();
+				WindowAlwaysOnTop = loadedSettings.UIOptions.WindowAlwaysOnTop;
+				ShowVisualTimeline = loadedSettings.UIOptions.ShowVisualTimeline;
+				ShowRecordingControls = loadedSettings.UIOptions.ShowRecordingControls;
+				ShowSessionLapSkipControls = loadedSettings.UIOptions.ShowSessionLapSkipControls;
+				DisableSimUIOnPlayback = loadedSettings.SimOptions.DisableSimUIOnPlayback;
+				DisableUIWhenRecording = loadedSettings.SimOptions.DisableUIWhenRecording;
+				StopRecordingOnFinalNode = loadedSettings.SimOptions.StopRecordingOnFinalNode;
+				UseInSimCapture = loadedSettings.SimOptions.UseInSimCapture;
+				UseOBSCapture = loadedSettings.SimOptions.UseOBSCapture;
 
 				if (UseInSimCapture && UseOBSCapture)
 					UseOBSCapture = false;
+
+				WindowWidth = loadedSettings.WindowSize.Width;
+				WindowHeight = loadedSettings.WindowSize.Height;
+			}
+			else
+			{
+				WindowWidth = 1000;
+				WindowHeight = 600;
+
+				ShowVisualTimeline = true;
+				ShowRecordingControls = true;
+				ShowSessionLapSkipControls = true;
+
+				DisableSimUIOnPlayback = false;
+				DisableUIWhenRecording = true;
+				StopRecordingOnFinalNode = false;
+
+				UseInSimCapture = true;
+				UseOBSCapture = false;
 			}
 		}
 
-		public void ApplicationClosing()
+		public void ApplicationClosing(Size windowSize)
 		{
 			Sim.Instance.Connected -= SdkConnected;
 			Sim.Instance.Disconnected -= SdkDisconnected;

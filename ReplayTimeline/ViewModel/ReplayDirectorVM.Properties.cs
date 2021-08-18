@@ -311,75 +311,40 @@ namespace iRacingReplayDirector
 			get { return _showVisualTimeline; }
 			set
 			{
-				_showVisualTimeline = value; MinimizedModeStatusCheck();
+				_showVisualTimeline = value;
 				OnPropertyChanged("ShowVisualTimeline");
 			}
 		}
 
-		private bool _showRecordingButtons;
-		public bool ShowRecordingButtons
+		private bool _showRecordingControls;
+		public bool ShowRecordingControls
 		{
-			get { return _showRecordingButtons; }
-			set { _showRecordingButtons = value; MinimizedModeStatusCheck();
-					OnPropertyChanged("ShowRecordingButtons");}
+			get { return _showRecordingControls; }
+			set { _showRecordingControls = value;
+					OnPropertyChanged("ShowRecordingControls");}
 		}
 
-		private bool _showSessionLapSkipButtons;
-		public bool ShowSessionLapSkipButtons
+		private bool _showSessionLapSkipControls;
+		public bool ShowSessionLapSkipControls
 		{
-			get { return _showSessionLapSkipButtons; }
-			set { _showSessionLapSkipButtons = value; MinimizedModeStatusCheck();
-					OnPropertyChanged("ShowSessionLapSkipButtons"); }
+			get { return _showSessionLapSkipControls; }
+			set { _showSessionLapSkipControls = value;
+					OnPropertyChanged("ShowSessionLapSkipControls"); }
 		}
 
 		private bool _showDriverCameraPanels;
 		public bool ShowDriverCameraPanels
 		{
 			get { return _showDriverCameraPanels; }
-			set { _showDriverCameraPanels = value; MinimizedModeStatusCheck();
+			set { _showDriverCameraPanels = value; 
 				OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
-		private bool _showTimelineNodeList;
-		public bool ShowTimelineNodeList
-		{
-			get { return _showTimelineNodeList; }
-			set { _showTimelineNodeList = value; MinimizedModeStatusCheck();
-				OnPropertyChanged("ShowTimelineNodeList"); }
-		}
+		public int HeightToDisableAllControls { get { return 450; } }
+		public int HeightToDisableTwoControls { get { return 480; } }
+		public int HeightToDisableOneControl { get { return 500; } }
+		public int WidthToDisableSidePanels { get { return 900; } }
 
-		private bool _minimizedMode;
-		public bool MinimizedMode
-		{
-			get { return _minimizedMode; }
-			set
-			{
-				_minimizedMode = value;
-
-				_showVisualTimeline = !_minimizedMode; OnPropertyChanged("ShowVisualTimeline");
-				_showRecordingButtons = !_minimizedMode; OnPropertyChanged("ShowRecordingButtons");
-				_showSessionLapSkipButtons = !_minimizedMode; OnPropertyChanged("ShowSessionLapSkipButtons");
-				_showDriverCameraPanels = !_minimizedMode; OnPropertyChanged("ShowDriverCameraPanels");
-				//_showTimelineNodeList = !_minimizedMode; OnPropertyChanged("ShowTimelineNodeList");
-
-				OnPropertyChanged("MinimizedMode");
-			}
-		}
-
-		private void MinimizedModeStatusCheck()
-		{
-			if (ShowVisualTimeline || ShowRecordingButtons || ShowSessionLapSkipButtons ||
-				ShowDriverCameraPanels /*|| ShowTimelineNodeList*/)
-			{
-				_minimizedMode = false;
-				OnPropertyChanged("MinimizedMode");
-			}
-			else
-			{
-				_minimizedMode = true;
-				OnPropertyChanged("MinimizedMode");
-			}
-		}
 
 		private string _statusBarText;
 		public string StatusBarText
@@ -423,19 +388,23 @@ namespace iRacingReplayDirector
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }
 		public DeleteStoredFrameCommand DeleteStoredFrameCommand { get; set; }
+
 		public PlayPauseCommand PlayPauseCommand { get; set; }
 		public RewindCommand RewindCommand { get; set; }
 		public FastForwardCommand FastForwardCommand { get; set; }
 		public SkipFrameBackCommand SkipFrameBackCommand { get; set; }
 		public SkipFrameForwardCommand SkipFrameForwardCommand { get; set; }
 		public SlowMotionCommand SlowMotionCommand { get; set; }
+
 		public NextLapCommand NextLapCommand { get; set; }
 		public PreviousLapCommand PreviousLapCommand { get; set; }
 		public NextSessionCommand NextSessionCommand { get; set; }
 		public PreviousSessionCommand PreviousSessionCommand { get; set; }
+
 		public NextDriverCommand NextDriverCommand { get; set; }
 		public PreviousDriverCommand PreviousDriverCommand { get; set; }
 		public ToggleDriverSortOptionCommand ToggleDriverSortOptionCommand { get; set; }
+
 		public ToggleRecordingCommand ToggleRecordingCommand { get; set; }
 
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
@@ -448,6 +417,11 @@ namespace iRacingReplayDirector
 		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
 		public ToggleUseInSimCaptureCommand ToggleUseInSimCaptureCommand { get; set; }
 		public ToggleUseOBSCaptureCommand ToggleUseOBSCaptureCommand { get; set; }
+
+		public ToggleDriverCameraPanelsCommand ToggleDriverCameraPanelsCommand { get; set; }
+		public ToggleVisualTimelineCommand ToggleVisualTimelineCommand { get; set; }
+		public ToggleRecordingControlsCommand ToggleRecordingControlsCommand { get; set; }
+		public ToggleSessionLapSkipCommand ToggleSessionLapSkipCommand { get; set; }
 		#endregion
 	}
 }

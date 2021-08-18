@@ -19,17 +19,9 @@ namespace iRacingReplayDirector
 		{
 			AppSettings appSettings = new AppSettings()
 			{
-				WindowAlwaysOnTop = vm.WindowAlwaysOnTop,
-				ShowVisualTimeline = vm.ShowVisualTimeline,
-				ShowRecordingButtons = vm.ShowRecordingButtons,
-				ShowSessionLapSkipButtons = vm.ShowSessionLapSkipButtons,
-				ShowDriverCameraPanels = vm.ShowDriverCameraPanels,
-				ShowTimelineNodeList = vm.ShowTimelineNodeList,
-				DisableSimUIOnPlayback = vm.DisableSimUIOnPlayback,
-				DisableUIWhenRecording = vm.DisableUIWhenRecording,
-				StopRecordingOnFinalNode = vm.StopRecordingOnFinalNode,
-				UseInSimCapture = vm.UseInSimCapture,
-				UseOBSCapture = vm.UseOBSCapture
+				WindowSize = new AppSettings.Window(vm.WindowWidth, vm.WindowHeight),
+				UIOptions = new AppSettings.InterfaceOptions(vm.WindowAlwaysOnTop, vm.ShowVisualTimeline, vm.ShowRecordingControls, vm.ShowSessionLapSkipControls),
+				SimOptions = new AppSettings.SimOptionsClass(vm.DisableSimUIOnPlayback, vm.DisableUIWhenRecording, vm.StopRecordingOnFinalNode, vm.UseInSimCapture, vm.UseOBSCapture)
 			};
 
 			var saveFilePath = GenerateSettingsFilePath();
