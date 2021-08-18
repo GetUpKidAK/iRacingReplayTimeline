@@ -6,7 +6,7 @@
 		xmlns:vm="clr-namespace:iRacingReplayDirector"
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
 		MinHeight="200" MaxHeight="600" Height="600"
-		MinWidth="500" MaxWidth="1200" Width="1000"
+		MinWidth="500" MaxWidth="1000" Width="1000"
 		SizeToContent="Width" ResizeMode="CanMinimize" Topmost="{Binding WindowAlwaysOnTop}"
 		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
 		Title="{Binding WindowTitle}">
@@ -74,7 +74,7 @@
 			</Grid.ColumnDefinitions>
 			
 			<!-- DRIVER PANEL -->
-			<DockPanel Grid.Column="0" Margin="5" Width="250" 
+			<DockPanel Grid.Column="0" Margin="5" Width="270" 
 					   Visibility="{Binding ShowDriverCameraPanels, Converter={StaticResource VisibilityConverter}}">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="0 5 0 5" Height="25">
 					<Button Content="Car Behind" Command="{Binding PreviousDriverCommand}" Width="80" />
@@ -101,10 +101,10 @@
 			</DockPanel>
 
 			<!-- CENTRAL PANEL -->
-			<DockPanel Grid.Column="1" Margin="5">
+			<DockPanel Grid.Column="1" Margin="0 5 0 5">
 				<DockPanel.Resources>
 					<Style TargetType="Grid">
-						<Setter Property="Grid.Margin" Value="5"/>
+						<Setter Property="Grid.Margin" Value="5 5 5 0"/>
 					</Style>
 					<Style TargetType="GroupBox">
 						<Setter Property="Padding" Value="5"/>
@@ -193,9 +193,9 @@
 				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowDriverCameraPanels,
 					Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="210" Margin="5"
+						<ComboBox ItemsSource="{Binding Drivers}" SelectedItem="{Binding CurrentDriver}" DisplayMemberPath="Name" Width="210" Margin="0 0 5 0"
 									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
-						<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="210" Margin="5"
+						<ComboBox ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" DisplayMemberPath="GroupName" Width="210" Margin="5 0 0 0"
 									  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}"/>
 					</StackPanel>
 				</Grid>
@@ -242,17 +242,17 @@
 			</DockPanel>
 
 			<!-- CAMERA PANEL -->
-			<DockPanel Grid.Column="2" Margin="5" Width="250" Visibility="{Binding ShowDriverCameraPanels,
+			<DockPanel Grid.Column="2" Margin="5" Width="220" Visibility="{Binding ShowDriverCameraPanels,
 				Converter={StaticResource VisibilityConverter}}">
 				<ListView DockPanel.Dock="Top" ItemsSource="{Binding Cameras}" SelectedItem="{Binding CurrentCamera}" SelectionMode="Single"
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}">
 					<ListView.View>
 						<GridView>
-							<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
-								<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
-							</GridViewColumn>
 							<GridViewColumn Width="50" DisplayMemberBinding="{Binding GroupNum}">
 								<GridViewColumnHeader Content="Group #" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="140" DisplayMemberBinding="{Binding GroupName}">
+								<GridViewColumnHeader Content="Camera Name" IsEnabled="False" />
 							</GridViewColumn>
 						</GridView>
 					</ListView.View>
