@@ -98,8 +98,11 @@ namespace iRacingReplayDirector
 		{
 			var loadedSettings = SaveLoadHelper.LoadSettings();
 
-			if (loadedSettings != null)
+			if (loadedSettings != null && loadedSettings.SettingsAreValid())
 			{
+				WindowWidth = loadedSettings.WindowSize.Width;
+				WindowHeight = loadedSettings.WindowSize.Height;
+
 				WindowAlwaysOnTop = loadedSettings.UIOptions.WindowAlwaysOnTop;
 				ShowVisualTimeline = loadedSettings.UIOptions.ShowVisualTimeline;
 				ShowRecordingControls = loadedSettings.UIOptions.ShowRecordingControls;
@@ -112,9 +115,6 @@ namespace iRacingReplayDirector
 
 				if (UseInSimCapture && UseOBSCapture)
 					UseOBSCapture = false;
-
-				WindowWidth = loadedSettings.WindowSize.Width;
-				WindowHeight = loadedSettings.WindowSize.Height;
 			}
 			else
 			{

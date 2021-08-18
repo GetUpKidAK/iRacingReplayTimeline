@@ -30,7 +30,7 @@ namespace iRacingReplayDirector
 		{
 			_vm.ShowDriverCameraPanels = e.NewSize.Width > _vm.WidthToDisableSidePanels;
 
-			if (e.PreviousSize.Height == 0 || e.PreviousSize.Width == 0)
+			if (!e.HeightChanged)
 				return;
 
 			bool previouslyLowEnoughToDisable = e.PreviousSize.Height < _vm.HeightToDisableControls;
@@ -39,9 +39,7 @@ namespace iRacingReplayDirector
 			// If height was short and is now tall enough
 			if (previouslyLowEnoughToDisable && nowHighEnoughToEnable)
 			{
-				//_vm.ShowVisualTimeline = e.NewSize.Height > _vm.HeightToDisableControls;
-				//_vm.ShowSessionLapSkipControls = e.NewSize.Height > _vm.HeightToDisableControls;
-				//_vm.ShowRecordingControls = e.NewSize.Height > _vm.HeightToDisableControls;
+				
 			}
 
 			// If height was tall enough and is now short enough

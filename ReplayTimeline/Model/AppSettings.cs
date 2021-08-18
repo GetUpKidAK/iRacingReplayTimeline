@@ -8,11 +8,13 @@ namespace iRacingReplayDirector
 		public InterfaceOptions UIOptions { get; set; }
 		public SimOptionsClass SimOptions { get; set; }
 
+		public AppSettings() { }
 
-		public AppSettings()
+		public bool SettingsAreValid()
 		{
-			
+			return WindowSize != null && UIOptions != null && SimOptions != null;
 		}
+
 
 		public class Window
 		{
