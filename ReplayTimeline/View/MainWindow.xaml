@@ -6,7 +6,7 @@
 		xmlns:vm="clr-namespace:iRacingReplayDirector"
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
 		MinWidth="500" MaxWidth="1000" Width="{Binding WindowWidth, Mode=TwoWay}"
-		MinHeight="400" MaxHeight="800" Height="{Binding WindowHeight, Mode=TwoWay}"
+		MinHeight="400" MaxHeight="920" Height="{Binding WindowHeight, Mode=TwoWay}"
 		Topmost="{Binding WindowAlwaysOnTop}"
 		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
 		SizeChanged="Window_SizeChanged"
