@@ -340,9 +340,7 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("ShowDriverCameraPanels"); }
 		}
 
-		public int HeightToDisableAllControls { get { return 450; } }
-		public int HeightToDisableTwoControls { get { return 480; } }
-		public int HeightToDisableOneControl { get { return 500; } }
+		public int HeightToDisableControls { get { return 500; } }
 		public int WidthToDisableSidePanels { get { return 900; } }
 
 
@@ -417,11 +415,6 @@ namespace iRacingReplayDirector
 		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
 		public ToggleUseInSimCaptureCommand ToggleUseInSimCaptureCommand { get; set; }
 		public ToggleUseOBSCaptureCommand ToggleUseOBSCaptureCommand { get; set; }
-
-		public ToggleDriverCameraPanelsCommand ToggleDriverCameraPanelsCommand { get; set; }
-		public ToggleVisualTimelineCommand ToggleVisualTimelineCommand { get; set; }
-		public ToggleRecordingControlsCommand ToggleRecordingControlsCommand { get; set; }
-		public ToggleSessionLapSkipCommand ToggleSessionLapSkipCommand { get; set; }
 		#endregion
 	}
 }

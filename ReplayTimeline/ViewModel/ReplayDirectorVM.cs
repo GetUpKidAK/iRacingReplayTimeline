@@ -91,11 +91,6 @@ namespace iRacingReplayDirector
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
 
-			ToggleDriverCameraPanelsCommand = new ToggleDriverCameraPanelsCommand(this);
-			ToggleVisualTimelineCommand = new ToggleVisualTimelineCommand(this);
-			ToggleRecordingControlsCommand = new ToggleRecordingControlsCommand(this);
-			ToggleSessionLapSkipCommand = new ToggleSessionLapSkipCommand(this);
-
 			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
 		}
 

@@ -33,15 +33,23 @@ namespace iRacingReplayDirector
 			if (e.PreviousSize.Height == 0 || e.PreviousSize.Width == 0)
 				return;
 
-			if (e.PreviousSize.Height < _vm.HeightToDisableOneControl)
+			bool previouslyLowEnoughToDisable = e.PreviousSize.Height < _vm.HeightToDisableControls;
+			bool nowHighEnoughToEnable = e.NewSize.Height > _vm.HeightToDisableControls;
+			
+			// If height was short and is now tall enough
+			if (previouslyLowEnoughToDisable && nowHighEnoughToEnable)
 			{
-				_vm.ShowVisualTimeline = e.NewSize.Height > _vm.HeightToDisableOneControl;
+				//_vm.ShowVisualTimeline = e.NewSize.Height > _vm.HeightToDisableControls;
+				//_vm.ShowSessionLapSkipControls = e.NewSize.Height > _vm.HeightToDisableControls;
+				//_vm.ShowRecordingControls = e.NewSize.Height > _vm.HeightToDisableControls;
 			}
 
-			if (e.PreviousSize.Height < _vm.HeightToDisableAllControls)
+			// If height was tall enough and is now short enough
+			if (!previouslyLowEnoughToDisable && !nowHighEnoughToEnable)
 			{
-				_vm.ShowSessionLapSkipControls = e.NewSize.Height > _vm.HeightToDisableAllControls;
-				_vm.ShowRecordingControls = e.NewSize.Height > _vm.HeightToDisableAllControls;
+				_vm.ShowVisualTimeline = e.NewSize.Height > _vm.HeightToDisableControls;
+				_vm.ShowSessionLapSkipControls = e.NewSize.Height > _vm.HeightToDisableControls;
+				_vm.ShowRecordingControls = e.NewSize.Height > _vm.HeightToDisableControls;
 			}
 		}
 	}

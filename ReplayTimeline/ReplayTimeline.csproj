@@ -77,10 +77,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\Nodes\ClearAllNodesCommand.cs" />
-    <Compile Include="Commands\Menu Items\ToggleRecordingControlsCommand.cs" />
-    <Compile Include="Commands\Menu Items\ToggleSessionLapSkipCommand.cs" />
-    <Compile Include="Commands\Menu Items\ToggleVisualTimelineCommand.cs" />
-    <Compile Include="Commands\Menu Items\ToggleDriverCameraPanelsCommand.cs" />
     <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />

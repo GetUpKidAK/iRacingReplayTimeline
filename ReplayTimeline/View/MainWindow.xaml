@@ -44,9 +44,9 @@
 				<MenuItem Header="View">
 					<MenuItem Header="Always On Top" IsCheckable="True" IsChecked="{Binding WindowAlwaysOnTop}" />
 					<Separator />
-					<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}" Command="{Binding ToggleVisualTimelineCommand}"/>
-					<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingControls}" Command="{Binding ToggleRecordingControlsCommand}" />
-					<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipControls}" Command="{Binding ToggleSessionLapSkipCommand}" />
+					<MenuItem Header="Visual Timeline" IsCheckable="True" IsChecked="{Binding ShowVisualTimeline}" />
+					<MenuItem Header="Recording Controls" IsCheckable="True" IsChecked="{Binding ShowRecordingControls}" />
+					<MenuItem Header="Session/Lap Controls" IsCheckable="True" IsChecked="{Binding ShowSessionLapSkipControls}" />
 				</MenuItem>
 
 				<MenuItem Header="Help">
@@ -263,7 +263,7 @@
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="1.8*"/>
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>
 						</Grid>
