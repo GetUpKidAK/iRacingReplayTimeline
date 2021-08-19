@@ -125,7 +125,7 @@ namespace iRacingReplayDirector
 				ShowRecordingControls = true;
 				ShowSessionLapSkipControls = true;
 
-				DisableSimUIOnPlayback = false;
+				DisableSimUIOnPlayback = true;
 				DisableUIWhenRecording = true;
 				StopRecordingOnFinalNode = false;
 
