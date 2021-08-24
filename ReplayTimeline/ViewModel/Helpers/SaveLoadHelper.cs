@@ -59,8 +59,14 @@ namespace iRacingReplayDirector
 				if (node is CamChangeNode)
 				{
 					CamChangeNode camChangeNode = node as CamChangeNode;
+					NodeSaveFile newSaveNode = new NodeSaveFile(camChangeNode.Enabled, camChangeNode.Frame, NodeType.CamChange, 1, camChangeNode.Driver.NumberRaw, camChangeNode.Camera.GroupName);
 
-					NodeSaveFile newSaveNode = new NodeSaveFile(camChangeNode.Enabled, camChangeNode.Frame, 1, camChangeNode.Driver.NumberRaw, camChangeNode.Camera.GroupName);
+					newProject.Nodes.Add(newSaveNode);
+				}
+				else
+				{
+					FrameSkipNode frameSkipNode = node as FrameSkipNode;
+					NodeSaveFile newSaveNode = new NodeSaveFile(frameSkipNode.Enabled, frameSkipNode.Frame, NodeType.FrameSkip);
 
 					newProject.Nodes.Add(newSaveNode);
 				}

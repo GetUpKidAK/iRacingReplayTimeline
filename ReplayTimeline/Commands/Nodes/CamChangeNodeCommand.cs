@@ -74,7 +74,7 @@ namespace iRacingReplayDirector
 
 				if (!timelineFrames.Contains(ReplayDirectorVM.CurrentFrame))
 				{
-					CamChangeNode newNode = new CamChangeNode(ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera);
+					CamChangeNode newNode = new CamChangeNode(true, ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera);
 
 					ReplayDirectorVM.NodeCollection.AddNode(newNode);
 					storedNode = newNode;

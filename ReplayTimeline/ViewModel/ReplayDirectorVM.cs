@@ -306,7 +306,8 @@ namespace iRacingReplayDirector
 					}
 				}
 
-				//LoadExistingProjectFile();
+				NodeCollection.SetSessionId(SessionID);
+				LoadExistingProjectFile();
 
 				InSimUIEnabled = true;
 				SessionInfoLoaded = true;
@@ -487,42 +488,45 @@ namespace iRacingReplayDirector
 			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
 		}
 
-		//private void LoadExistingProjectFile()
-		//{
-		//	var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
-		//	if (loaddedProject.Nodes.Count > 0)
-		//	{
-		//		Nodes.NodeList.Clear();
+		private void LoadExistingProjectFile()
+		{
+			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+			if (loaddedProject.Nodes.Count > 0)
+			{
+				NodeCollection.Nodes.Clear();
 
-		//		foreach (var node in loaddedProject.Nodes)
-		//		{
-		//			var foundDriver = Drivers.FirstOrDefault(d => d.NumberRaw == node.DriverNumber);
-		//			var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
+				foreach (var node in loaddedProject.Nodes)
+				{
+					if (node.NodeType == NodeType.CamChange)
+					{
+						var foundDriver = Drivers.FirstOrDefault(d => d.NumberRaw == node.DriverNumber);
+						var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
 
-		//			if (foundDriver == null)
-		//			{
-		//				Console.WriteLine($"ERROR: Couldn't find driver with number {node.DriverNumber}. Node ignored.");
-		//			}
-		//			else
-		//			{
-		//				if (foundCamera == null)
-		//					foundCamera = new Camera() { GroupName = node.CameraName };
+						if (foundDriver == null)
+						{
+							Console.WriteLine($"ERROR: Couldn't find driver with number {node.DriverNumber}. Node ignored.");
+						}
+						else
+						{
+							if (foundCamera == null)
+								foundCamera = new Camera() { GroupName = node.CameraName };
 
-		//				TimelineNode newTimelineNode = new TimelineNode()
-		//				{
-		//					Enabled = node.Enabled,
-		//					Frame = node.Frame,
-		//					Driver = foundDriver,
-		//					Camera = foundCamera
-		//				};
+							CamChangeNode newCamChangeNode = new CamChangeNode(node.Enabled, node.Frame, foundDriver, foundCamera);
 
-		//				Nodes.Add(newTimelineNode);
-		//			}
-		//		}
+							NodeCollection.AddNode(newCamChangeNode);
+						}
+					}
+					else if (node.NodeType == NodeType.FrameSkip)
+					{
+						FrameSkipNode newFrameSkipNode = new FrameSkipNode(node.Enabled, node.Frame);
 
-		//		VerifyExistingNodeCameras();
-		//	}
-		//}
+						NodeCollection.AddNode(newFrameSkipNode);
+					}
+				}
+
+				VerifyExistingNodeCameras();
+			}
+		}
 
 		public bool IsCaptureAvailable()
 		{

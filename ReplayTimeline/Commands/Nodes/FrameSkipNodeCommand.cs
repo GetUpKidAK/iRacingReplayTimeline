@@ -37,7 +37,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			FrameSkipNode newNode = new FrameSkipNode(ReplayDirectorVM.CurrentFrame);
+			FrameSkipNode newNode = new FrameSkipNode(true, ReplayDirectorVM.CurrentFrame);
 
 			ReplayDirectorVM.NodeCollection.AddNode(newNode);
 

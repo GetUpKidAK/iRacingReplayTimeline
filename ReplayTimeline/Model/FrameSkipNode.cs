@@ -5,8 +5,9 @@ namespace iRacingReplayDirector
 {
 	public class FrameSkipNode : Node
 	{
-		public FrameSkipNode(int frame)
+		public FrameSkipNode(bool enabled, int frame)
 		{
+			Enabled = enabled;
 			Frame = frame;
 
 			UpdateLabel();
@@ -36,9 +37,11 @@ namespace iRacingReplayDirector
 				return;
 			}
 
-			// Otherwise...
-			Sim.Instance.Sdk.Replay.SetPosition(NextNode.Frame);
-			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
+			if (NextNode != null)
+			{
+				Sim.Instance.Sdk.Replay.SetPosition(NextNode.Frame);
+				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
+			}
 		}
 	}
 }

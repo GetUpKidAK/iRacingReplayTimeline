@@ -9,6 +9,7 @@ namespace iRacingReplayDirector
 	{
 		public ObservableCollection<Node> Nodes { get; private set; }
 
+		public int SessionID { get; private set; }
 		public bool NodesListOccupied { get { return Nodes.Count > 0; } }
 
 
@@ -45,6 +46,12 @@ namespace iRacingReplayDirector
 				SaveNodeChanges();
 			}
 		}
+
+		public void SetSessionId(int sessionId)
+		{
+			SessionID = sessionId;
+		}
+
 
 		public void AddNode(Node newNode)
 		{
@@ -123,7 +130,7 @@ namespace iRacingReplayDirector
 
 		public void SaveNodeChanges()
 		{
-			//SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
+			SaveLoadHelper.SaveProject(Nodes.ToList(), SessionID);
 		}
 	}
 }

@@ -19,8 +19,9 @@ namespace iRacingReplayDirector
 			set { _camera = value; UpdateLabel(); OnPropertyChanged("Camera"); }
 		}
 
-		public CamChangeNode(int frame, Driver driver, Camera camera)
+		public CamChangeNode(bool enabled, int frame, Driver driver, Camera camera)
 		{
+			Enabled = enabled;
 			Frame = frame;
 			Driver = driver;
 			Camera = camera;
