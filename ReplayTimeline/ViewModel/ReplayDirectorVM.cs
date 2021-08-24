@@ -142,7 +142,7 @@ namespace iRacingReplayDirector
 			SessionInfoLoaded = false;
 			Drivers.Clear();
 			Cameras.Clear();
-			NodeCollection.RemoveAllNodes();
+			NodeCollection.Nodes.Clear();
 			StatusBarSessionID = "No Session Loaded.";
 			StatusBarCurrentSessionInfo = "";
 		}
