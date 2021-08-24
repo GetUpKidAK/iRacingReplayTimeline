@@ -20,12 +20,6 @@ namespace iRacingReplayDirector
 			set { _frame = value; OnPropertyChanged("Frame"); }
 		}
 
-		private string _nodeLabel;
-		public string NodeLabel
-		{
-			get { return _nodeLabel; }
-			set { _nodeLabel = value; OnPropertyChanged("NodeLabel"); }
-		}
 
 		private Node _prevNode;
 		public Node PreviousNode
@@ -41,7 +35,14 @@ namespace iRacingReplayDirector
 			set { _nextNode = value; UpdateLabel(); }
 		}
 
-		//TODO: CONSTRUCTOR??
+
+		private string _nodeLabel;
+		public string NodeLabel
+		{
+			get { return _nodeLabel; }
+			set { _nodeLabel = value; OnPropertyChanged("NodeLabel"); }
+		}
+
 
 		public abstract void ApplyNode();
 		protected abstract void UpdateLabel();

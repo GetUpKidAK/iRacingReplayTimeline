@@ -513,14 +513,35 @@ namespace iRacingReplayDirector
 
 							CamChangeNode newCamChangeNode = new CamChangeNode(node.Enabled, node.Frame, foundDriver, foundCamera);
 
-							NodeCollection.AddNode(newCamChangeNode);
+							NodeCollection.Nodes.Add(newCamChangeNode);
 						}
 					}
 					else if (node.NodeType == NodeType.FrameSkip)
 					{
 						FrameSkipNode newFrameSkipNode = new FrameSkipNode(node.Enabled, node.Frame);
 
-						NodeCollection.AddNode(newFrameSkipNode);
+						NodeCollection.Nodes.Add(newFrameSkipNode);
+					}
+				}
+
+				// Add node links
+				for (int i = 0; i < NodeCollection.Nodes.Count; i++)
+				{
+					if (i > 0 && i < NodeCollection.Nodes.Count - 1)
+					{
+						NodeCollection.Nodes[i].NextNode = NodeCollection.Nodes[i + 1];
+						NodeCollection.Nodes[i].PreviousNode = NodeCollection.Nodes[i - 1];
+					}
+					else
+					{
+						if (i == 0)
+						{
+							NodeCollection.Nodes[i].NextNode = NodeCollection.Nodes[i + 1];
+						}
+						if (i == NodeCollection.Nodes.Count - 1)
+						{
+							NodeCollection.Nodes[i].PreviousNode = NodeCollection.Nodes[i - 1];
+						}
 					}
 				}
 

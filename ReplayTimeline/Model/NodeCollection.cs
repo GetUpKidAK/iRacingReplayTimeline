@@ -60,26 +60,25 @@ namespace iRacingReplayDirector
 			if (previouslyActiveNode == null)
 			{
 				Prepend(newNode);
-				SaveNodeChanges();
-
-				return;
 			}
+			else
+			{
+				// Chain events
+				newNode.NextNode = previouslyActiveNode.NextNode;
+				newNode.PreviousNode = previouslyActiveNode;
+				if (newNode.NextNode != null) newNode.NextNode.PreviousNode = newNode;
 
-			// Chain events
-			newNode.NextNode = previouslyActiveNode.NextNode;
-			newNode.PreviousNode = previouslyActiveNode;
-			if (newNode.NextNode != null) newNode.NextNode.PreviousNode = newNode;
+				previouslyActiveNode.NextNode = newNode;
 
-			previouslyActiveNode.NextNode = newNode;
-
-			// Insert in collection
-			int index = Nodes.IndexOf(previouslyActiveNode) + 1;
-			Nodes.Insert(index, newNode);
+				// Insert in collection
+				int index = Nodes.IndexOf(previouslyActiveNode) + 1;
+				Nodes.Insert(index, newNode);
+			}
 
 			SaveNodeChanges();
 		}
 
-		public bool RemoveNode(Node nodeToRemove)
+		public void RemoveNode(Node nodeToRemove)
 		{
 			Node prev = nodeToRemove.PreviousNode;
 			Node next = nodeToRemove.NextNode;
@@ -94,9 +93,8 @@ namespace iRacingReplayDirector
 				next.PreviousNode = nodeToRemove.PreviousNode;
 			}
 
+			Nodes.Remove(nodeToRemove);
 			SaveNodeChanges();
-
-			return Nodes.Remove(nodeToRemove);
 		}
 
 		public void RemoveAllNodes()

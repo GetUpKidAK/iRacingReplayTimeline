@@ -18,12 +18,12 @@ namespace iRacingReplayDirector
 			if (NextNode == null)
 			{
 				Enabled = false;
-				NodeLabel = $"Frame #{Frame} - Skip Frame - NEEDS A NODE TO SKIP TO";
+				NodeLabel = $"Skip Frame - NEEDS A NODE TO SKIP TO";
 			}
 			else
 			{
-				Enabled = true;
-				NodeLabel = $"Frame #{Frame} - Skip Frame - Jump to {NextNode.Frame}";
+				Enabled = NextNode.Enabled;
+				NodeLabel = $"Skip Frame - Jump to {NextNode.Frame}";
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace iRacingReplayDirector
 				return;
 			}
 
-			if (NextNode != null)
+			if (NextNode != null && Enabled)
 			{
 				Sim.Instance.Sdk.Replay.SetPosition(NextNode.Frame);
 				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);

@@ -223,7 +223,10 @@
 								</GridViewColumn.CellTemplate>
 							</GridViewColumn>
 
-							<GridViewColumn Width="400" DisplayMemberBinding="{Binding NodeLabel}">
+							<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
+								<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
+							</GridViewColumn>
+							<GridViewColumn Width="330" DisplayMemberBinding="{Binding NodeLabel}">
 								<GridViewColumnHeader Content="Node" IsEnabled="False" />
 							</GridViewColumn>
 

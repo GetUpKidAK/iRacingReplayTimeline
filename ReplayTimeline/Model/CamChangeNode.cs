@@ -33,7 +33,7 @@ namespace iRacingReplayDirector
 		{
 			if (Driver == null || Camera == null) return;
 
-			NodeLabel = $"Frame #{Frame} - Cut to {Driver.TeamName} ({Camera.GroupName})";
+			NodeLabel = $"Cut to {Driver.TeamName} ({Camera.GroupName})";
 		}
 
 		public override void ApplyNode()

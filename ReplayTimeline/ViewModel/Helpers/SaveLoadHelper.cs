@@ -87,6 +87,9 @@ namespace iRacingReplayDirector
 				{
 					string fileContents = File.ReadAllText(saveFilePath);
 					loadedProject = JsonConvert.DeserializeObject<TimelineProject>(fileContents);
+
+					if (loadedProject == null)
+						loadedProject = new TimelineProject();
 				}
 				catch (Exception e)
 				{
