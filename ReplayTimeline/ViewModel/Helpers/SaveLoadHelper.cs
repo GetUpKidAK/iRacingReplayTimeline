@@ -49,16 +49,21 @@ namespace iRacingReplayDirector
 			return loadedSettings;
 		}
 
-		public static void SaveProject(List<TimelineNode> nodes, int sessionID)
+		public static void SaveProject(List<Node> nodes, int sessionID)
 		{
 			TimelineProject newProject = new TimelineProject();
 			newProject.SessionID = sessionID;
 
 			foreach (var node in nodes)
 			{
-				NodeSaveFile newSaveNode = new NodeSaveFile(node.Enabled, node.Frame, 1, node.Driver.NumberRaw, node.Camera.GroupName);
+				if (node is CamChangeNode)
+				{
+					CamChangeNode camChangeNode = node as CamChangeNode;
 
-				newProject.Nodes.Add(newSaveNode);
+					NodeSaveFile newSaveNode = new NodeSaveFile(camChangeNode.Enabled, camChangeNode.Frame, 1, camChangeNode.Driver.NumberRaw, camChangeNode.Camera.GroupName);
+
+					newProject.Nodes.Add(newSaveNode);
+				}
 			}
 
 			var saveFilePath = GenerateProjectFilePath(sessionID);

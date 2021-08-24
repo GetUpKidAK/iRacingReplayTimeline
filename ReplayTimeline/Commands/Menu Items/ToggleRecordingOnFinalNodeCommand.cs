@@ -30,8 +30,8 @@ namespace iRacingReplayDirector
 			if (ReplayDirectorVM.IsCaptureActive())
 			{
 				// If capture is active disable the button if the final node is already gone
-				IEnumerable<TimelineNode> orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>();
-				TimelineNode finalNode = orderedNodes.LastOrDefault(node => node.Frame > ReplayDirectorVM.CurrentFrame);
+				IEnumerable<Node> orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<Node>();
+				var finalNode = orderedNodes.LastOrDefault(node => node.Frame > ReplayDirectorVM.CurrentFrame);
 
 				return finalNode != null;
 			}

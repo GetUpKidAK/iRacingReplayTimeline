@@ -27,29 +27,29 @@ namespace iRacingReplayDirector
 		/// BINDING PROPERTIES
 		/// </summary>
 		#region Binding Properties
-		public ObservableCollection<TimelineNode> TimelineNodes { get; set; }
+		public NodeCollection Nodes { get; set; }
 		public ICollectionView TimelineNodesView { get; private set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ICollectionView DriversView { get; private set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
 
-		private TimelineNode _currentTimelineNode;
-		public TimelineNode CurrentTimelineNode
+		private Node _currentNode;
+		public Node CurrentNode
 		{
-			get { return _currentTimelineNode; }
+			get { return _currentNode; }
 			set
 			{
-				if (_currentTimelineNode != value && value != null)
+				if (_currentNode != value && value != null)
 				{
-					_currentTimelineNode = value;
-					_currentTimelineNode.ApplyNode();
-					OnPropertyChanged("CurrentTimelineNode");
+					_currentNode = value;
+					_currentNode.ApplyNode();
+					OnPropertyChanged("CurrentNode");
 				}
 			}
 		}
 
-		private TimelineNode _lastAppliedNode;
+		private Node _lastAppliedNode;
 
 		private Driver _currentDriver;
 		public Driver CurrentDriver
@@ -381,7 +381,7 @@ namespace iRacingReplayDirector
 		/// COMMANDS
 		/// </summary>
 		#region Commands
-		public StoreCurrentFrameCommand StoreCurrentFrameCommand { get; set; }
+		public CamChangeNodeCommand CamChangeNodeCommand { get; set; }
 		public ClearAllNodesCommand ClearAllNodesCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }

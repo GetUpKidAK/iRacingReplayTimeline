@@ -38,8 +38,8 @@ namespace iRacingReplayDirector
 
 			Sim.Instance.Start();
 
-			TimelineNodes = new ObservableCollection<TimelineNode>();
-			TimelineNodesView = CollectionViewSource.GetDefaultView(TimelineNodes);
+			Nodes = new NodeCollection();
+			TimelineNodesView = CollectionViewSource.GetDefaultView(Nodes.NodeList); // TODO: MOVE
 			Drivers = new ObservableCollection<Driver>();
 			DriversView = CollectionViewSource.GetDefaultView(Drivers);
 			Cameras = new ObservableCollection<Camera>();
@@ -59,7 +59,7 @@ namespace iRacingReplayDirector
 
 			GetAppSettings();
 
-			StoreCurrentFrameCommand = new StoreCurrentFrameCommand(this);
+			CamChangeNodeCommand = new CamChangeNodeCommand(this);
 			ClearAllNodesCommand = new ClearAllNodesCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
@@ -91,7 +91,7 @@ namespace iRacingReplayDirector
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
 
-			TimelineNodes.CollectionChanged += TimelineNodes_CollectionChanged;
+			Nodes.NodeList.CollectionChanged += TimelineNodes_CollectionChanged; // TODO: MOVE
 		}
 
 		private void GetAppSettings()
@@ -186,7 +186,7 @@ namespace iRacingReplayDirector
 			SessionInfoLoaded = false;
 			Drivers.Clear();
 			Cameras.Clear();
-			TimelineNodes.Clear();
+			Nodes.NodeList.Clear(); // TODO: MOVE
 			StatusBarSessionID = "No Session Loaded.";
 			StatusBarCurrentSessionInfo = "";
 		}
@@ -301,23 +301,28 @@ namespace iRacingReplayDirector
 
 		private void VerifyExistingNodeCameras()
 		{
-			foreach (var node in TimelineNodes)
+			foreach (var currentNode in Nodes.NodeList)
 			{
-				// Check for node camera in camera list, based on name
-				var existingCameraInSession = Cameras.FirstOrDefault(c => c.GroupName == node.Camera.GroupName);
+				if (currentNode is CamChangeNode)
+				{
+					CamChangeNode node = currentNode as CamChangeNode;
 
-				if (existingCameraInSession == null)
-				{
-					// Disable node if it wasn't found
-					node.Enabled = false;
-				}
-				else
-				{
-					// If a camera is found but the group number is different...
-					if (node.Camera.GroupNum != existingCameraInSession.GroupNum)
+					// Check for node camera in camera list, based on name
+					var existingCameraInSession = Cameras.FirstOrDefault(c => c.GroupName == node.Camera.GroupName);
+
+					if (existingCameraInSession == null)
 					{
-						// Set the camera group number to the one in the active camera liust
-						node.Camera.GroupNum = existingCameraInSession.GroupNum;
+						// Disable node if it wasn't found
+						node.Enabled = false;
+					}
+					else
+					{
+						// If a camera is found but the group number is different...
+						if (node.Camera.GroupNum != existingCameraInSession.GroupNum)
+						{
+							// Set the camera group number to the one in the active camera liust
+							node.Camera.GroupNum = existingCameraInSession.GroupNum;
+						}
 					}
 				}
 			}
@@ -345,7 +350,7 @@ namespace iRacingReplayDirector
 					}
 				}
 
-				LoadExistingProjectFile();
+				//LoadExistingProjectFile();
 
 				InSimUIEnabled = true;
 				SessionInfoLoaded = true;
@@ -380,8 +385,8 @@ namespace iRacingReplayDirector
 
 			if (!PlaybackEnabled)
 			{
-				var currentNode = TimelineNodes.LastOrDefault(node => node.Frame == CurrentFrame);
-				_currentTimelineNode = currentNode; OnPropertyChanged("CurrentTimelineNode");
+				var currentNode = Nodes.NodeList.LastOrDefault(node => node.Frame == CurrentFrame); // TODO: Update
+				_currentNode = currentNode; OnPropertyChanged("CurrentNode");
 
 				UpdateUILabels();
 
@@ -495,8 +500,8 @@ namespace iRacingReplayDirector
 			if (!NormalPlaybackSpeedEnabled)
 				return;
 
-			IEnumerable<TimelineNode> orderedNodes = TimelineNodesView.Cast<TimelineNode>();
-			TimelineNode nodeToApply = orderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
+			IEnumerable<Node> orderedNodes = TimelineNodesView.Cast<Node>();
+			Node nodeToApply = orderedNodes.LastOrDefault(node => node.Frame <= CurrentFrame);
 
 			if (StopRecordingOnFinalNode && IsCaptureActive())
 			{
@@ -514,58 +519,58 @@ namespace iRacingReplayDirector
 				return;
 
 			_lastAppliedNode = nodeToApply;
-			CurrentTimelineNode = nodeToApply;
+			CurrentNode = nodeToApply;
 		}
 
 		private void UpdateUILabels()
 		{
-			StoreFrameBtnText = CurrentTimelineNode == null ? "Store Node" : "Update Node";
+			StoreFrameBtnText = CurrentNode == null ? "Store Node" : "Update Node";
 
 			CaptureModeText = "Capture Mode: None";
 			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";
 			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
 		}
 
-		private void LoadExistingProjectFile()
-		{
-			var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
-			if (loaddedProject.Nodes.Count > 0)
-			{
-				TimelineNodes.Clear();
+		//private void LoadExistingProjectFile()
+		//{
+		//	var loaddedProject = SaveLoadHelper.LoadProject(SessionID);
+		//	if (loaddedProject.Nodes.Count > 0)
+		//	{
+		//		Nodes.NodeList.Clear();
 
-				foreach (var node in loaddedProject.Nodes)
-				{
-					var foundDriver = Drivers.FirstOrDefault(d => d.NumberRaw == node.DriverNumber);
-					var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
+		//		foreach (var node in loaddedProject.Nodes)
+		//		{
+		//			var foundDriver = Drivers.FirstOrDefault(d => d.NumberRaw == node.DriverNumber);
+		//			var foundCamera = Cameras.FirstOrDefault(c => c.GroupName == node.CameraName);
 
-					if (foundDriver == null)
-					{
-						Console.WriteLine($"ERROR: Couldn't find driver with number {node.DriverNumber}. Node ignored.");
-					}
-					else
-					{
-						if (foundCamera == null)
-							foundCamera = new Camera() { GroupName = node.CameraName };
+		//			if (foundDriver == null)
+		//			{
+		//				Console.WriteLine($"ERROR: Couldn't find driver with number {node.DriverNumber}. Node ignored.");
+		//			}
+		//			else
+		//			{
+		//				if (foundCamera == null)
+		//					foundCamera = new Camera() { GroupName = node.CameraName };
 
-						TimelineNode newTimelineNode = new TimelineNode()
-						{
-							Enabled = node.Enabled,
-							Frame = node.Frame,
-							Driver = foundDriver,
-							Camera = foundCamera
-						};
+		//				TimelineNode newTimelineNode = new TimelineNode()
+		//				{
+		//					Enabled = node.Enabled,
+		//					Frame = node.Frame,
+		//					Driver = foundDriver,
+		//					Camera = foundCamera
+		//				};
 
-						TimelineNodes.Add(newTimelineNode);
-					}
-				}
+		//				Nodes.Add(newTimelineNode);
+		//			}
+		//		}
 
-				VerifyExistingNodeCameras();
-			}
-		}
+		//		VerifyExistingNodeCameras();
+		//	}
+		//}
 
 		public void SaveProjectChanges()
 		{
-			SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
+			//SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
 		}
 
 		public bool IsCaptureAvailable()

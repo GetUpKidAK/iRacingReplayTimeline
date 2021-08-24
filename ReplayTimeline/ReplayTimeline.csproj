@@ -76,7 +76,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\CamChangeNode.cs" />
     <Compile Include="Commands\Nodes\ClearAllNodesCommand.cs" />
+    <Compile Include="Model\FrameSkipNode.cs" />
+    <Compile Include="Model\Node.cs" />
+    <Compile Include="NodeCollection.cs" />
     <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />
@@ -110,7 +114,6 @@
     <Compile Include="Commands\Nodes\NextStoredFrameCommand.cs" />
     <Compile Include="Commands\Nodes\PreviousStoredFrameCommand.cs" />
     <Compile Include="Model\Driver.cs" />
-    <Compile Include="Model\TimelineNode.cs" />
     <Compile Include="Commands\Playback\SlowMotionCommand.cs" />
     <Compile Include="Commands\Session\NextDriverCommand.cs" />
     <Compile Include="Commands\Session\PreviousDriverCommand.cs" />
@@ -119,7 +122,7 @@
     <Compile Include="ViewModel\Helpers\SaveLoadHelper.cs" />
     <Compile Include="Model\TimelineProject.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.cs" />
-    <Compile Include="Commands\Nodes\StoreCurrentFrameCommand.cs" />
+    <Compile Include="Commands\Nodes\CamChangeNodeCommand.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

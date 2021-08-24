@@ -33,9 +33,9 @@ namespace iRacingReplayDirector
 
 			if (ReplayDirectorVM.StopRecordingOnFinalNode)
 			{
-				if (ReplayDirectorVM.TimelineNodes.Count > 0)
+				if (ReplayDirectorVM.Nodes.NodeList.Count > 0)
 				{
-					var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<TimelineNode>().ToList();
+					var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<Node>().ToList();
 					var finalNode = orderedNodes[orderedNodes.Count - 1];
 
 					if (ReplayDirectorVM.CurrentFrame >= finalNode.Frame)

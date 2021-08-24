@@ -24,7 +24,7 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayDirectorVM.SessionInfoLoaded)
 			{
-				return ReplayDirectorVM.CurrentTimelineNode != null && !ReplayDirectorVM.PlaybackEnabled;
+				return ReplayDirectorVM.CurrentNode != null && !ReplayDirectorVM.PlaybackEnabled;
 			}
 
 			return false;
@@ -37,10 +37,10 @@ namespace iRacingReplayDirector
 
 			if (confirmationPopUp == MessageBoxResult.Yes)
 			{
-				if (ReplayDirectorVM.CurrentTimelineNode != null)
+				if (ReplayDirectorVM.CurrentNode != null)
 				{
-					ReplayDirectorVM.TimelineNodes.Remove(ReplayDirectorVM.CurrentTimelineNode);
-					ReplayDirectorVM.CurrentTimelineNode = null;
+					ReplayDirectorVM.Nodes.NodeList.Remove(ReplayDirectorVM.CurrentNode);
+					ReplayDirectorVM.CurrentNode = null;
 
 					ReplayDirectorVM.SaveProjectChanges();
 				}

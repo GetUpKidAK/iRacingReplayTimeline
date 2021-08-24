@@ -7,9 +7,8 @@
         xmlns:local="clr-namespace:iRacingReplayDirector" mc:Ignorable="d"
 		MinWidth="500" MaxWidth="1000" Width="{Binding WindowWidth, Mode=TwoWay}"
 		MinHeight="400" MaxHeight="920" Height="{Binding WindowHeight, Mode=TwoWay}"
-		Topmost="{Binding WindowAlwaysOnTop}"
-		WindowStartupLocation="CenterScreen" Closing="Window_Closing"
-		SizeChanged="Window_SizeChanged"
+		Topmost="{Binding WindowAlwaysOnTop}" WindowStartupLocation="CenterScreen"
+		Closing="Window_Closing" SizeChanged="Window_SizeChanged"
 		Title="{Binding WindowTitle}">
 	<Window.DataContext>
 		<vm:ReplayDirectorVM/>
@@ -168,7 +167,7 @@
 					<GroupBox Header="Nodes">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding StoreCurrentFrameCommand}" Width="120" />
+							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding CamChangeNodeCommand}" Width="120" />
 							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
 
 							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
@@ -208,7 +207,7 @@
 				</Grid>
 
 				<!-- NODES LIST -->
-				<ListView ItemsSource="{Binding TimelineNodes}" SelectedItem="{Binding CurrentTimelineNode}"
+				<ListView ItemsSource="{Binding Nodes.NodeList}" SelectedItem="{Binding CurrentNode}"
 					  SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" 
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" DockPanel.Dock="Top">
 					<ListView.View>
