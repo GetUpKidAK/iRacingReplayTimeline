@@ -5,6 +5,8 @@ namespace iRacingReplayDirector
 {
 	public class CamChangeNode : Node
 	{
+		public override string NodeType { get => "Camera Change"; }
+
 		private Driver _driver;
 		public Driver Driver
 		{
@@ -33,7 +35,8 @@ namespace iRacingReplayDirector
 		{
 			if (Driver == null || Camera == null) return;
 
-			NodeLabel = $"Cut to {Driver.TeamName} ({Camera.GroupName})";
+			NodeDetails = Driver.TeamName;
+			NodeDetailsAdditional = Camera.GroupName;
 		}
 
 		public override void ApplyNode()

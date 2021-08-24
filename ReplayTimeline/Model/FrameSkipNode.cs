@@ -5,6 +5,8 @@ namespace iRacingReplayDirector
 {
 	public class FrameSkipNode : Node
 	{
+		public override string NodeType { get => "Frame Skip";  }
+
 		public FrameSkipNode(bool enabled, int frame)
 		{
 			Enabled = enabled;
@@ -18,12 +20,12 @@ namespace iRacingReplayDirector
 			if (NextNode == null)
 			{
 				Enabled = false;
-				NodeLabel = $"Skip Frame - NEEDS A NODE TO SKIP TO";
+				NodeDetails = $"NEEDS A NODE TO SKIP TO";
 			}
 			else
 			{
 				Enabled = NextNode.Enabled;
-				NodeLabel = $"Skip Frame - Jump to {NextNode.Frame}";
+				NodeDetails = $"Frame #{NextNode.Frame}";
 			}
 		}
 

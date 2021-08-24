@@ -36,13 +36,22 @@ namespace iRacingReplayDirector
 		}
 
 
-		private string _nodeLabel;
-		public string NodeLabel
+		private string _nodeDetails;
+		public string NodeDetails
 		{
-			get { return _nodeLabel; }
-			set { _nodeLabel = value; OnPropertyChanged("NodeLabel"); }
+			get { return _nodeDetails; }
+			set { _nodeDetails = value; OnPropertyChanged("NodeDetails"); }
 		}
 
+		private string _nodeDetailsAdditional;
+		public string NodeDetailsAdditional
+		{
+			get { return _nodeDetailsAdditional; }
+			set { _nodeDetailsAdditional = value; OnPropertyChanged("NodeDetailsAdditional"); }
+		}
+
+
+		public abstract string NodeType { get; }
 
 		public abstract void ApplyNode();
 		protected abstract void UpdateLabel();

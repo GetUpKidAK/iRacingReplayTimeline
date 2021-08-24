@@ -214,31 +214,27 @@
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" DockPanel.Dock="Top">
 					<ListView.View>
 						<GridView>
-							<GridViewColumn Width="40">
+							<GridViewColumn Width="30">
 								<GridViewColumnHeader IsEnabled="False" />
 								<GridViewColumn.CellTemplate>
 									<DataTemplate>
-										<CheckBox Margin="5, 0" IsChecked="{Binding Enabled}"/>
+										<CheckBox IsChecked="{Binding Enabled}"/>
 									</DataTemplate>
 								</GridViewColumn.CellTemplate>
 							</GridViewColumn>
 
-							<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
+							<GridViewColumn Width="60" DisplayMemberBinding="{Binding Frame}">
 								<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 							</GridViewColumn>
-							<GridViewColumn Width="330" DisplayMemberBinding="{Binding NodeLabel}">
-								<GridViewColumnHeader Content="Node" IsEnabled="False" />
+							<GridViewColumn Width="100" DisplayMemberBinding="{Binding NodeType}">
+								<GridViewColumnHeader Content="Node Type" IsEnabled="False" />
 							</GridViewColumn>
-
-							<!--<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
-								<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
+							<GridViewColumn Width="125" DisplayMemberBinding="{Binding NodeDetails}">
+								<GridViewColumnHeader Content="" IsEnabled="False" />
 							</GridViewColumn>
-							<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.TeamName}">
-								<GridViewColumnHeader Content="Driver/Team name" IsEnabled="False" />
+							<GridViewColumn Width="125" DisplayMemberBinding="{Binding NodeDetailsAdditional}">
+								<GridViewColumnHeader Content="" IsEnabled="False" />
 							</GridViewColumn>
-							<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
-								<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
-							</GridViewColumn>-->
 						</GridView>
 					</ListView.View>
 				</ListView>
