@@ -166,9 +166,11 @@
 				<Grid DockPanel.Dock="Bottom">
 					<GroupBox Header="Nodes">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-							<Button Content="{Binding CamChangeBtnText}" Command="{Binding CamChangeNodeCommand}" Width="120" />
-							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
+							<Button Content="Prev" Command="{Binding PreviousStoredFrameCommand}" Width="60" />
+							<Button Content="Next" Command="{Binding NextStoredFrameCommand}" Width="60" />
+
+							<Button Content="{Binding CamChangeBtnText}" Command="{Binding CamChangeNodeCommand}" Width="100" Margin="10 0 0 0" />
+							<Button Content="Add Frame Skip" Command="{Binding FrameSkipNodeCommand}" Width="100" />
 
 							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>
 						</StackPanel>
@@ -221,7 +223,11 @@
 								</GridViewColumn.CellTemplate>
 							</GridViewColumn>
 
-							<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
+							<GridViewColumn Width="400" DisplayMemberBinding="{Binding NodeLabel}">
+								<GridViewColumnHeader Content="Node" IsEnabled="False" />
+							</GridViewColumn>
+
+							<!--<GridViewColumn Width="70" DisplayMemberBinding="{Binding Frame}">
 								<GridViewColumnHeader Content="Frame #" IsEnabled="False" />
 							</GridViewColumn>
 							<GridViewColumn Width="200" DisplayMemberBinding="{Binding Driver.TeamName}">
@@ -229,7 +235,7 @@
 							</GridViewColumn>
 							<GridViewColumn Width="130" DisplayMemberBinding="{Binding Camera.GroupName}">
 								<GridViewColumnHeader Content="Camera name" IsEnabled="False" />
-							</GridViewColumn>
+							</GridViewColumn>-->
 						</GridView>
 					</ListView.View>
 				</ListView>

@@ -5,24 +5,40 @@ namespace iRacingReplayDirector
 {
 	public class FrameSkipNode : Node
 	{
-		private int _targetFrame;
-		public int TargetFrame
+		public FrameSkipNode(int frame)
 		{
-			get { return _targetFrame; }
-			set { _targetFrame = value; OnPropertyChanged("TargetFrame"); }
+			Frame = frame;
+
+			UpdateLabel();
 		}
 
+		protected override void UpdateLabel()
+		{
+			if (NextNode == null)
+			{
+				Enabled = false;
+				NodeLabel = $"Frame #{Frame} - Skip Frame - NEEDS A NODE TO SKIP TO";
+			}
+			else
+			{
+				Enabled = true;
+				NodeLabel = $"Frame #{Frame} - Skip Frame - Jump to {NextNode.Frame}";
+			}
+		}
 
 		public override void ApplyNode()
 		{
 			bool playbackEnabled = Sim.Instance.Telemetry.ReplayPlaySpeed.Value != 0;
 
-			// If replay is playing back AND node is disabled, skip it...
-			if (playbackEnabled && !Enabled)
+			if (!playbackEnabled)
+			{
+				Sim.Instance.Sdk.Replay.SetPosition(Frame);
 				return;
+			}
 
-			// Otherwise, switch driver and camera
-			Sim.Instance.Sdk.Replay.SetPosition(TargetFrame);
+			// Otherwise...
+			Sim.Instance.Sdk.Replay.SetPosition(NextNode.Frame);
+			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
 		}
 	}
 }

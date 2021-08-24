@@ -28,7 +28,7 @@ namespace iRacingReplayDirector
 			UpdateLabel();
 		}
 
-		private void UpdateLabel()
+		protected override void UpdateLabel()
 		{
 			if (Driver == null || Camera == null) return;
 

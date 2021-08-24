@@ -48,9 +48,9 @@ namespace iRacingReplayDirector
 
 		public void AddNode(Node newNode)
 		{
-			Node current = GetCurrentActiveNode(newNode.Frame);
+			Node previouslyActiveNode = GetCurrentActiveNode(newNode.Frame);
 
-			if (current == null)
+			if (previouslyActiveNode == null)
 			{
 				Prepend(newNode);
 				SaveNodeChanges();
@@ -59,11 +59,14 @@ namespace iRacingReplayDirector
 			}
 
 			// Chain events
-			current.NextNode = newNode;
-			newNode.PreviousNode = current;
+			newNode.NextNode = previouslyActiveNode.NextNode;
+			newNode.PreviousNode = previouslyActiveNode;
+			if (newNode.NextNode != null) newNode.NextNode.PreviousNode = newNode;
+
+			previouslyActiveNode.NextNode = newNode;
 
 			// Insert in collection
-			int index = Nodes.IndexOf(current) + 1;
+			int index = Nodes.IndexOf(previouslyActiveNode) + 1;
 			Nodes.Insert(index, newNode);
 
 			SaveNodeChanges();

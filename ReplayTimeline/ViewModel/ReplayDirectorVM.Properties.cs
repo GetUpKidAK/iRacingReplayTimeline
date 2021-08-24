@@ -395,6 +395,7 @@ namespace iRacingReplayDirector
 		/// </summary>
 		#region Commands
 		public CamChangeNodeCommand CamChangeNodeCommand { get; set; }
+		public FrameSkipNodeCommand FrameSkipNodeCommand { get; set; }
 		public ClearAllNodesCommand ClearAllNodesCommand { get; set; }
 		public PreviousStoredFrameCommand PreviousStoredFrameCommand { get; set; }
 		public NextStoredFrameCommand NextStoredFrameCommand { get; set; }

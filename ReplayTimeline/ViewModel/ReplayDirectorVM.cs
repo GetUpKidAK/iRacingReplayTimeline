@@ -38,12 +38,13 @@ namespace iRacingReplayDirector
 			SortDriversById = true;
 
 			StatusBarText = "iRacing Not Connected.";
-			CamChangeBtnText = "Store Node";
+			CamChangeBtnText = "Add Cam Change";
 			RecordBtnText = "Record";
 
 			GetAppSettings();
 
 			CamChangeNodeCommand = new CamChangeNodeCommand(this);
+			FrameSkipNodeCommand = new FrameSkipNodeCommand(this);
 			ClearAllNodesCommand = new ClearAllNodesCommand(this);
 			NextStoredFrameCommand = new NextStoredFrameCommand(this);
 			PreviousStoredFrameCommand = new PreviousStoredFrameCommand(this);
@@ -479,7 +480,7 @@ namespace iRacingReplayDirector
 
 		private void UpdateUILabels()
 		{
-			CamChangeBtnText = CurrentNode == null ? "Store Node" : "Update Node";
+			CamChangeBtnText = CurrentNode == null ? "Add Cam Change" : "Update Camera";
 
 			CaptureModeText = "Capture Mode: None";
 			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";

@@ -76,11 +76,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Nodes\FrameSkipNodeCommand.cs" />
     <Compile Include="Model\CamChangeNode.cs" />
     <Compile Include="Commands\Nodes\ClearAllNodesCommand.cs" />
     <Compile Include="Model\FrameSkipNode.cs" />
     <Compile Include="Model\Node.cs" />
-    <Compile Include="NodeCollection.cs" />
+    <Compile Include="Model\NodeCollection.cs" />
     <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />

@@ -45,6 +45,8 @@ namespace iRacingReplayDirector
 						PreviousNode = orderedNodes.LastOrDefault(n => n.Frame < ReplayDirectorVM.CurrentFrame);
 					}
 				}
+				else
+					return false;
 			}
 
 			return PreviousNode != null;

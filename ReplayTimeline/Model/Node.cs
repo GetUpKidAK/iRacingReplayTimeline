@@ -27,12 +27,24 @@ namespace iRacingReplayDirector
 			set { _nodeLabel = value; OnPropertyChanged("NodeLabel"); }
 		}
 
-		public Node PreviousNode;
-		public Node NextNode;
+		private Node _prevNode;
+		public Node PreviousNode
+		{
+			get { return _prevNode; }
+			set { _prevNode = value; UpdateLabel(); }
+		}
+
+		private Node _nextNode;
+		public Node NextNode
+		{
+			get { return _nextNode; }
+			set { _nextNode = value; UpdateLabel(); }
+		}
 
 		//TODO: CONSTRUCTOR??
 
 		public abstract void ApplyNode();
+		protected abstract void UpdateLabel();
 
 
 		public event PropertyChangedEventHandler PropertyChanged;
