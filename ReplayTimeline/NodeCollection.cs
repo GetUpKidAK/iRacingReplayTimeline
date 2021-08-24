@@ -8,14 +8,16 @@ namespace iRacingReplayDirector
 	{
 		public ObservableCollection<Node> NodeList { get; private set; }
 
+		public bool NodesListOccupied { get { return NodeList.Count > 0; } }
+
 		public NodeCollection()
 		{
 			NodeList = new ObservableCollection<Node>();
 		}
 
-		public void Add(Node newNode)
+		public void AddNode(Node newNode)
 		{
-			Node current = GetCurrent(newNode.Frame);
+			Node current = GetCurrentActiveNode(newNode.Frame);
 
 			if (current == null)
 			{
@@ -32,21 +34,37 @@ namespace iRacingReplayDirector
 			NodeList.Insert(index, newNode);
 		}
 
-		public bool Remove(Node oldNode)
+		public bool RemoveNode(Node nodeToRemove)
 		{
-			Node prev = oldNode.PreviousNode;
+			Node prev = nodeToRemove.PreviousNode;
+			Node next = nodeToRemove.NextNode;
 
 			if (prev != null)
 			{
-				prev.NextNode = oldNode.NextNode;
+				prev.NextNode = nodeToRemove.NextNode;
 			}
 
-			return NodeList.Remove(oldNode);
+			if (next != null)
+			{
+				next.PreviousNode = nodeToRemove.PreviousNode;
+			}
+
+			return NodeList.Remove(nodeToRemove);
 		}
 
-		public Node GetCurrent(int frameNum)
+		public void RemoveAllNodes()
 		{
-			return NodeList.LastOrDefault(e => e.Frame <= frameNum);
+			NodeList.Clear();
+		}
+
+		public Node GetNodeOnCurrentFrame(int currentFrame)
+		{
+			return NodeList.LastOrDefault(node => node.Frame == currentFrame);
+		}
+
+		public Node GetCurrentActiveNode(int currentFrame)
+		{
+			return NodeList.LastOrDefault(e => e.Frame <= currentFrame);
 		}
 
 		private void Prepend(Node transition)

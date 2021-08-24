@@ -167,7 +167,7 @@
 					<GroupBox Header="Nodes">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 							<Button Content="Prev Node" Command="{Binding PreviousStoredFrameCommand}" Width="100" />
-							<Button Content="{Binding StoreFrameBtnText}" Command="{Binding CamChangeNodeCommand}" Width="120" />
+							<Button Content="{Binding CamChangeBtnText}" Command="{Binding CamChangeNodeCommand}" Width="120" />
 							<Button Content="Next Node" Command="{Binding NextStoredFrameCommand}" Width="100" />
 
 							<Button Content="Delete Node" Command="{Binding DeleteStoredFrameCommand}" Width="80" Margin="20 0 0 0"/>

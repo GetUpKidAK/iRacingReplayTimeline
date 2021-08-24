@@ -23,7 +23,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayDirectorVM.Nodes.NodeList.Count > 0;
+			return ReplayDirectorVM.Nodes.NodesListOccupied;
 		}
 
 		public void Execute(object parameter)
@@ -33,7 +33,7 @@ namespace iRacingReplayDirector
 
 			if (confirmationPopUp == MessageBoxResult.Yes)
 			{
-				ReplayDirectorVM.Nodes.NodeList.Clear();
+				ReplayDirectorVM.Nodes.RemoveAllNodes();
 				ReplayDirectorVM.CurrentNode = null;
 
 				ReplayDirectorVM.SaveProjectChanges();

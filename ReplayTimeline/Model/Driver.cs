@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace iRacingReplayDirector
 {
-	[DebuggerDisplay("{ToString()}")]
+	[System.Diagnostics.DebuggerDisplay("{TeamName} (#{Number})")]
 	public class Driver : IEquatable<Driver>
 	{
 		public Driver()
@@ -135,10 +134,5 @@ namespace iRacingReplayDirector
 		}
 
 		public static bool operator !=(Driver lhs, Driver rhs) => !(lhs == rhs);
-
-		public override string ToString()
-		{
-			return $"{Name} (#{Number})";
-		}
 	}
 }

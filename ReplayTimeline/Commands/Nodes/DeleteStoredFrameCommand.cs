@@ -39,7 +39,7 @@ namespace iRacingReplayDirector
 			{
 				if (ReplayDirectorVM.CurrentNode != null)
 				{
-					ReplayDirectorVM.Nodes.NodeList.Remove(ReplayDirectorVM.CurrentNode);
+					ReplayDirectorVM.Nodes.RemoveNode(ReplayDirectorVM.CurrentNode);
 					ReplayDirectorVM.CurrentNode = null;
 
 					ReplayDirectorVM.SaveProjectChanges();

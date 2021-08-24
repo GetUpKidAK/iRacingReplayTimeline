@@ -68,6 +68,7 @@ namespace iRacingReplayDirector
 			}
 			else
 			{
+				// TODO: Check this logic. Checking if a node exists already? Seems pointless
 				var timelineFrames = ReplayDirectorVM.Nodes.NodeList.Select(n => n.Frame).ToList();
 				Node storedNode = null;
 
@@ -75,7 +76,7 @@ namespace iRacingReplayDirector
 				{
 					CamChangeNode newNode = new CamChangeNode(ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera);
 
-					ReplayDirectorVM.Nodes.NodeList.Add(newNode);
+					ReplayDirectorVM.Nodes.AddNode(newNode);
 					storedNode = newNode;
 
 					ReplayDirectorVM.SaveProjectChanges();

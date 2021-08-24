@@ -33,7 +33,6 @@ namespace iRacingReplayDirector
 		public ICollectionView DriversView { get; private set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
-
 		private Node _currentNode;
 		public Node CurrentNode
 		{
@@ -221,6 +220,20 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private int _windowWidth;
+		public int WindowWidth
+		{
+			get { return _windowWidth; }
+			set { _windowWidth = value; OnPropertyChanged("WindowWidth"); }
+		}
+
+		private int _windowHeight;
+		public int WindowHeight
+		{
+			get { return _windowHeight; }
+			set { _windowHeight = value; OnPropertyChanged("WindowHeight"); }
+		}
+
 		private bool _windowAlwaysOnTop;
 		public bool WindowAlwaysOnTop
 		{
@@ -235,11 +248,11 @@ namespace iRacingReplayDirector
 		/// </summary>
 		#region Label Properties
 
-		private string _storeFrameBtnText;
-		public string StoreFrameBtnText
+		private string _camChangeBtnText;
+		public string CamChangeBtnText
 		{
-			get { return _storeFrameBtnText; }
-			set { _storeFrameBtnText = value; OnPropertyChanged("StoreFrameBtnText"); }
+			get { return _camChangeBtnText; }
+			set { _camChangeBtnText = value; OnPropertyChanged("CamChangeBtnText"); }
 		}
 
 		private string _playPauseBtnText;

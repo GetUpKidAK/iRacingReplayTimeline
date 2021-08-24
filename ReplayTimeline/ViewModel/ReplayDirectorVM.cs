@@ -13,22 +13,6 @@ namespace iRacingReplayDirector
 {
 	public partial class ReplayDirectorVM : INotifyPropertyChanged
 	{
-		private int _windowWidth;
-		public int WindowWidth
-		{
-			get { return _windowWidth; }
-			set { _windowWidth = value; OnPropertyChanged("WindowWidth"); }
-		}
-
-		private int _windowHeight;
-		public int WindowHeight
-		{
-			get { return _windowHeight; }
-			set { _windowHeight = value; OnPropertyChanged("WindowHeight"); }
-		}
-
-
-
 		public ReplayDirectorVM()
 		{
 			Sim.Instance.Connected += SdkConnected;
@@ -54,7 +38,7 @@ namespace iRacingReplayDirector
 			SortDriversById = true;
 
 			StatusBarText = "iRacing Not Connected.";
-			StoreFrameBtnText = "Store Node";
+			CamChangeBtnText = "Store Node";
 			RecordBtnText = "Record";
 
 			GetAppSettings();
@@ -186,7 +170,7 @@ namespace iRacingReplayDirector
 			SessionInfoLoaded = false;
 			Drivers.Clear();
 			Cameras.Clear();
-			Nodes.NodeList.Clear(); // TODO: MOVE
+			Nodes.RemoveAllNodes();
 			StatusBarSessionID = "No Session Loaded.";
 			StatusBarCurrentSessionInfo = "";
 		}
@@ -385,7 +369,7 @@ namespace iRacingReplayDirector
 
 			if (!PlaybackEnabled)
 			{
-				var currentNode = Nodes.NodeList.LastOrDefault(node => node.Frame == CurrentFrame); // TODO: Update
+				var currentNode = Nodes.GetNodeOnCurrentFrame(CurrentFrame);
 				_currentNode = currentNode; OnPropertyChanged("CurrentNode");
 
 				UpdateUILabels();
@@ -524,7 +508,7 @@ namespace iRacingReplayDirector
 
 		private void UpdateUILabels()
 		{
-			StoreFrameBtnText = CurrentNode == null ? "Store Node" : "Update Node";
+			CamChangeBtnText = CurrentNode == null ? "Store Node" : "Update Node";
 
 			CaptureModeText = "Capture Mode: None";
 			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";

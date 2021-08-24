@@ -9,14 +9,14 @@ namespace iRacingReplayDirector
 		public Driver Driver
 		{
 			get { return _driver; }
-			set { _driver = value; OnPropertyChanged("Driver"); }
+			set { _driver = value; UpdateLabel(); OnPropertyChanged("Driver"); }
 		}
 
 		private Camera _camera;
 		public Camera Camera
 		{
 			get { return _camera; }
-			set { _camera = value; OnPropertyChanged("Camera"); }
+			set { _camera = value; UpdateLabel(); OnPropertyChanged("Camera"); }
 		}
 
 		public CamChangeNode(int frame, Driver driver, Camera camera)
@@ -24,6 +24,15 @@ namespace iRacingReplayDirector
 			Frame = frame;
 			Driver = driver;
 			Camera = camera;
+
+			UpdateLabel();
+		}
+
+		private void UpdateLabel()
+		{
+			if (Driver == null || Camera == null) return;
+
+			NodeLabel = $"Frame #{Frame} - Cut to {Driver.TeamName} ({Camera.GroupName})";
 		}
 
 		public override void ApplyNode()

@@ -17,6 +17,8 @@ namespace iRacingReplayDirector
 		}
 
 
+		private Node NextNode;
+
 		public NextStoredFrameCommand(ReplayDirectorVM vm)
 		{
 			ReplayDirectorVM = vm;
@@ -24,7 +26,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			if (!(ReplayDirectorVM.Nodes.NodeList.Count > 0))
+			if (!ReplayDirectorVM.Nodes.NodesListOccupied)
 				return false;
 
 			if (ReplayDirectorVM.SessionInfoLoaded)
@@ -32,38 +34,25 @@ namespace iRacingReplayDirector
 				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
 					var currentNode = ReplayDirectorVM.CurrentNode;
-					var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<Node>().ToList();
 
 					if (currentNode != null)
 					{
-						var nodeIndex = orderedNodes.IndexOf(currentNode);
-
-						return nodeIndex < orderedNodes.Count - 1;
+						NextNode = currentNode.NextNode;
 					}
 					else
 					{
-						var nearestNode = orderedNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
-
-						if (nearestNode != null)
-						{
-							return true;
-						}
+						var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<Node>().ToList();
+						NextNode = orderedNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
 					}
 				}
 			}
 
-			return false;
+			return NextNode != null;
 		}
 
 		public void Execute(object parameter)
 		{
-			var orderedNodes = ReplayDirectorVM.TimelineNodesView.Cast<Node>();
-			var targetNode = orderedNodes.FirstOrDefault(n => n.Frame > ReplayDirectorVM.CurrentFrame);
-
-			if (targetNode != null)
-			{
-				ReplayDirectorVM.CurrentNode = targetNode;
-			}
+			ReplayDirectorVM.CurrentNode = NextNode;
 		}
 	}
 }

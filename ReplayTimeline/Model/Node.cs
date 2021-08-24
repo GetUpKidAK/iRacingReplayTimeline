@@ -3,6 +3,7 @@
 
 namespace iRacingReplayDirector
 {
+	[System.Diagnostics.DebuggerDisplay("{NodeLabel}")]
 	public abstract class Node : INotifyPropertyChanged
 	{
 		private bool _enabled = true;
