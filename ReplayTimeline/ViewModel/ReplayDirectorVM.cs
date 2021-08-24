@@ -22,8 +22,8 @@ namespace iRacingReplayDirector
 
 			Sim.Instance.Start();
 
-			Nodes = new NodeCollection();
-			TimelineNodesView = CollectionViewSource.GetDefaultView(Nodes.NodeList); // TODO: MOVE
+			NodeCollection = new NodeCollection();
+			TimelineNodesView = CollectionViewSource.GetDefaultView(NodeCollection.Nodes); // TODO: MOVE
 			Drivers = new ObservableCollection<Driver>();
 			DriversView = CollectionViewSource.GetDefaultView(Drivers);
 			Cameras = new ObservableCollection<Camera>();
@@ -74,8 +74,6 @@ namespace iRacingReplayDirector
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
-
-			Nodes.NodeList.CollectionChanged += TimelineNodes_CollectionChanged; // TODO: MOVE
 		}
 
 		private void GetAppSettings()
@@ -130,33 +128,6 @@ namespace iRacingReplayDirector
 			ApplicationQuitCommand.Execute(this);
 		}
 
-		private void TimelineNodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
-			if (e.NewItems != null)
-			{
-				foreach (INotifyPropertyChanged added in e.NewItems)
-				{
-					added.PropertyChanged += TimelineNodesPropertyChanged;
-				}
-			}
-
-			if (e.OldItems != null)
-			{
-				foreach (INotifyPropertyChanged removed in e.OldItems)
-				{
-					removed.PropertyChanged -= TimelineNodesPropertyChanged;
-				}
-			}
-		}
-
-		private void TimelineNodesPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-		{
-			if (propertyChangedEventArgs.PropertyName == "Enabled")
-			{
-				SaveProjectChanges();
-			}
-		}
-
 		private void SdkConnected(object sender, System.EventArgs e)
 		{
 			StatusBarText = "iRacing Connected.";
@@ -170,7 +141,7 @@ namespace iRacingReplayDirector
 			SessionInfoLoaded = false;
 			Drivers.Clear();
 			Cameras.Clear();
-			Nodes.RemoveAllNodes();
+			NodeCollection.RemoveAllNodes();
 			StatusBarSessionID = "No Session Loaded.";
 			StatusBarCurrentSessionInfo = "";
 		}
@@ -285,7 +256,7 @@ namespace iRacingReplayDirector
 
 		private void VerifyExistingNodeCameras()
 		{
-			foreach (var currentNode in Nodes.NodeList)
+			foreach (var currentNode in NodeCollection.Nodes)
 			{
 				if (currentNode is CamChangeNode)
 				{
@@ -369,7 +340,7 @@ namespace iRacingReplayDirector
 
 			if (!PlaybackEnabled)
 			{
-				var currentNode = Nodes.GetNodeOnCurrentFrame(CurrentFrame);
+				var currentNode = NodeCollection.GetNodeOnCurrentFrame(CurrentFrame);
 				_currentNode = currentNode; OnPropertyChanged("CurrentNode");
 
 				UpdateUILabels();
@@ -551,11 +522,6 @@ namespace iRacingReplayDirector
 		//		VerifyExistingNodeCameras();
 		//	}
 		//}
-
-		public void SaveProjectChanges()
-		{
-			//SaveLoadHelper.SaveProject(TimelineNodes.ToList(), SessionID);
-		}
 
 		public bool IsCaptureAvailable()
 		{

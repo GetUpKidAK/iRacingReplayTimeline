@@ -27,7 +27,7 @@ namespace iRacingReplayDirector
 		/// BINDING PROPERTIES
 		/// </summary>
 		#region Binding Properties
-		public NodeCollection Nodes { get; set; }
+		public NodeCollection NodeCollection { get; set; }
 		public ICollectionView TimelineNodesView { get; private set; }
 		public ObservableCollection<Driver> Drivers { get; set; }
 		public ICollectionView DriversView { get; private set; }

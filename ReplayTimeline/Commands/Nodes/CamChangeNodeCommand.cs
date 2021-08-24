@@ -63,23 +63,21 @@ namespace iRacingReplayDirector
 					currentNode.Driver = ReplayDirectorVM.CurrentDriver;
 					currentNode.Camera = ReplayDirectorVM.CurrentCamera;
 
-					ReplayDirectorVM.SaveProjectChanges();
+					ReplayDirectorVM.NodeCollection.SaveNodeChanges(); // TODO: POssible to improve this? remove public reference
 				}
 			}
 			else
 			{
 				// TODO: Check this logic. Checking if a node exists already? Seems pointless
-				var timelineFrames = ReplayDirectorVM.Nodes.NodeList.Select(n => n.Frame).ToList();
+				var timelineFrames = ReplayDirectorVM.NodeCollection.Nodes.Select(n => n.Frame).ToList();
 				Node storedNode = null;
 
 				if (!timelineFrames.Contains(ReplayDirectorVM.CurrentFrame))
 				{
 					CamChangeNode newNode = new CamChangeNode(ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera);
 
-					ReplayDirectorVM.Nodes.AddNode(newNode);
+					ReplayDirectorVM.NodeCollection.AddNode(newNode);
 					storedNode = newNode;
-
-					ReplayDirectorVM.SaveProjectChanges();
 				}
 
 				ReplayDirectorVM.CurrentNode = storedNode;

@@ -26,7 +26,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			if (!ReplayDirectorVM.Nodes.NodesListOccupied)
+			if (!ReplayDirectorVM.NodeCollection.NodesListOccupied)
 				return false;
 
 			if (ReplayDirectorVM.SessionInfoLoaded)

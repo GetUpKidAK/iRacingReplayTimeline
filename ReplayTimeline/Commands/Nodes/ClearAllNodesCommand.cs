@@ -23,7 +23,7 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
-			return ReplayDirectorVM.Nodes.NodesListOccupied;
+			return ReplayDirectorVM.NodeCollection.NodesListOccupied;
 		}
 
 		public void Execute(object parameter)
@@ -33,10 +33,8 @@ namespace iRacingReplayDirector
 
 			if (confirmationPopUp == MessageBoxResult.Yes)
 			{
-				ReplayDirectorVM.Nodes.RemoveAllNodes();
+				ReplayDirectorVM.NodeCollection.RemoveAllNodes();
 				ReplayDirectorVM.CurrentNode = null;
-
-				ReplayDirectorVM.SaveProjectChanges();
 			}
 		}
 	}

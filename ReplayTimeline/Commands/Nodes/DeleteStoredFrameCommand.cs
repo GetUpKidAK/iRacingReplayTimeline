@@ -39,10 +39,8 @@ namespace iRacingReplayDirector
 			{
 				if (ReplayDirectorVM.CurrentNode != null)
 				{
-					ReplayDirectorVM.Nodes.RemoveNode(ReplayDirectorVM.CurrentNode);
+					ReplayDirectorVM.NodeCollection.RemoveNode(ReplayDirectorVM.CurrentNode);
 					ReplayDirectorVM.CurrentNode = null;
-
-					ReplayDirectorVM.SaveProjectChanges();
 				}
 			}
 		}

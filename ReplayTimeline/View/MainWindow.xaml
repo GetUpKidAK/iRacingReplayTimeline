@@ -207,7 +207,7 @@
 				</Grid>
 
 				<!-- NODES LIST -->
-				<ListView ItemsSource="{Binding Nodes.NodeList}" SelectedItem="{Binding CurrentNode}"
+				<ListView ItemsSource="{Binding NodeCollection.Nodes}" SelectedItem="{Binding CurrentNode}"
 					  SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" 
 					  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" DockPanel.Dock="Top">
 					<ListView.View>
