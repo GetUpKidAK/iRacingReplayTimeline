@@ -26,7 +26,7 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Should only be enabled during race sessions
-			if (!ReplayDirectorVM.SessionInfoLoaded)
+			if (!ReplayDirectorVM.IsSessionReady())
 				return false;
 
 			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];

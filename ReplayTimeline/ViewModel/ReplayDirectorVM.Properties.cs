@@ -20,6 +20,7 @@ namespace iRacingReplayDirector
 		#region Properties
 		public string WindowTitle { get { return $"{m_ApplicationTitle} (v{m_VersionNumber})"; } }
 		public bool SessionInfoLoaded { get; private set; } = false;
+		public bool IsLiveSession { get; private set; }
 		public int SessionID { get; private set; }
 		#endregion
 

@@ -26,7 +26,7 @@ namespace iRacingReplayDirector
 			if (ReplayDirectorVM.PlaybackEnabled)
 				return false;
 
-			if (ReplayDirectorVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.IsSessionReady())
 			{
 				return ReplayDirectorVM.CurrentDriver != null;
 			}

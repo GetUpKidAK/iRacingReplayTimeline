@@ -289,9 +289,9 @@ namespace iRacingReplayDirector
 			if (!m_LiveSessionPopupVisible)
 			{
 				var simMode = Sim.Instance.SessionInfo["WeekendInfo"]["SimMode"].GetValue();
-				var isLiveSession = simMode.ToLower().Contains("replay") ? false : true;
+				IsLiveSession = simMode.ToLower().Contains("replay") ? false : true;
 
-				if (isLiveSession)
+				if (IsLiveSession)
 				{
 					m_LiveSessionPopupVisible = true;
 
@@ -547,6 +547,11 @@ namespace iRacingReplayDirector
 
 				VerifyExistingNodeCameras();
 			}
+		}
+
+		public bool IsSessionReady()
+		{
+			return SessionInfoLoaded && !IsLiveSession;
 		}
 
 		public bool IsCaptureAvailable()

@@ -25,7 +25,7 @@ namespace iRacingReplayDirector
 		public bool CanExecute(object parameter)
 		{
 			// Disabled if in-sim recording is disabled
-			if (!ReplayDirectorVM.SessionInfoLoaded || !ReplayDirectorVM.IsCaptureAvailable())
+			if (!ReplayDirectorVM.IsSessionReady() || !ReplayDirectorVM.IsCaptureAvailable())
 				return false;
 
 			if ((ReplayDirectorVM.CurrentFrame + 1) >= ReplayDirectorVM.FinalFrame)

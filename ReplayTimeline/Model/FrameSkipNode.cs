@@ -20,7 +20,7 @@ namespace iRacingReplayDirector
 			if (NextNode == null)
 			{
 				Enabled = false;
-				NodeDetails = $"NEEDS A NODE TO SKIP TO";
+				NodeDetails = $"SKIP TO NEXT NODE";
 			}
 			else
 			{

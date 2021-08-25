@@ -29,7 +29,7 @@ namespace iRacingReplayDirector
 			if (!ReplayDirectorVM.NodeCollection.NodesListOccupied)
 				return false;
 
-			if (ReplayDirectorVM.SessionInfoLoaded)
+			if (ReplayDirectorVM.IsSessionReady())
 			{
 				if (!ReplayDirectorVM.PlaybackEnabled)
 				{
