@@ -134,12 +134,12 @@ namespace iRacingReplayDirector
 			ApplicationQuitCommand.Execute(this);
 		}
 
-		private void SdkConnected(object sender, System.EventArgs e)
+		private void SdkConnected(object sender, EventArgs e)
 		{
 			StatusBarText = "iRacing Connected.";
 		}
 
-		private void SdkDisconnected(object sender, System.EventArgs e)
+		private void SdkDisconnected(object sender, EventArgs e)
 		{
 			StatusBarText = "iRacing Disconnected.";
 
@@ -317,6 +317,9 @@ namespace iRacingReplayDirector
 				InSimUIEnabled = true;
 				SessionInfoLoaded = true;
 			}
+
+			CurrentDriver = Drivers.FirstOrDefault(d => d.Id == Sim.Instance.Telemetry.CamCarIdx.Value);
+			CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == Sim.Instance.Telemetry.CamGroupNumber.Value);
 		}
 
 		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
@@ -453,6 +456,7 @@ namespace iRacingReplayDirector
 			if (updateCounter > updateRefreshRate)
 			{
 				updateCounter = 0;
+
 				DriversView.Refresh();
 			}
 		}
