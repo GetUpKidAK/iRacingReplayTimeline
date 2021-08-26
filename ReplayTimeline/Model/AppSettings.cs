@@ -34,20 +34,23 @@ namespace iRacingReplayDirector
 			public bool ShowVisualTimeline { get; set; } = true;
 			public bool ShowRecordingControls { get; set; } = true;
 			public bool ShowSessionLapSkipControls { get; set; } = true;
+			public bool FrameSkipInfoShown { get; set; } = false;
+
 
 			public InterfaceOptions(bool windowAlwaysOnTop, bool showVisualTimeline,
-				bool showRecordingControls, bool showSessionLapSkipControls)
+				bool showRecordingControls, bool showSessionLapSkipControls, bool frameSkipInfoShown)
 			{
 				WindowAlwaysOnTop = windowAlwaysOnTop;
 				ShowVisualTimeline = showVisualTimeline;
 				ShowRecordingControls = showRecordingControls;
 				ShowSessionLapSkipControls = showSessionLapSkipControls;
+				FrameSkipInfoShown = frameSkipInfoShown;
 			}
 		}
 
 		public class SimOptionsClass
 		{
-			public bool DisableSimUIOnPlayback { get; set; } = false;
+			public bool DisableSimUIOnPlayback { get; set; } = true;
 			public bool DisableUIWhenRecording { get; set; } = true;
 			public bool StopRecordingOnFinalNode { get; set; } = false;
 

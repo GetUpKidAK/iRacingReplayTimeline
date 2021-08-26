@@ -90,6 +90,8 @@ namespace iRacingReplayDirector
 				ShowVisualTimeline = loadedSettings.UIOptions.ShowVisualTimeline;
 				ShowRecordingControls = loadedSettings.UIOptions.ShowRecordingControls;
 				ShowSessionLapSkipControls = loadedSettings.UIOptions.ShowSessionLapSkipControls;
+				FrameSkipInfoShown = loadedSettings.UIOptions.FrameSkipInfoShown;
+
 				DisableSimUIOnPlayback = loadedSettings.SimOptions.DisableSimUIOnPlayback;
 				DisableUIWhenRecording = loadedSettings.SimOptions.DisableUIWhenRecording;
 				StopRecordingOnFinalNode = loadedSettings.SimOptions.StopRecordingOnFinalNode;
@@ -101,12 +103,15 @@ namespace iRacingReplayDirector
 			}
 			else
 			{
+				// Defaults
 				WindowWidth = 1000;
 				WindowHeight = 600;
 
+				WindowAlwaysOnTop = false;
 				ShowVisualTimeline = true;
 				ShowRecordingControls = true;
 				ShowSessionLapSkipControls = true;
+				FrameSkipInfoShown = false;
 
 				DisableSimUIOnPlayback = true;
 				DisableUIWhenRecording = true;

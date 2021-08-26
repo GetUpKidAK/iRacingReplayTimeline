@@ -33,12 +33,17 @@ namespace iRacingReplayDirector
 		{
 			var obsProcess = ExternalProcessHelper.GetExternalProcess();
 
+			// Disabling OBS capture, don't bother checking if application is running
+			if (!ReplayDirectorVM.UseOBSCapture)
+			{
+				return;
+			}
+
 			if (obsProcess != null)
 			{
-				ReplayDirectorVM.UseOBSCapture = true;
 				ReplayDirectorVM.UseInSimCapture = false;
 			}
-			else
+			else  // If OBS can't be found
 			{
 				ReplayDirectorVM.UseOBSCapture = false;
 

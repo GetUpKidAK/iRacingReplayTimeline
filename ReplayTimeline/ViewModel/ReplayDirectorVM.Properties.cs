@@ -22,6 +22,7 @@ namespace iRacingReplayDirector
 		public bool SessionInfoLoaded { get; private set; } = false;
 		public bool IsLiveSession { get; private set; }
 		public int SessionID { get; private set; }
+		public bool FrameSkipInfoShown { get; set; }
 		#endregion
 
 		/// <summary>

@@ -33,7 +33,6 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayDirectorVM.InSimCaptureSettingEnabled)
 			{
-				ReplayDirectorVM.UseInSimCapture = true;
 				ReplayDirectorVM.UseOBSCapture = false;
 			}
 			else

@@ -20,7 +20,7 @@ namespace iRacingReplayDirector
 			AppSettings appSettings = new AppSettings()
 			{
 				WindowSize = new AppSettings.Window(vm.WindowWidth, vm.WindowHeight),
-				UIOptions = new AppSettings.InterfaceOptions(vm.WindowAlwaysOnTop, vm.ShowVisualTimeline, vm.ShowRecordingControls, vm.ShowSessionLapSkipControls),
+				UIOptions = new AppSettings.InterfaceOptions(vm.WindowAlwaysOnTop, vm.ShowVisualTimeline, vm.ShowRecordingControls, vm.ShowSessionLapSkipControls, vm.FrameSkipInfoShown),
 				SimOptions = new AppSettings.SimOptionsClass(vm.DisableSimUIOnPlayback, vm.DisableUIWhenRecording, vm.StopRecordingOnFinalNode, vm.UseInSimCapture, vm.UseOBSCapture)
 			};
 
