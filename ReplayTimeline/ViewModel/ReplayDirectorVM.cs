@@ -23,7 +23,7 @@ namespace iRacingReplayDirector
 			Sim.Instance.Start();
 
 			NodeCollection = new NodeCollection();
-			TimelineNodesView = CollectionViewSource.GetDefaultView(NodeCollection.Nodes); // TODO: MOVE
+			TimelineNodesView = CollectionViewSource.GetDefaultView(NodeCollection.Nodes);
 			Drivers = new ObservableCollection<Driver>();
 			DriversView = CollectionViewSource.GetDefaultView(Drivers);
 			Cameras = new ObservableCollection<Camera>();
@@ -73,6 +73,7 @@ namespace iRacingReplayDirector
 			ToggleUseOBSCaptureCommand = new ToggleUseOBSCaptureCommand(this);
 
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
+			ResetAppSettingsCommand = new ResetAppSettingsCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
 		}
@@ -103,23 +104,28 @@ namespace iRacingReplayDirector
 			}
 			else
 			{
-				// Defaults
-				WindowWidth = 1000;
-				WindowHeight = 600;
-
-				WindowAlwaysOnTop = false;
-				ShowVisualTimeline = true;
-				ShowRecordingControls = true;
-				ShowSessionLapSkipControls = true;
-				FrameSkipInfoShown = false;
-
-				DisableSimUIOnPlayback = true;
-				DisableUIWhenRecording = true;
-				StopRecordingOnFinalNode = false;
-
-				UseInSimCapture = true;
-				UseOBSCapture = false;
+				SetAppDefaults();
 			}
+		}
+
+		public void SetAppDefaults()
+		{
+			// Defaults
+			WindowWidth = 1000;
+			WindowHeight = 600;
+
+			WindowAlwaysOnTop = false;
+			ShowVisualTimeline = true;
+			ShowRecordingControls = true;
+			ShowSessionLapSkipControls = true;
+			FrameSkipInfoShown = false;
+
+			DisableSimUIOnPlayback = true;
+			DisableUIWhenRecording = true;
+			StopRecordingOnFinalNode = false;
+
+			UseInSimCapture = false;
+			UseOBSCapture = false;
 		}
 
 		public void ApplicationClosing(Size windowSize)

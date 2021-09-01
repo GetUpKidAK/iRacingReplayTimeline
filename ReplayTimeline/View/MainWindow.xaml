@@ -49,6 +49,8 @@
 				</MenuItem>
 
 				<MenuItem Header="Help">
+					<MenuItem Header="Reset Application Settings" Command="{Binding ResetAppSettingsCommand}"/>
+					<Separator />
 					<MenuItem Header="More Info / Guides" Command="{Binding MoreInfoCommand}"/>
 					<MenuItem Header="About" Command="{Binding AboutCommand}"/>
 				</MenuItem>
