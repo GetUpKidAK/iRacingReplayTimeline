@@ -533,23 +533,28 @@ namespace iRacingReplayDirector
 					}
 				}
 
-				// Add node links
-				for (int i = 0; i < NodeCollection.Nodes.Count; i++)
+				// Add node links if there is more than one node saved
+				if (NodeCollection.Nodes.Count > 1)
 				{
-					if (i > 0 && i < NodeCollection.Nodes.Count - 1)
+					for (int i = 0; i < NodeCollection.Nodes.Count; i++)
 					{
-						NodeCollection.Nodes[i].NextNode = NodeCollection.Nodes[i + 1];
-						NodeCollection.Nodes[i].PreviousNode = NodeCollection.Nodes[i - 1];
-					}
-					else
-					{
-						if (i == 0)
+						if (i > 0 && i < NodeCollection.Nodes.Count - 1)
 						{
+							// If not the first or last nodes, assign both previous and next nodes from list
 							NodeCollection.Nodes[i].NextNode = NodeCollection.Nodes[i + 1];
-						}
-						if (i == NodeCollection.Nodes.Count - 1)
-						{
 							NodeCollection.Nodes[i].PreviousNode = NodeCollection.Nodes[i - 1];
+						}
+						else
+						{
+							// If first or last, assign just next/previous depending on which
+							if (i == 0)
+							{
+								NodeCollection.Nodes[i].NextNode = NodeCollection.Nodes[i + 1];
+							}
+							if (i == NodeCollection.Nodes.Count - 1)
+							{
+								NodeCollection.Nodes[i].PreviousNode = NodeCollection.Nodes[i - 1];
+							}
 						}
 					}
 				}
