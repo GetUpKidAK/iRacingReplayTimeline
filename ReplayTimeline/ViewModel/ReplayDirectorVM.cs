@@ -428,27 +428,8 @@ namespace iRacingReplayDirector
 
 			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
 			var sessionType = sessionInfoQuery["SessionType"].GetValue("");
-			var sessionLaps = sessionInfoQuery["SessionLaps"].GetValue("-1");
-			var sessionTime = sessionInfoQuery["SessionTime"].GetValue("-1");
-			var currentLap = CurrentDriver.Lap;
 
-			string sessionDetail;
-
-			if (sessionLaps.Contains("unlimited"))
-			{
-				var sessionTimeInSecs = float.Parse(sessionTime.Replace("sec", ""));
-				TimeSpan sessionTimeSpan = TimeSpan.FromSeconds(sessionTimeInSecs);
-				var totalSessionTime = sessionTimeSpan.ToString(@"hh\:mm\:ss");
-				var currentLapCount = (currentLap > -1) ? $"Lap {currentLap} - " : ""; // Only show lap info if one has started
-
-				sessionDetail = $"({currentLapCount}{totalSessionTime})";
-			}
-			else
-			{
-				sessionDetail = (currentLap > -1) ? $"(Lap {currentLap}/{sessionLaps})" : ""; // Only show lap info if one has started
-			}
-			
-			StatusBarCurrentSessionInfo = $"Current Session: {sessionType} {sessionDetail}";
+			StatusBarCurrentSessionInfo = $"Current Session: {sessionType}";
 		}
 
 		// Used to limit updates on refreshing driver position ordering
