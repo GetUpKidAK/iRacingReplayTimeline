@@ -30,7 +30,7 @@ namespace iRacingReplayDirector
 		{
 			if (ReplayDirectorVM.PlaybackEnabled)
 			{
-				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
+				ReplayDirectorVM.PlaybackSpeed = ReplayDirectorVM.PauseSpeed;
 
 				if (ReplayDirectorVM.DisableSimUIOnPlayback)
 				{
@@ -39,7 +39,7 @@ namespace iRacingReplayDirector
 			}
 			else
 			{
-				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
+				ReplayDirectorVM.PlaybackSpeed = ReplayDirectorVM.PlaySpeed;
 				ReplayDirectorVM.InSimUIEnabled = !ReplayDirectorVM.DisableSimUIOnPlayback;
 			}
 		}

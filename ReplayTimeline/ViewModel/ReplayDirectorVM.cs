@@ -37,6 +37,45 @@ namespace iRacingReplayDirector
 			DriversView.SortDescriptions.Add(idSort);
 			SortDriversById = true;
 
+			AvailableSpeeds = new ObservableCollection<PlaybackSpeed>()
+			{
+				new PlaybackSpeed("RW 1/16x", -15, true),
+				new PlaybackSpeed("RW 1/12x", -11, true),
+				new PlaybackSpeed("RW 1/8x", -7, true),
+				new PlaybackSpeed("RW 1/4x", -3, true),
+				new PlaybackSpeed("RW 1/2x", -1, true),
+				new PlaybackSpeed("RW 16x", -16, false),
+				new PlaybackSpeed("RW 12x", -12, false),
+				new PlaybackSpeed("RW 8x", -8, false),
+				new PlaybackSpeed("RW 4x", -4, false),
+				new PlaybackSpeed("RW 2x", -2, false),
+				new PlaybackSpeed("RW", -1, false),
+				new PlaybackSpeed("Paused", 0, false),
+				new PlaybackSpeed("1x", 1, false),
+				new PlaybackSpeed("2x", 2, false),
+				new PlaybackSpeed("4x", 4, false),
+				new PlaybackSpeed("8x", 8, false),
+				new PlaybackSpeed("12x", 12, false),
+				new PlaybackSpeed("16x", 16, false),
+				new PlaybackSpeed("1/2x", 1, true),
+				new PlaybackSpeed("1/4x", 3, true),
+				new PlaybackSpeed("1/8x", 7, true),
+				new PlaybackSpeed("1/12x", 11, true),
+				new PlaybackSpeed("1/16x", 15, true)
+			};
+
+			// Populate available node speeds with all positive speed values - For now at least...
+			AvailableNodeSpeeds = new ObservableCollection<PlaybackSpeed>();
+			foreach (var speed in AvailableSpeeds)
+			{
+				if (speed.SpeedValue > 0)
+				{
+					AvailableNodeSpeeds.Add(speed);
+				}
+			}
+			// Select first speed (1x)
+			SelectedNodeSpeed = AvailableNodeSpeeds[0];
+
 			StatusBarText = "iRacing Not Connected.";
 			CamChangeBtnText = "Add Cam Change";
 			RecordBtnText = "Record";
@@ -343,6 +382,8 @@ namespace iRacingReplayDirector
 			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
 			InSimCaptureSettingEnabled = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;
 			InSimCaptureActive = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapActive").Value;
+
+			PlaybackSpeed = AvailableSpeeds.FirstOrDefault(s => s.SpeedValue == CurrentPlaybackSpeed && s.SlowMotion == SlowMotionEnabled);
 
 			// Set current car/camera based on sim selections (won't update unless different to app)
 			CurrentDriver = Drivers.FirstOrDefault(d => d.Id == e.TelemetryInfo.CamCarIdx.Value);

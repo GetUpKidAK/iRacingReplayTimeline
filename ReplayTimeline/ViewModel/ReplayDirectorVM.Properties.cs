@@ -35,6 +35,29 @@ namespace iRacingReplayDirector
 		public ICollectionView DriversView { get; private set; }
 		public ObservableCollection<Camera> Cameras { get; set; }
 
+		private PlaybackSpeed _playbackSpeed;
+		public PlaybackSpeed PlaybackSpeed
+		{
+			get => _playbackSpeed;
+			set
+			{
+				if (_playbackSpeed != value && value != null)
+				{
+					_playbackSpeed = value;
+					Sim.Instance.Sdk.Replay.SetPlaybackSpeed(_playbackSpeed.SpeedValue, _playbackSpeed.SlowMotion);
+					OnPropertyChanged("PlaybackSpeed");
+					CommandManager.InvalidateRequerySuggested();
+					//UpdatePlaybackButtonText();
+				}
+			}
+		}
+
+		public PlaybackSpeed PlaySpeed => new PlaybackSpeed("1x", 1, false);
+		public PlaybackSpeed PauseSpeed => new PlaybackSpeed("Paused", 0, false);
+		public ObservableCollection<PlaybackSpeed> AvailableSpeeds { get; set; }
+		public ObservableCollection<PlaybackSpeed> AvailableNodeSpeeds { get; set; }
+		public PlaybackSpeed SelectedNodeSpeed { get; set; }
+
 		private Node _currentNode;
 		public Node CurrentNode
 		{

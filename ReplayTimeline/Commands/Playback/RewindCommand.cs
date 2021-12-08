@@ -34,31 +34,11 @@ namespace iRacingReplayDirector
 			// If in any other state (slow motion, fast-forward, etc.) then it will just start playback in reverse at 1X speed
 			if (ReplayDirectorVM.CurrentPlaybackSpeed < 0 && !ReplayDirectorVM.SlowMotionEnabled)
 			{
-				// In-Sim speed jumps are 1, 2, 4, 8, 12, 16X
-				int newSpeed = ReplayDirectorVM.CurrentPlaybackSpeed;
-
-				switch (ReplayDirectorVM.CurrentPlaybackSpeed)
+				var index = ReplayDirectorVM.AvailableSpeeds.IndexOf(ReplayDirectorVM.PlaybackSpeed);
+				if (index > 0)
 				{
-					case -1:
-						newSpeed *= 2;
-						break;
-					case -2:
-						newSpeed *= 2;
-						break;
-					case -4:
-						newSpeed *= 2;
-						break;
-					case -8:
-						newSpeed -= 4;
-						break;
-					case -12:
-						newSpeed -= 4;
-						break;
-					default:
-						break;
+					ReplayDirectorVM.PlaybackSpeed = ReplayDirectorVM.AvailableSpeeds[index - 1];
 				}
-
-				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(newSpeed);
 			}
 			else
 			{
