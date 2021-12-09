@@ -379,7 +379,8 @@ namespace iRacingReplayDirector
 			CurrentPlaybackSpeed = e.TelemetryInfo.ReplayPlaySpeed.Value;
 			PlaybackEnabled = CurrentPlaybackSpeed != 0;
 			SlowMotionEnabled = e.TelemetryInfo.ReplayPlaySlowMotion.Value;
-			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
+			//NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed == 1 && !SlowMotionEnabled;
+			NormalPlaybackSpeedEnabled = CurrentPlaybackSpeed > 0;
 			InSimCaptureSettingEnabled = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;
 			InSimCaptureActive = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapActive").Value;
 
@@ -548,7 +549,7 @@ namespace iRacingReplayDirector
 							if (foundCamera == null)
 								foundCamera = new Camera() { GroupName = node.CameraName };
 
-							CamChangeNode newCamChangeNode = new CamChangeNode(node.Enabled, node.Frame, foundDriver, foundCamera);
+							CamChangeNode newCamChangeNode = new CamChangeNode(node.Enabled, node.Frame, foundDriver, foundCamera, new PlaybackSpeed("1x", 1, false));// TODO: FIX!
 
 							NodeCollection.Nodes.Add(newCamChangeNode);
 						}

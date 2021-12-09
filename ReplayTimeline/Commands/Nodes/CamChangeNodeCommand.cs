@@ -29,6 +29,7 @@ namespace iRacingReplayDirector
 				{
 					bool driverSelected = ReplayDirectorVM.CurrentDriver != null;
 					bool cameraSelected = ReplayDirectorVM.CurrentCamera != null;
+					bool playbackSpeedSelected = ReplayDirectorVM.SelectedNodeSpeed != null;
 
 					bool timelineNodeSelected = ReplayDirectorVM.CurrentNode != null;
 
@@ -39,12 +40,13 @@ namespace iRacingReplayDirector
 							var currentNode = ReplayDirectorVM.CurrentNode as CamChangeNode;
 
 							return ReplayDirectorVM.CurrentDriver != currentNode.Driver
-								|| ReplayDirectorVM.CurrentCamera != currentNode.Camera;
+								|| ReplayDirectorVM.CurrentCamera != currentNode.Camera
+								|| ReplayDirectorVM.SelectedNodeSpeed != currentNode.PlaybackSpeed;
 						}
 					}
 					else
 					{
-						return driverSelected && cameraSelected;
+						return driverSelected && cameraSelected && playbackSpeedSelected;
 					}
 				}
 			}
@@ -62,6 +64,7 @@ namespace iRacingReplayDirector
 
 					currentNode.Driver = ReplayDirectorVM.CurrentDriver;
 					currentNode.Camera = ReplayDirectorVM.CurrentCamera;
+					currentNode.PlaybackSpeed = ReplayDirectorVM.SelectedNodeSpeed;
 
 					ReplayDirectorVM.NodeCollection.SaveNodeChanges(); // TODO: POssible to improve this? remove public reference
 				}
@@ -74,7 +77,7 @@ namespace iRacingReplayDirector
 
 				if (!timelineFrames.Contains(ReplayDirectorVM.CurrentFrame))
 				{
-					CamChangeNode newNode = new CamChangeNode(true, ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera);
+					CamChangeNode newNode = new CamChangeNode(true, ReplayDirectorVM.CurrentFrame, ReplayDirectorVM.CurrentDriver, ReplayDirectorVM.CurrentCamera, ReplayDirectorVM.SelectedNodeSpeed);
 
 					ReplayDirectorVM.NodeCollection.AddNode(newNode);
 					storedNode = newNode;
