@@ -58,6 +58,7 @@ namespace iRacingReplayDirector
 
 			// Otherwise, switch driver and camera
 			Sim.Instance.Sdk.Camera.SwitchToCar(Driver.NumberRaw, Camera.GroupNum);
+
 			if (playbackEnabled && PlaybackSpeed != null)
 			{
 				Sim.Instance.Sdk.Replay.SetPlaybackSpeed(PlaybackSpeed.SpeedValue, PlaybackSpeed.SlowMotion);
