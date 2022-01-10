@@ -12,7 +12,7 @@ namespace iRacingReplayDirector
 		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
-		private const string m_VersionNumber = "1.31";
+		private const string m_VersionNumber = "1.32";
 
 		/// <summary>
 		/// PROPERTIES
