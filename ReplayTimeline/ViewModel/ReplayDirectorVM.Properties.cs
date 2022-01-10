@@ -243,6 +243,14 @@ namespace iRacingReplayDirector
 			set { _windowAlwaysOnTop = value; OnPropertyChanged("WindowAlwaysOnTop"); }
 		}
 
+		private string _manualFrameEntryText;
+		public string ManualFrameEntryText
+		{
+			get { return _manualFrameEntryText; }
+			set { _manualFrameEntryText = value; OnPropertyChanged("ManualFrameEntryText"); }
+		}
+
+
 		#endregion
 
 		/// <summary>
@@ -409,6 +417,8 @@ namespace iRacingReplayDirector
 		public SkipFrameBackCommand SkipFrameBackCommand { get; set; }
 		public SkipFrameForwardCommand SkipFrameForwardCommand { get; set; }
 		public SlowMotionCommand SlowMotionCommand { get; set; }
+
+		public ManualFrameEntryCommand ManualFrameEntryCommand { get; set; }
 
 		public NextLapCommand NextLapCommand { get; set; }
 		public PreviousLapCommand PreviousLapCommand { get; set; }

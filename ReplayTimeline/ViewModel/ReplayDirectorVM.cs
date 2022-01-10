@@ -64,6 +64,8 @@ namespace iRacingReplayDirector
 			ToggleDriverSortOptionCommand = new ToggleDriverSortOptionCommand(this);
 			ToggleRecordingCommand = new ToggleRecordingCommand(this);
 
+			ManualFrameEntryCommand = new ManualFrameEntryCommand(this);
+
 			ToggleInSimUICommand = new ToggleInSimUICommand(this);
 			ToggleSimUIOnPlaybackCommand = new ToggleSimUIOnPlaybackCommand(this);
 			ToggleSimUIOnRecordingCommand = new ToggleSimUIOnRecordingCommand(this);

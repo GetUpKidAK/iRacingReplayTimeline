@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 
 
@@ -49,6 +50,12 @@ namespace iRacingReplayDirector
 				_vm.ShowSessionLapSkipControls = e.NewSize.Height > _vm.HeightToDisableControls;
 				_vm.ShowRecordingControls = e.NewSize.Height > _vm.HeightToDisableControls;
 			}
+		}
+
+		private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
 		}
 	}
 }
