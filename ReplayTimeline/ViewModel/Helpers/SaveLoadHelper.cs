@@ -17,34 +17,42 @@ namespace iRacingReplayDirector
 
 		public static void SaveSettings(ReplayDirectorVM vm)
 		{
-			AppSettings appSettings = new AppSettings()
-			{
-				WindowSize = new AppSettings.Window(vm.WindowWidth, vm.WindowHeight),
-				UIOptions = new AppSettings.InterfaceOptions(vm.WindowAlwaysOnTop, vm.ShowVisualTimeline, vm.ShowRecordingControls, vm.ShowSessionLapSkipControls, vm.FrameSkipInfoShown),
-				SimOptions = new AppSettings.SimOptionsClass(vm.DisableSimUIOnPlayback, vm.DisableUIWhenRecording, vm.StopRecordingOnFinalNode, vm.UseInSimCapture, vm.UseOBSCapture)
-			};
+			Properties.Settings.Default.WindowWidth = vm.WindowWidth;
+			Properties.Settings.Default.WindowHeight = vm.WindowHeight;
+			Properties.Settings.Default.WindowOnTop = vm.WindowAlwaysOnTop;
+			Properties.Settings.Default.ShowVisualTimeline = vm.ShowVisualTimeline;
+			Properties.Settings.Default.ShowRecordingControls = vm.ShowRecordingControls;
+			Properties.Settings.Default.ShowSessionLapSkipControls = vm.ShowSessionLapSkipControls;
+			Properties.Settings.Default.FrameSkipInfoShown = vm.FrameSkipInfoShown;
+			Properties.Settings.Default.DisableSimUIOnPlayback = vm.DisableSimUIOnPlayback;
+			Properties.Settings.Default.DisableUIWhenRecording = vm.DisableUIWhenRecording;
+			Properties.Settings.Default.StopRecordingOnFinalNode = vm.StopRecordingOnFinalNode;
+			Properties.Settings.Default.UseInSimCapture = vm.UseInSimCapture;
+			Properties.Settings.Default.UseOBSCapture = vm.UseOBSCapture;
 
-			var saveFilePath = GenerateSettingsFilePath();
-			SaveToFile(saveFilePath, appSettings);
+			Properties.Settings.Default.Save();
 		}
 
 		public static AppSettings LoadSettings()
 		{
-			var saveFilePath = GenerateSettingsFilePath();
-			AppSettings loadedSettings = new AppSettings();
-
-			if (File.Exists(saveFilePath))
+			AppSettings loadedSettings = new AppSettings()
 			{
-				try
-				{
-					string fileContents = File.ReadAllText(saveFilePath);
-					loadedSettings = JsonConvert.DeserializeObject<AppSettings>(fileContents);
-				}
-				catch (Exception e)
-				{
-					Console.WriteLine(e.Message);
-				}
-			}
+				WindowSize = new AppSettings.Window(
+					Properties.Settings.Default.WindowWidth,
+					Properties.Settings.Default.WindowHeight),
+				UIOptions = new AppSettings.InterfaceOptions(
+					Properties.Settings.Default.WindowOnTop,
+					Properties.Settings.Default.ShowVisualTimeline,
+					Properties.Settings.Default.ShowRecordingControls,
+					Properties.Settings.Default.ShowSessionLapSkipControls,
+					Properties.Settings.Default.FrameSkipInfoShown),
+				SimOptions = new AppSettings.SimOptionsClass(
+					Properties.Settings.Default.DisableSimUIOnPlayback,
+					Properties.Settings.Default.DisableUIWhenRecording,
+					Properties.Settings.Default.StopRecordingOnFinalNode,
+					Properties.Settings.Default.UseInSimCapture,
+					Properties.Settings.Default.UseOBSCapture)
+			};
 
 			return loadedSettings;
 		}
@@ -98,26 +106,6 @@ namespace iRacingReplayDirector
 			}
 
 			return loadedProject;
-		}
-
-		private static string GenerateSettingsFilePath()
-		{
-			var finalFilename = $"{m_SettingsFilename}{m_SettingsExtension}";
-			var finalPath = AppDomain.CurrentDomain.BaseDirectory;
-
-			if (!Directory.Exists(finalPath))
-			{
-				try
-				{
-					Directory.CreateDirectory(finalPath);
-				}
-				catch (Exception e)
-				{
-					Console.WriteLine(e.Message);
-				}
-			}
-
-			return Path.Combine(finalPath, finalFilename);
 		}
 
 		private static string GenerateProjectFilePath(int sessionID)

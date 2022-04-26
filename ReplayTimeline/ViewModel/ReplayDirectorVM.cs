@@ -84,7 +84,7 @@ namespace iRacingReplayDirector
 		{
 			var loadedSettings = SaveLoadHelper.LoadSettings();
 
-			if (loadedSettings != null && loadedSettings.SettingsAreValid())
+			if (loadedSettings != null && loadedSettings.SettingsAreValid()) // TODO: SettingsAreValid now redundant?
 			{
 				WindowWidth = loadedSettings.WindowSize.Width;
 				WindowHeight = loadedSettings.WindowSize.Height;
@@ -110,7 +110,7 @@ namespace iRacingReplayDirector
 			}
 		}
 
-		public void SetAppDefaults()
+		public void SetAppDefaults()  // TODO: Redundant due to ApplicationSettings?
 		{
 			// Defaults
 			WindowWidth = 1000;
