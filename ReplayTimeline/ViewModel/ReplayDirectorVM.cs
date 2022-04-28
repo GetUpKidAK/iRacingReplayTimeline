@@ -41,7 +41,7 @@ namespace iRacingReplayDirector
 			CamChangeBtnText = "Add Cam Change";
 			RecordBtnText = "Record";
 
-			GetAppSettings();
+			SaveLoadHelper.LoadSettings(this);
 
 			CamChangeNodeCommand = new CamChangeNodeCommand(this);
 			FrameSkipNodeCommand = new FrameSkipNodeCommand(this);
@@ -78,56 +78,6 @@ namespace iRacingReplayDirector
 			ResetAppSettingsCommand = new ResetAppSettingsCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
 			AboutCommand = new AboutCommand(this);
-		}
-
-		private void GetAppSettings()
-		{
-			var loadedSettings = SaveLoadHelper.LoadSettings();
-
-			if (loadedSettings != null && loadedSettings.SettingsAreValid()) // TODO: SettingsAreValid now redundant?
-			{
-				WindowWidth = loadedSettings.WindowSize.Width;
-				WindowHeight = loadedSettings.WindowSize.Height;
-
-				WindowAlwaysOnTop = loadedSettings.UIOptions.WindowAlwaysOnTop;
-				ShowVisualTimeline = loadedSettings.UIOptions.ShowVisualTimeline;
-				ShowRecordingControls = loadedSettings.UIOptions.ShowRecordingControls;
-				ShowSessionLapSkipControls = loadedSettings.UIOptions.ShowSessionLapSkipControls;
-				FrameSkipInfoShown = loadedSettings.UIOptions.FrameSkipInfoShown;
-
-				DisableSimUIOnPlayback = loadedSettings.SimOptions.DisableSimUIOnPlayback;
-				DisableUIWhenRecording = loadedSettings.SimOptions.DisableUIWhenRecording;
-				StopRecordingOnFinalNode = loadedSettings.SimOptions.StopRecordingOnFinalNode;
-				UseInSimCapture = loadedSettings.SimOptions.UseInSimCapture;
-				UseOBSCapture = loadedSettings.SimOptions.UseOBSCapture;
-
-				if (UseInSimCapture && UseOBSCapture)
-					UseOBSCapture = false;
-			}
-			else
-			{
-				SetAppDefaults();
-			}
-		}
-
-		public void SetAppDefaults()  // TODO: Redundant due to ApplicationSettings?
-		{
-			// Defaults
-			WindowWidth = 1000;
-			WindowHeight = 600;
-
-			WindowAlwaysOnTop = false;
-			ShowVisualTimeline = true;
-			ShowRecordingControls = true;
-			ShowSessionLapSkipControls = true;
-			FrameSkipInfoShown = false;
-
-			DisableSimUIOnPlayback = true;
-			DisableUIWhenRecording = true;
-			StopRecordingOnFinalNode = false;
-
-			UseInSimCapture = false;
-			UseOBSCapture = false;
 		}
 
 		public void ApplicationClosing(Size windowSize)

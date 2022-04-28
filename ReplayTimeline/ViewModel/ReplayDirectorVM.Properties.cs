@@ -12,7 +12,7 @@ namespace iRacingReplayDirector
 		private bool m_LiveSessionPopupVisible;
 
 		private const string m_ApplicationTitle = "iRacing Sequence Director";
-		private const string m_VersionNumber = "1.32";
+		private const string m_VersionNumber = "1.4";
 
 		/// <summary>
 		/// PROPERTIES
@@ -22,7 +22,16 @@ namespace iRacingReplayDirector
 		public bool SessionInfoLoaded { get; private set; } = false;
 		public bool IsLiveSession { get; private set; }
 		public int SessionID { get; private set; }
-		public bool FrameSkipInfoShown { get; set; }
+		private bool _frameSkipInfoShown;
+		public bool FrameSkipInfoShown
+		{
+			get { return _frameSkipInfoShown; }
+			set
+			{
+				_frameSkipInfoShown = value;
+				Properties.Settings.Default.FrameSkipInfoShown = value;
+			}
+		}
 		#endregion
 
 		/// <summary>
@@ -226,21 +235,36 @@ namespace iRacingReplayDirector
 		public int WindowWidth
 		{
 			get { return _windowWidth; }
-			set { _windowWidth = value; OnPropertyChanged("WindowWidth"); }
+			set
+			{
+				_windowWidth = value;
+				Properties.Settings.Default.WindowWidth = value;
+				OnPropertyChanged("WindowWidth");
+			}
 		}
 
 		private int _windowHeight;
 		public int WindowHeight
 		{
 			get { return _windowHeight; }
-			set { _windowHeight = value; OnPropertyChanged("WindowHeight"); }
+			set
+			{
+				_windowHeight = value;
+				Properties.Settings.Default.WindowHeight = value;
+				OnPropertyChanged("WindowHeight");
+			}
 		}
 
 		private bool _windowAlwaysOnTop;
 		public bool WindowAlwaysOnTop
 		{
 			get { return _windowAlwaysOnTop; }
-			set { _windowAlwaysOnTop = value; OnPropertyChanged("WindowAlwaysOnTop"); }
+			set
+			{
+				_windowAlwaysOnTop = value;
+				Properties.Settings.Default.WindowOnTop = value;
+				OnPropertyChanged("WindowAlwaysOnTop");
+			}
 		}
 
 		private string _manualFrameEntryText;
@@ -290,35 +314,60 @@ namespace iRacingReplayDirector
 		public bool DisableSimUIOnPlayback
 		{
 			get { return _disableSimUIOnPlayback; }
-			set { _disableSimUIOnPlayback = value;OnPropertyChanged("DisableSimUIOnPlayback"); }
+			set
+			{
+				_disableSimUIOnPlayback = value;
+				Properties.Settings.Default.DisableSimUIOnPlayback = value;
+				OnPropertyChanged("DisableSimUIOnPlayback");
+			}
 		}
 
 		private bool _disableUIWhenRecording;
 		public bool DisableUIWhenRecording
 		{
 			get { return _disableUIWhenRecording; }
-			set { _disableUIWhenRecording = value; OnPropertyChanged("DisableUIWhenRecording"); }
+			set
+			{
+				_disableUIWhenRecording = value;
+				Properties.Settings.Default.DisableUIWhenRecording = value;
+				OnPropertyChanged("DisableUIWhenRecording");
+			}
 		}
 
 		private bool _stopRecordingOnFinalNode;
 		public bool StopRecordingOnFinalNode
 		{
 			get { return _stopRecordingOnFinalNode; }
-			set { _stopRecordingOnFinalNode = value; OnPropertyChanged("StopRecordingOnFinalNode"); }
+			set
+			{
+				_stopRecordingOnFinalNode = value;
+				Properties.Settings.Default.StopRecordingOnFinalNode = value;
+				OnPropertyChanged("StopRecordingOnFinalNode");
+			}
 		}
 
 		private bool _useInSimCapture;
 		public bool UseInSimCapture
 		{
 			get { return _useInSimCapture; }
-			set { _useInSimCapture = value; OnPropertyChanged("UseInSimCapture"); }
+			set
+			{
+				_useInSimCapture = value;
+				Properties.Settings.Default.UseInSimCapture = value;
+				OnPropertyChanged("UseInSimCapture");
+			}
 		}
 
 		private bool _useOBSCapture;
 		public bool UseOBSCapture
 		{
 			get { return _useOBSCapture; }
-			set { _useOBSCapture = value; OnPropertyChanged("UseOBSCapture"); }
+			set
+			{
+				_useOBSCapture = value;
+				Properties.Settings.Default.UseOBSCapture = value;
+				OnPropertyChanged("UseOBSCapture");
+			}
 		}
 
 		private bool _externalCaptureActive;
@@ -335,6 +384,7 @@ namespace iRacingReplayDirector
 			set
 			{
 				_showVisualTimeline = value;
+				Properties.Settings.Default.ShowVisualTimeline = value;
 				OnPropertyChanged("ShowVisualTimeline");
 			}
 		}
@@ -343,16 +393,24 @@ namespace iRacingReplayDirector
 		public bool ShowRecordingControls
 		{
 			get { return _showRecordingControls; }
-			set { _showRecordingControls = value;
-					OnPropertyChanged("ShowRecordingControls");}
+			set
+			{
+				_showRecordingControls = value;
+				Properties.Settings.Default.ShowRecordingControls = value;
+				OnPropertyChanged("ShowRecordingControls");
+			}
 		}
 
 		private bool _showSessionLapSkipControls;
 		public bool ShowSessionLapSkipControls
 		{
 			get { return _showSessionLapSkipControls; }
-			set { _showSessionLapSkipControls = value;
-					OnPropertyChanged("ShowSessionLapSkipControls"); }
+			set
+			{
+				_showSessionLapSkipControls = value;
+				Properties.Settings.Default.ShowSessionLapSkipControls = value;
+				OnPropertyChanged("ShowSessionLapSkipControls");
+			}
 		}
 
 		private bool _showDriverCameraPanels;

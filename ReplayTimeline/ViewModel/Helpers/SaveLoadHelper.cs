@@ -10,51 +10,31 @@ namespace iRacingReplayDirector
 	{
 		private const string m_ProjectsSubFolder = "Saves";
 		private const string m_ProjectExtension = ".timeline";
-		private const string m_SettingsFilename = "settings";
-		private const string m_SettingsExtension = ".ini";
+
 		private const Formatting m_FileFormatting = Formatting.Indented;
 
 
 		public static void SaveSettings(ReplayDirectorVM vm)
 		{
-			Properties.Settings.Default.WindowWidth = vm.WindowWidth;
-			Properties.Settings.Default.WindowHeight = vm.WindowHeight;
-			Properties.Settings.Default.WindowOnTop = vm.WindowAlwaysOnTop;
-			Properties.Settings.Default.ShowVisualTimeline = vm.ShowVisualTimeline;
-			Properties.Settings.Default.ShowRecordingControls = vm.ShowRecordingControls;
-			Properties.Settings.Default.ShowSessionLapSkipControls = vm.ShowSessionLapSkipControls;
-			Properties.Settings.Default.FrameSkipInfoShown = vm.FrameSkipInfoShown;
-			Properties.Settings.Default.DisableSimUIOnPlayback = vm.DisableSimUIOnPlayback;
-			Properties.Settings.Default.DisableUIWhenRecording = vm.DisableUIWhenRecording;
-			Properties.Settings.Default.StopRecordingOnFinalNode = vm.StopRecordingOnFinalNode;
-			Properties.Settings.Default.UseInSimCapture = vm.UseInSimCapture;
-			Properties.Settings.Default.UseOBSCapture = vm.UseOBSCapture;
-
 			Properties.Settings.Default.Save();
 		}
 
-		public static AppSettings LoadSettings()
+		public static void LoadSettings(ReplayDirectorVM vm)
 		{
-			AppSettings loadedSettings = new AppSettings()
-			{
-				WindowSize = new AppSettings.Window(
-					Properties.Settings.Default.WindowWidth,
-					Properties.Settings.Default.WindowHeight),
-				UIOptions = new AppSettings.InterfaceOptions(
-					Properties.Settings.Default.WindowOnTop,
-					Properties.Settings.Default.ShowVisualTimeline,
-					Properties.Settings.Default.ShowRecordingControls,
-					Properties.Settings.Default.ShowSessionLapSkipControls,
-					Properties.Settings.Default.FrameSkipInfoShown),
-				SimOptions = new AppSettings.SimOptionsClass(
-					Properties.Settings.Default.DisableSimUIOnPlayback,
-					Properties.Settings.Default.DisableUIWhenRecording,
-					Properties.Settings.Default.StopRecordingOnFinalNode,
-					Properties.Settings.Default.UseInSimCapture,
-					Properties.Settings.Default.UseOBSCapture)
-			};
+			vm.WindowWidth = Properties.Settings.Default.WindowWidth;
+			vm.WindowHeight = Properties.Settings.Default.WindowHeight;
+			vm.WindowAlwaysOnTop = Properties.Settings.Default.WindowOnTop;
 
-			return loadedSettings;
+			vm.ShowVisualTimeline = Properties.Settings.Default.ShowVisualTimeline;
+			vm.ShowRecordingControls = Properties.Settings.Default.ShowRecordingControls;
+			vm.ShowSessionLapSkipControls = Properties.Settings.Default.ShowSessionLapSkipControls;
+			vm.FrameSkipInfoShown = Properties.Settings.Default.FrameSkipInfoShown;
+
+			vm.DisableSimUIOnPlayback = Properties.Settings.Default.DisableSimUIOnPlayback;
+			vm.DisableUIWhenRecording = Properties.Settings.Default.DisableUIWhenRecording;
+			vm.StopRecordingOnFinalNode = Properties.Settings.Default.StopRecordingOnFinalNode;
+			vm.UseInSimCapture = Properties.Settings.Default.UseInSimCapture;
+			vm.UseOBSCapture = Properties.Settings.Default.UseOBSCapture;
 		}
 
 		public static void SaveProject(List<Node> nodes, int sessionID)

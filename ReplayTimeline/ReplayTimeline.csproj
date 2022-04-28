@@ -85,7 +85,6 @@
     <Compile Include="Model\NodeCollection.cs" />
     <Compile Include="Commands\Menu Items\ResetAppSettingsCommand.cs" />
     <Compile Include="ViewModel\Converters\CarPositionConverter.cs" />
-    <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Commands\Menu Items\AboutCommand.cs" />
     <Compile Include="Commands\Menu Items\ApplicationQuitCommand.cs" />
     <Compile Include="Commands\Menu Items\ToggleSimUIOnPlaybackCommand.cs" />
