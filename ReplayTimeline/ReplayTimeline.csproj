@@ -80,6 +80,11 @@
     <Compile Include="Commands\Playback\ManualFrameEntryCommand.cs" />
     <Compile Include="Model\CamChangeNode.cs" />
     <Compile Include="Commands\Nodes\ClearAllNodesCommand.cs" />
+    <Compile Include="Model\CaptureModes\CaptureModeBase.cs" />
+    <Compile Include="Model\CaptureModes\CaptureMode_Iracing.cs" />
+    <Compile Include="Model\CaptureModes\CaptureMode_None.cs" />
+    <Compile Include="Model\CaptureModes\CaptureMode_OBS.cs" />
+    <Compile Include="Model\CaptureModes\CaptureMode_ShadowPlay.cs" />
     <Compile Include="Model\FrameSkipNode.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="Model\NodeCollection.cs" />

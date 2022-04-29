@@ -136,9 +136,12 @@
 										ToolTipService.ShowOnDisabled="True"
 										ToolTipService.IsEnabled="{Binding InSimCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
 										ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
+								
 								<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
 												  ToolTip="Use last stored node as a placeholder to stop recording." />
-								<TextBlock Padding="10 2" Text="{Binding CaptureModeText}"/>
+								<TextBlock Padding="10 2 5 2" Text="Capture Mode: "/>
+
+								<ComboBox Width="100" ItemsSource="{Binding CaptureModes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCaptureMode}" IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" />
 							</StackPanel>
 						</GroupBox>
 					</StackPanel>

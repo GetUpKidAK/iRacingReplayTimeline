@@ -34,6 +34,16 @@ namespace iRacingReplayDirector
 		}
 		#endregion
 
+		public ObservableCollection<CaptureModeBase> CaptureModes { get; set; }
+
+		private CaptureModeBase _selectedCaptureMode;
+		public CaptureModeBase SelectedCaptureMode
+		{
+			get { return _selectedCaptureMode; }
+			set { _selectedCaptureMode = value; System.Console.WriteLine($"{_selectedCaptureMode.Name} selected"); OnPropertyChanged("SelectedCaptureMode"); }
+		}
+
+
 		/// <summary>
 		/// BINDING PROPERTIES
 		/// </summary>

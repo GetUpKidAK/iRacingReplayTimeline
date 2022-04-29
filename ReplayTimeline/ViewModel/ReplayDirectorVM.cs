@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using iRacingSdkWrapper;
@@ -42,6 +44,9 @@ namespace iRacingReplayDirector
 			RecordBtnText = "Record";
 
 			SaveLoadHelper.LoadSettings(this);
+			//TODO: Improve this, have last used method reinstated
+			CaptureModes = new ObservableCollection<CaptureModeBase>() { new CaptureMode_None(), new CaptureMode_Iracing(), new CaptureMode_OBS(), new CaptureMode_ShadowPlay() };
+			SelectedCaptureMode = CaptureModes[0];
 
 			CamChangeNodeCommand = new CamChangeNodeCommand(this);
 			FrameSkipNodeCommand = new FrameSkipNodeCommand(this);
@@ -431,9 +436,9 @@ namespace iRacingReplayDirector
 		{
 			CamChangeBtnText = CurrentNode == null ? "Add Cam Change" : "Update Camera";
 
-			CaptureModeText = "Capture Mode: None";
-			if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";
-			else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
+			//CaptureModeText = "Capture Mode: None";
+			//if (UseOBSCapture) CaptureModeText = "Capture Mode: OBS";
+			//else if (UseInSimCapture) CaptureModeText = "Capture Mode: iRacing";
 		}
 
 		private void LoadExistingProjectFile()
@@ -509,10 +514,12 @@ namespace iRacingReplayDirector
 
 		public bool IsCaptureAvailable()
 		{
-			var inSimCaptureReady = UseInSimCapture && InSimCaptureSettingEnabled;
-			var obsCaptureReady = UseOBSCapture;
+			return SelectedCaptureMode.IsReadyToRecord();
 
-			return inSimCaptureReady || obsCaptureReady;
+			//var inSimCaptureReady = UseInSimCapture && InSimCaptureSettingEnabled;
+			//var obsCaptureReady = UseOBSCapture;
+
+			//return inSimCaptureReady || obsCaptureReady;
 		}
 
 		public bool IsCaptureActive()
@@ -528,48 +535,26 @@ namespace iRacingReplayDirector
 			ToggleRecording(true);
 		}
 
-		public void StopRecording()
+		public async void StopRecording()
 		{
 			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
 			ToggleRecording(false);
+
+			await Task.Delay(500);
 			
 			InSimUIEnabled = true;
 		}
 
 		private void ToggleRecording(bool enabled)
 		{
-			if (UseOBSCapture)
-			{
-				var obsProcess = ExternalProcessHelper.GetExternalProcess();
-				if (obsProcess != null)
-				{
-					RecordBtnText = enabled ? "Stop Rec" : "Record";
-					ExternalCaptureActive = enabled;
-					ExternalProcessHelper.SendToggleRecordMessage(obsProcess);
-				}
-				else
-				{
-					MessageBox.Show("Couldn't find OBS process, please ensure the application is running.", "Error");
+			// Check if process is available ("false" always for disabled capture)
+			// Method return to check if record message sent, update UI
 
-					InSimUIEnabled = true;
-					Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
-					RecordBtnText = "Record";
-				}
-				return;
-			}
-
-			if (UseInSimCapture)
+			if (SelectedCaptureMode.IsReadyToRecord())
 			{
-				if (enabled)
-				{
-					RecordBtnText = "Stop Rec";
-					Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
-				}
-				else
-				{
-					RecordBtnText = "Record";
-					Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
-				}
+				SelectedCaptureMode.ToggleRecording(enabled);
+				RecordBtnText = enabled ? "Stop Rec" : "Record";
+				ExternalCaptureActive = enabled && SelectedCaptureMode.Name != "In-Sim Capture"; // Not sure about this...
 			}
 		}
 	}

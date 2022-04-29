@@ -31,7 +31,7 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			var obsProcess = ExternalProcessHelper.GetExternalProcess();
+			var obsProcess = ExternalProcessHelper.GetExternalProcess("obs64");
 
 			// Disabling OBS capture, don't bother checking if application is running
 			if (!ReplayDirectorVM.UseOBSCapture)
