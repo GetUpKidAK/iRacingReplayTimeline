@@ -34,19 +34,7 @@ namespace iRacingReplayDirector
 		}
 		#endregion
 
-		public ObservableCollection<CaptureModeBase> CaptureModes { get; set; }
-
-		private CaptureModeBase _selectedCaptureMode;
-		public CaptureModeBase SelectedCaptureMode
-		{
-			get { return _selectedCaptureMode; }
-			set
-			{
-				_selectedCaptureMode = value;
-				Properties.Settings.Default.CaptureModeSelected = _selectedCaptureMode.Name;
-				OnPropertyChanged("SelectedCaptureMode");
-			}
-		}
+		
 
 
 		/// <summary>
@@ -212,6 +200,20 @@ namespace iRacingReplayDirector
 			private set { _inSimCaptureActive = value; OnPropertyChanged("InSimCaptureActive"); }
 		}
 
+		public ObservableCollection<CaptureModeBase> CaptureModes { get; set; }
+
+		private CaptureModeBase _selectedCaptureMode;
+		public CaptureModeBase SelectedCaptureMode
+		{
+			get { return _selectedCaptureMode; }
+			set
+			{
+				_selectedCaptureMode = value;
+				Properties.Settings.Default.CaptureModeSelected = _selectedCaptureMode.Name;
+				OnPropertyChanged("SelectedCaptureMode");
+			}
+		}
+
 		private bool _InSimUIEnabled;
 		public bool InSimUIEnabled
 		{
@@ -318,13 +320,6 @@ namespace iRacingReplayDirector
 			set { _recordBtnText = value; OnPropertyChanged("RecordBtnText"); }
 		}
 
-		private string _captureModeText;
-		public string CaptureModeText
-		{
-			get { return _captureModeText; }
-			set { _captureModeText = value; OnPropertyChanged("CaptureModeText"); }
-		}
-
 		private bool _disableSimUIOnPlayback;
 		public bool DisableSimUIOnPlayback
 		{
@@ -358,30 +353,6 @@ namespace iRacingReplayDirector
 				_stopRecordingOnFinalNode = value;
 				Properties.Settings.Default.StopRecordingOnFinalNode = value;
 				OnPropertyChanged("StopRecordingOnFinalNode");
-			}
-		}
-
-		private bool _useInSimCapture;
-		public bool UseInSimCapture
-		{
-			get { return _useInSimCapture; }
-			set
-			{
-				_useInSimCapture = value;
-				Properties.Settings.Default.UseInSimCapture = value;
-				OnPropertyChanged("UseInSimCapture");
-			}
-		}
-
-		private bool _useOBSCapture;
-		public bool UseOBSCapture
-		{
-			get { return _useOBSCapture; }
-			set
-			{
-				_useOBSCapture = value;
-				Properties.Settings.Default.UseOBSCapture = value;
-				OnPropertyChanged("UseOBSCapture");
 			}
 		}
 
@@ -513,8 +484,6 @@ namespace iRacingReplayDirector
 		public ToggleSimUIOnPlaybackCommand ToggleSimUIOnPlaybackCommand { get; set; }
 		public ToggleSimUIOnRecordingCommand ToggleSimUIOnRecordingCommand { get; set; }
 		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
-		public ToggleUseInSimCaptureCommand ToggleUseInSimCaptureCommand { get; set; }
-		public ToggleUseOBSCaptureCommand ToggleUseOBSCaptureCommand { get; set; }
 		#endregion
 	}
 }

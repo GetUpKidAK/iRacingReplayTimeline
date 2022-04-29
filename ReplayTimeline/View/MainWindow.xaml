@@ -31,11 +31,6 @@
 				<MenuItem Header="Options">
 					<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}" Command="{Binding ToggleSimUIOnPlaybackCommand}"/>
 					<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" Command="{Binding ToggleSimUIOnRecordingCommand}"/>
-					<Separator/>
-					<MenuItem Header="Recording Capture Method">
-						<MenuItem Header="iRacing Capture" IsCheckable="True" IsChecked="{Binding UseInSimCapture}" Command="{Binding ToggleUseInSimCaptureCommand}"/>
-						<MenuItem Header="OBS" IsCheckable="True" IsChecked="{Binding UseOBSCapture}" Command="{Binding ToggleUseOBSCaptureCommand}"/>
-					</MenuItem>
 					<Separator />
 					<MenuItem Header="Clear All Nodes" Command="{Binding ClearAllNodesCommand}" />
 				</MenuItem>
@@ -139,9 +134,10 @@
 								
 								<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
 												  ToolTip="Use last stored node as a placeholder to stop recording." />
-								<TextBlock Padding="10 2 5 2" Text="Capture Mode: "/>
 
-								<ComboBox Width="100" ItemsSource="{Binding CaptureModes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedCaptureMode}" IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" />
+								<TextBlock Padding="10 2 5 2" Text="Capture Mode: "/>
+								<ComboBox Width="100" ItemsSource="{Binding CaptureModes}" DisplayMemberPath="Name"
+										  SelectedItem="{Binding SelectedCaptureMode}" IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" />
 							</StackPanel>
 						</GroupBox>
 					</StackPanel>

@@ -145,30 +145,6 @@ namespace iRacingReplayDirector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseInSimCapture {
-            get {
-                return ((bool)(this["UseInSimCapture"]));
-            }
-            set {
-                this["UseInSimCapture"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseOBSCapture {
-            get {
-                return ((bool)(this["UseOBSCapture"]));
-            }
-            set {
-                this["UseOBSCapture"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("None")]
         public string CaptureModeSelected {
             get {

@@ -32,12 +32,6 @@
     <Setting Name="StopRecordingOnFinalNode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="UseInSimCapture" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="UseOBSCapture" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="CaptureModeSelected" Type="System.String" Scope="User">
       <Value Profile="(Default)">None</Value>
     </Setting>

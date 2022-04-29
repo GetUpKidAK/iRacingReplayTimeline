@@ -75,9 +75,6 @@ namespace iRacingReplayDirector
 			ToggleSimUIOnRecordingCommand = new ToggleSimUIOnRecordingCommand(this);
 			ToggleRecordingOnFinalNodeCommand = new ToggleRecordingOnFinalNodeCommand(this);
 
-			ToggleUseInSimCaptureCommand = new ToggleUseInSimCaptureCommand(this);
-			ToggleUseOBSCaptureCommand = new ToggleUseOBSCaptureCommand(this);
-
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			ResetAppSettingsCommand = new ResetAppSettingsCommand(this);
 			MoreInfoCommand = new MoreInfoCommand(this);
