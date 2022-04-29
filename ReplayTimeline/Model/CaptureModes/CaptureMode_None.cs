@@ -19,7 +19,12 @@ namespace iRacingReplayDirector
 			return false;
 		}
 
-		public override void ToggleRecording(bool enabled)
+		public override void StartRecording()
+		{
+			return;
+		}
+
+		public override void StopRecording()
 		{
 			return;
 		}

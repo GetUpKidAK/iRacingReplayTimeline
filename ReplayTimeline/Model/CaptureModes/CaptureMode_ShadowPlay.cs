@@ -26,7 +26,17 @@ namespace iRacingReplayDirector
 			return IsAvailable();
 		}
 
-		public override void ToggleRecording(bool enabled)
+		public override void StartRecording()
+		{
+			ToggleRecording();
+		}
+
+		public override void StopRecording()
+		{
+			ToggleRecording();
+		}
+
+		private void ToggleRecording()
 		{
 			ExternalProcessHelper.SendToggleRecordHotkey(_process, _recordHotkey);
 		}

@@ -14,7 +14,8 @@ namespace iRacingReplayDirector
 
 		public abstract bool IsAvailable();
 		public abstract bool IsReadyToRecord();
-		public abstract void ToggleRecording(bool enabled);
+		public abstract void StartRecording();
+		public abstract void StopRecording();
 
 
 		public CaptureModeBase() { }

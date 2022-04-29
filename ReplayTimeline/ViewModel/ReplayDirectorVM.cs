@@ -533,9 +533,9 @@ namespace iRacingReplayDirector
 
 			if (SelectedCaptureMode.IsReadyToRecord())
 			{
-				SelectedCaptureMode.ToggleRecording(true);
+				SelectedCaptureMode.StartRecording();
 				RecordBtnText = "Stop Rec";
-				ExternalCaptureActive = SelectedCaptureMode.Name != "In-Sim Capture"; // Not sure about this...
+				ExternalCaptureActive = SelectedCaptureMode.Name != "In-Sim Capture"; // TODO: Not sure about this. Should I use a property?
 			}
 		}
 
@@ -545,7 +545,7 @@ namespace iRacingReplayDirector
 
 			if (SelectedCaptureMode.IsReadyToRecord())
 			{
-				SelectedCaptureMode.ToggleRecording(false);
+				SelectedCaptureMode.StopRecording();
 				RecordBtnText = "Record";
 				ExternalCaptureActive = false;
 			}
@@ -553,16 +553,6 @@ namespace iRacingReplayDirector
 			await Task.Delay(500);
 			
 			InSimUIEnabled = true;
-		}
-
-		private void ToggleRecording(bool enabled)
-		{
-			if (SelectedCaptureMode.IsReadyToRecord())
-			{
-				SelectedCaptureMode.ToggleRecording(enabled);
-				RecordBtnText = enabled ? "Stop Rec" : "Record";
-				ExternalCaptureActive = enabled && SelectedCaptureMode.Name != "In-Sim Capture"; // Not sure about this...
-			}
 		}
 	}
 }

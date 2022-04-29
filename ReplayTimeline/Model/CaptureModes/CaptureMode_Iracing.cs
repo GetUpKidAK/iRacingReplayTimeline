@@ -20,16 +20,14 @@ namespace iRacingReplayDirector
 			return IsAvailable();
 		}
 
-		public override void ToggleRecording(bool enabled)
+		public override void StartRecording()
 		{
-			if (enabled)
-			{
-				Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
-			}
-			else
-			{
-				Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
-			}
+			Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 1, 0);
+		}
+
+		public override void StopRecording()
+		{
+			Sim.Instance.Sdk.Sdk.BroadcastMessage(iRSDKSharp.BroadcastMessageTypes.VideoCapture, 2, 0);
 		}
 	}
 }
