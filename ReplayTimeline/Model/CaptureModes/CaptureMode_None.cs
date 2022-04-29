@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 
 namespace iRacingReplayDirector
 {
@@ -24,9 +19,9 @@ namespace iRacingReplayDirector
 			return false;
 		}
 
-		public override bool ToggleRecording(bool enabled)
+		public override void ToggleRecording(bool enabled)
 		{
-			return false;
+			return;
 		}
 	}
 }

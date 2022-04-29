@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using System.Linq;
 
 
 namespace iRacingReplayDirector
@@ -35,6 +36,8 @@ namespace iRacingReplayDirector
 			vm.StopRecordingOnFinalNode = Properties.Settings.Default.StopRecordingOnFinalNode;
 			vm.UseInSimCapture = Properties.Settings.Default.UseInSimCapture;
 			vm.UseOBSCapture = Properties.Settings.Default.UseOBSCapture;
+
+			vm.SelectedCaptureMode = vm.CaptureModes.FirstOrDefault(m => m.Name == Properties.Settings.Default.CaptureModeSelected);
 		}
 
 		public static void SaveProject(List<Node> nodes, int sessionID)

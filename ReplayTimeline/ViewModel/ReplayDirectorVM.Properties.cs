@@ -40,7 +40,12 @@ namespace iRacingReplayDirector
 		public CaptureModeBase SelectedCaptureMode
 		{
 			get { return _selectedCaptureMode; }
-			set { _selectedCaptureMode = value; System.Console.WriteLine($"{_selectedCaptureMode.Name} selected"); OnPropertyChanged("SelectedCaptureMode"); }
+			set
+			{
+				_selectedCaptureMode = value;
+				Properties.Settings.Default.CaptureModeSelected = _selectedCaptureMode.Name;
+				OnPropertyChanged("SelectedCaptureMode");
+			}
 		}
 
 

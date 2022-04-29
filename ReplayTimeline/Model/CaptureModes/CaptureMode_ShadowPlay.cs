@@ -26,11 +26,9 @@ namespace iRacingReplayDirector
 			return IsAvailable();
 		}
 
-		public override bool ToggleRecording(bool enabled)
+		public override void ToggleRecording(bool enabled)
 		{
 			ExternalProcessHelper.SendToggleRecordHotkey(_process, _recordHotkey);
-
-			return false;
 		}
 	}
 }

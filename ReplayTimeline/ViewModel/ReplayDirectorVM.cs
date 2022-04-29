@@ -43,10 +43,9 @@ namespace iRacingReplayDirector
 			CamChangeBtnText = "Add Cam Change";
 			RecordBtnText = "Record";
 
-			SaveLoadHelper.LoadSettings(this);
-			//TODO: Improve this, have last used method reinstated
 			CaptureModes = new ObservableCollection<CaptureModeBase>() { new CaptureMode_None(), new CaptureMode_Iracing(), new CaptureMode_OBS(), new CaptureMode_ShadowPlay() };
-			SelectedCaptureMode = CaptureModes[0];
+
+			SaveLoadHelper.LoadSettings(this);
 
 			CamChangeNodeCommand = new CamChangeNodeCommand(this);
 			FrameSkipNodeCommand = new FrameSkipNodeCommand(this);
@@ -532,13 +531,24 @@ namespace iRacingReplayDirector
 			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(1);
 			InSimUIEnabled = !DisableUIWhenRecording;
 
-			ToggleRecording(true);
+			if (SelectedCaptureMode.IsReadyToRecord())
+			{
+				SelectedCaptureMode.ToggleRecording(true);
+				RecordBtnText = "Stop Rec";
+				ExternalCaptureActive = SelectedCaptureMode.Name != "In-Sim Capture"; // Not sure about this...
+			}
 		}
 
 		public async void StopRecording()
 		{
 			Sim.Instance.Sdk.Replay.SetPlaybackSpeed(0);
-			ToggleRecording(false);
+
+			if (SelectedCaptureMode.IsReadyToRecord())
+			{
+				SelectedCaptureMode.ToggleRecording(false);
+				RecordBtnText = "Record";
+				ExternalCaptureActive = false;
+			}
 
 			await Task.Delay(500);
 			
@@ -547,9 +557,6 @@ namespace iRacingReplayDirector
 
 		private void ToggleRecording(bool enabled)
 		{
-			// Check if process is available ("false" always for disabled capture)
-			// Method return to check if record message sent, update UI
-
 			if (SelectedCaptureMode.IsReadyToRecord())
 			{
 				SelectedCaptureMode.ToggleRecording(enabled);

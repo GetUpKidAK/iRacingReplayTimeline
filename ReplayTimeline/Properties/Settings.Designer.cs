@@ -133,7 +133,7 @@ namespace iRacingReplayDirector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool StopRecordingOnFinalNode {
             get {
                 return ((bool)(this["StopRecordingOnFinalNode"]));
@@ -164,6 +164,18 @@ namespace iRacingReplayDirector.Properties {
             }
             set {
                 this["UseOBSCapture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public string CaptureModeSelected {
+            get {
+                return ((string)(this["CaptureModeSelected"]));
+            }
+            set {
+                this["CaptureModeSelected"] = value;
             }
         }
     }
