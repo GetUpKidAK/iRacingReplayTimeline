@@ -482,7 +482,7 @@ namespace iRacingReplayDirector
 
 		public ApplicationQuitCommand ApplicationQuitCommand { get; set; }
 		public ResetAppSettingsCommand ResetAppSettingsCommand { get; set; }
-		public MoreInfoCommand MoreInfoCommand { get; set; }
+		public OpenURLCommand OpenURLCommand { get; set; }
 		public AboutCommand AboutCommand { get; set; }
 
 		public ToggleInSimUICommand ToggleInSimUICommand { get; set; }

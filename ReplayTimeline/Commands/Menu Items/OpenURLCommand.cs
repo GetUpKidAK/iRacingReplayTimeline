@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace iRacingReplayDirector
 {
-	public class MoreInfoCommand : ICommand
+	public class OpenURLCommand : ICommand
 	{
 		public ReplayDirectorVM ReplayDirectorVM { get; set; }
 
@@ -16,7 +16,7 @@ namespace iRacingReplayDirector
 		}
 
 
-		public MoreInfoCommand(ReplayDirectorVM vm)
+		public OpenURLCommand(ReplayDirectorVM vm)
 		{
 			ReplayDirectorVM = vm;
 		}
@@ -28,13 +28,14 @@ namespace iRacingReplayDirector
 
 		public void Execute(object parameter)
 		{
-			MessageBoxResult confirmationPopUp = MessageBox.Show($"This will open the GitHub project page containing more details and some usage guides.",
-						"More Info / Guides", MessageBoxButton.OKCancel, MessageBoxImage.None, MessageBoxResult.OK);
+			string url = (string)parameter;
+
+			MessageBoxResult confirmationPopUp = MessageBox.Show($"This will open your default browser and take you to:\n\n{url}.",
+						"Open URL", MessageBoxButton.OKCancel, MessageBoxImage.None, MessageBoxResult.OK);
 
 			if (confirmationPopUp == MessageBoxResult.OK)
 			{
-				var destinationurl = "https://github.com/GetUpKidAK/iRacingSequenceDirector";
-				var sInfo = new System.Diagnostics.ProcessStartInfo(destinationurl)
+				var sInfo = new System.Diagnostics.ProcessStartInfo(url)
 				{
 					UseShellExecute = true,
 				};

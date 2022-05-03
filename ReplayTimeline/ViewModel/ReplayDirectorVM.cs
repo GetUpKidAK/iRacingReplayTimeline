@@ -77,7 +77,7 @@ namespace iRacingReplayDirector
 
 			ApplicationQuitCommand = new ApplicationQuitCommand(this);
 			ResetAppSettingsCommand = new ResetAppSettingsCommand(this);
-			MoreInfoCommand = new MoreInfoCommand(this);
+			OpenURLCommand = new OpenURLCommand(this);
 			AboutCommand = new AboutCommand(this);
 		}
 

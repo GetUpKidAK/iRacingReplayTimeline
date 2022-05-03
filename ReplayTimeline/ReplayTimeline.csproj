@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Menu Items\OpenURLCommand.cs" />
     <Compile Include="Commands\Nodes\FrameSkipNodeCommand.cs" />
     <Compile Include="Commands\Playback\ManualFrameEntryCommand.cs" />
     <Compile Include="Model\CamChangeNode.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="ViewModel\Helpers\ExternalProcessHelper.cs" />
     <Compile Include="Model\NodeSaveFile.cs" />
     <Compile Include="Model\TrackSurfaces.cs" />
-    <Compile Include="Commands\Menu Items\MoreInfoCommand.cs" />
     <Compile Include="Commands\Playback\ToggleRecordingCommand.cs" />
     <Compile Include="ViewModel\ReplayDirectorVM.Properties.cs" />
     <Compile Include="ViewModel\Converters\SecondsToTimeConverter.cs" />

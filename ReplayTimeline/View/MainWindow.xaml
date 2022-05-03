@@ -46,7 +46,17 @@
 				<MenuItem Header="Help">
 					<MenuItem Header="Reset Application Settings" Command="{Binding ResetAppSettingsCommand}"/>
 					<Separator />
-					<MenuItem Header="More Info / Guides" Command="{Binding MoreInfoCommand}"/>
+					<MenuItem Header="Homepage" Command="{Binding OpenURLCommand}" CommandParameter="https://github.com/GetUpKidAK/iRacingSequenceDirector"/>
+					<MenuItem Header="Guides">
+						<MenuItem Header="Basic Usage" Command="{Binding OpenURLCommand}" CommandParameter="https://github.com/GetUpKidAK/iRacingSequenceDirector#how-to-use" />
+						<Separator />
+						<MenuItem Header="Enabling In-Sim Capture" Command="{Binding OpenURLCommand}" CommandParameter="https://github.com/GetUpKidAK/iRacingSequenceDirector#setting-up-iracing-in-sim-capture" />
+						<MenuItem Header="Setting up OBS recording" Command="{Binding OpenURLCommand}" CommandParameter="https://github.com/GetUpKidAK/iRacingSequenceDirector#setting-up-obs-recording"/>
+						<Separator />
+						<MenuItem Header="Using Custom Cameras" Command="{Binding OpenURLCommand}" CommandParameter="https://docs.google.com/document/d/1EOWFVIqH9OppcqurmR_wzZs_czvqj3_zsKU_qR6fKfo/edit?usp=sharing"/>
+					</MenuItem>
+					<MenuItem Header="Support" Command="{Binding OpenURLCommand}" CommandParameter="https://forums.iracing.com/discussion/605/iracing-sequence-director-editing-tool-for-replays" />
+					<MenuItem Header="Donate" Command="{Binding OpenURLCommand}" CommandParameter="https://www.paypal.com/paypalme/GetUpKidAK?locale.x=en_GB"/>
 					<MenuItem Header="About" Command="{Binding AboutCommand}"/>
 				</MenuItem>
 
