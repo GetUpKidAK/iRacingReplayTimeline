@@ -12,7 +12,11 @@ namespace iRacingReplayDirector
 
 		public override bool IsAvailable()
 		{
-			return Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;
+			CaptureModeAvailable = Sim.Instance.Sdk.GetTelemetryValue<bool>("VidCapEnabled").Value;;
+
+			CaptureAvailabilityMessage = CaptureModeAvailable ? "" : "Enable In-Sim capture under iRacing's Options (Misc) and restart iRacing.";
+
+			return CaptureModeAvailable;
 		}
 
 		public override bool IsReadyToRecord()

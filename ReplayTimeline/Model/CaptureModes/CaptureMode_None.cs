@@ -11,11 +11,13 @@ namespace iRacingReplayDirector
 
 		public override bool IsAvailable()
 		{
+			CaptureModeAvailable = true;
 			return true;
 		}
 
 		public override bool IsReadyToRecord()
 		{
+			CaptureModeAvailable = true;
 			return false;
 		}
 

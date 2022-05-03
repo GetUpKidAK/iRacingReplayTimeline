@@ -125,19 +125,27 @@
 				<!-- RECORDING CONTROLS -->
 				<Grid DockPanel.Dock="Bottom" Visibility="{Binding ShowRecordingControls, Converter={StaticResource VisibilityConverter}}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<GroupBox Header="Recording" >
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-								<Button Content="{Binding RecordBtnText}" Command="{Binding ToggleRecordingCommand}" Width="100" Margin="10 0 10 0"
-										ToolTipService.ShowOnDisabled="True"
-										ToolTipService.IsEnabled="{Binding InSimCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
-										ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
-								
-								<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}" Command="{Binding ToggleRecordingOnFinalNodeCommand}"
-												  ToolTip="Use last stored node as a placeholder to stop recording." />
+						<GroupBox Header="Recording" Padding="5 0">
+							<StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
+									<Button Content="{Binding RecordBtnText}" Command="{Binding ToggleRecordingCommand}" Width="100" Margin="10 0 10 0"
+											ToolTipService.ShowOnDisabled="True"
+											ToolTipService.IsEnabled="{Binding InSimCaptureSettingEnabled, Converter={StaticResource InvertedBoolConverter}}"
+											ToolTip="Capture must be enabled in-sim to start recording.&#x0a;See Help -> More Info for details."/>
 
-								<TextBlock Padding="10 2 5 2" Text="Capture Mode: "/>
-								<ComboBox Width="100" ItemsSource="{Binding CaptureModes}" DisplayMemberPath="Name"
-										  SelectedItem="{Binding SelectedCaptureMode}" IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" />
+									<ToggleButton Content="Stop at Final Node" Padding="10 0" IsChecked="{Binding StopRecordingOnFinalNode}"
+													Command="{Binding ToggleRecordingOnFinalNodeCommand}"
+													ToolTip="Use last stored node as a placeholder to stop recording." />
+
+									<TextBlock Padding="10 2 5 2" Text="Capture Mode: "/>
+									<ComboBox Width="100" ItemsSource="{Binding CaptureModes}" DisplayMemberPath="Name"
+											  SelectedItem="{Binding SelectedCaptureMode}"
+											  IsEnabled="{Binding PlaybackEnabled, Converter={StaticResource InvertedBoolConverter}}" />
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5 3 0 5"
+									Visibility="{Binding SelectedCaptureMode.CaptureModeAvailable, Converter={StaticResource FlexibleBooleanToVisibilityConverter}, ConverterParameter=Collapsed|Visible}">
+									<TextBlock Text="{Binding CaptureErrorMessage}" />
+								</StackPanel>
 							</StackPanel>
 						</GroupBox>
 					</StackPanel>

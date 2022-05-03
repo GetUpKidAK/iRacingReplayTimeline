@@ -34,9 +34,6 @@ namespace iRacingReplayDirector
 		}
 		#endregion
 
-		
-
-
 		/// <summary>
 		/// BINDING PROPERTIES
 		/// </summary>
@@ -213,6 +210,14 @@ namespace iRacingReplayDirector
 				OnPropertyChanged("SelectedCaptureMode");
 			}
 		}
+
+		private string _captureErrorMessage;
+		public string CaptureErrorMessage
+		{
+			get { return _captureErrorMessage; }
+			set { _captureErrorMessage = value; OnPropertyChanged("CaptureErrorMessage"); }
+		}
+
 
 		private bool _InSimUIEnabled;
 		public bool InSimUIEnabled

@@ -511,11 +511,6 @@ namespace iRacingReplayDirector
 		public bool IsCaptureAvailable()
 		{
 			return SelectedCaptureMode.IsReadyToRecord();
-
-			//var inSimCaptureReady = UseInSimCapture && InSimCaptureSettingEnabled;
-			//var obsCaptureReady = UseOBSCapture;
-
-			//return inSimCaptureReady || obsCaptureReady;
 		}
 
 		public bool IsCaptureActive()

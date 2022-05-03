@@ -24,6 +24,8 @@ namespace iRacingReplayDirector
 
 		public bool CanExecute(object parameter)
 		{
+			ReplayDirectorVM.CaptureErrorMessage = ReplayDirectorVM.SelectedCaptureMode.CaptureAvailabilityMessage;
+
 			// Disabled if in-sim recording is disabled
 			if (!ReplayDirectorVM.IsSessionReady() || !ReplayDirectorVM.IsCaptureAvailable())
 				return false;

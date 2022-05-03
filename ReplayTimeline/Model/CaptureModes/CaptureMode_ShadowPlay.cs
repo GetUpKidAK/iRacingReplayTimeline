@@ -18,7 +18,10 @@ namespace iRacingReplayDirector
 		{
 			_process = ExternalProcessHelper.GetExternalProcess(ProcessName);
 
-			return _process != null;
+			CaptureModeAvailable = _process != null;
+			CaptureAvailabilityMessage = CaptureModeAvailable ? "" : "Couldn't find the ShadowPlay process, please ensure the application is running.";
+
+			return CaptureModeAvailable;
 		}
 
 		public override bool IsReadyToRecord()
