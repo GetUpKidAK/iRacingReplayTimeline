@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Menu Items\ToggleShowInactiveDriversCommand.cs" />
     <Compile Include="Commands\Menu Items\OpenURLCommand.cs" />
     <Compile Include="Commands\Nodes\FrameSkipNodeCommand.cs" />
     <Compile Include="Commands\Playback\ManualFrameEntryCommand.cs" />

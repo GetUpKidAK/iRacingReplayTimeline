@@ -32,6 +32,8 @@
 					<MenuItem Header="Disable In-Sim UI During Playback" IsCheckable="True" IsChecked="{Binding DisableSimUIOnPlayback}" Command="{Binding ToggleSimUIOnPlaybackCommand}"/>
 					<MenuItem Header="Disable In-Sim UI When Recording" IsCheckable="True" IsChecked="{Binding DisableUIWhenRecording}" Command="{Binding ToggleSimUIOnRecordingCommand}"/>
 					<Separator />
+					<MenuItem Header="Show Inactive Drivers" IsCheckable="True" IsChecked="{Binding ShowInactiveDrivers}" Command="{Binding ToggleShowInactiveDriversCommand}"/>
+					<Separator />
 					<MenuItem Header="Clear All Nodes" Command="{Binding ClearAllNodesCommand}" />
 				</MenuItem>
 

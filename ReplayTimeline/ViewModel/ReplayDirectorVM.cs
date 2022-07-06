@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -17,13 +16,30 @@ namespace iRacingReplayDirector
 	{
 		public ReplayDirectorVM()
 		{
-			Sim.Instance.Connected += SdkConnected;
-			Sim.Instance.Disconnected += SdkDisconnected;
-			Sim.Instance.SessionInfoUpdated += SessionInfoUpdated;
-			Sim.Instance.TelemetryUpdated += TelemetryUpdated;
+			InitSDK();
+			InitVariables();
+
+			StatusBarText = "iRacing Not Connected.";
+			CamChangeBtnText = "Add Cam Change";
+			RecordBtnText = "Record";
+
+			SaveLoadHelper.LoadSettings(this);
+
+			ToggleInactiveDriverDisplay();
+		}
+
+		private void InitSDK()
+		{
+			Sim.Instance.Connected += SdkConnectedCallback;
+			Sim.Instance.Disconnected += SdkDisconnectedCallback;
+			Sim.Instance.SessionInfoUpdated += SessionInfoUpdatedCallback;
+			Sim.Instance.TelemetryUpdated += TelemetryUpdatedCallback;
 
 			Sim.Instance.Start();
+		}
 
+		private void InitVariables()
+		{
 			NodeCollection = new NodeCollection();
 			TimelineNodesView = CollectionViewSource.GetDefaultView(NodeCollection.Nodes);
 			Drivers = new ObservableCollection<Driver>();
@@ -31,21 +47,13 @@ namespace iRacingReplayDirector
 			Cameras = new ObservableCollection<Camera>();
 
 			TimelineNodesView.SortDescriptions.Clear();
-
 			SortDescription frameSort = new SortDescription("Frame", ListSortDirection.Ascending);
 			TimelineNodesView.SortDescriptions.Add(frameSort);
-
 			SortDescription idSort = new SortDescription("NumberRaw", ListSortDirection.Ascending);
 			DriversView.SortDescriptions.Add(idSort);
 			SortDriversById = true;
 
-			StatusBarText = "iRacing Not Connected.";
-			CamChangeBtnText = "Add Cam Change";
-			RecordBtnText = "Record";
-
 			CaptureModes = new ObservableCollection<CaptureModeBase>() { new CaptureMode_None(), new CaptureMode_Iracing(), new CaptureMode_OBS(), new CaptureMode_ShadowPlay() };
-
-			SaveLoadHelper.LoadSettings(this);
 
 			CamChangeNodeCommand = new CamChangeNodeCommand(this);
 			FrameSkipNodeCommand = new FrameSkipNodeCommand(this);
@@ -67,6 +75,7 @@ namespace iRacingReplayDirector
 			PreviousDriverCommand = new PreviousDriverCommand(this);
 			ToggleDriverSortOptionCommand = new ToggleDriverSortOptionCommand(this);
 			ToggleRecordingCommand = new ToggleRecordingCommand(this);
+			ToggleShowInactiveDriversCommand = new ToggleShowInactiveDriversCommand(this);
 
 			ManualFrameEntryCommand = new ManualFrameEntryCommand(this);
 
@@ -83,22 +92,22 @@ namespace iRacingReplayDirector
 
 		public void ApplicationClosing(Size windowSize)
 		{
-			Sim.Instance.Connected -= SdkConnected;
-			Sim.Instance.Disconnected -= SdkDisconnected;
-			Sim.Instance.SessionInfoUpdated -= SessionInfoUpdated;
-			Sim.Instance.TelemetryUpdated -= TelemetryUpdated;
+			Sim.Instance.Connected -= SdkConnectedCallback;
+			Sim.Instance.Disconnected -= SdkDisconnectedCallback;
+			Sim.Instance.SessionInfoUpdated -= SessionInfoUpdatedCallback;
+			Sim.Instance.TelemetryUpdated -= TelemetryUpdatedCallback;
 
 			Sim.Instance.Stop();
 
 			ApplicationQuitCommand.Execute(this);
 		}
 
-		private void SdkConnected(object sender, EventArgs e)
+		private void SdkConnectedCallback(object sender, EventArgs e)
 		{
 			StatusBarText = "iRacing Connected.";
 		}
 
-		private void SdkDisconnected(object sender, EventArgs e)
+		private void SdkDisconnectedCallback(object sender, EventArgs e)
 		{
 			StatusBarText = "iRacing Disconnected.";
 
@@ -111,7 +120,20 @@ namespace iRacingReplayDirector
 			StatusBarCurrentSessionInfo = "";
 		}
 
-		private void SessionInfoUpdated(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
+		private bool DriverOnTrackFilter(object item)
+		{
+			Driver driver = item as Driver;
+
+			if (driver != CurrentDriver)
+			{
+				_currentDriver = driver;
+				OnPropertyChanged("CurrentDriver");
+			}
+
+			return driver.TrackSurface != TrackSurfaces.NotInWorld;
+		}
+
+		private void SessionInfoUpdatedCallback(object sender, SdkWrapper.SessionInfoUpdatedEventArgs e)
 		{
 			GetSessionDrivers();
 			GetSessionCameras();
@@ -259,7 +281,7 @@ namespace iRacingReplayDirector
 				{
 					m_LiveSessionPopupVisible = true;
 
-					var sessionWarningResult = MessageBox.Show("You seem to be running a live session.\n\nThis tool is designed for replays. Some stuff may work, but it's not supported.",
+					var sessionWarningResult = MessageBox.Show("You seem to be running a live session.\n\nThis tool is designed for loaded replays. Some stuff may work, but it's not supported.",
 						"Viewing a Live session", MessageBoxButton.OK, MessageBoxImage.Warning);
 
 					if (sessionWarningResult == MessageBoxResult.OK || sessionWarningResult == MessageBoxResult.Cancel)
@@ -281,7 +303,7 @@ namespace iRacingReplayDirector
 			CurrentCamera = Cameras.FirstOrDefault(c => c.GroupNum == Sim.Instance.Telemetry.CamGroupNumber.Value);
 		}
 
-		private void TelemetryUpdated(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
+		private void TelemetryUpdatedCallback(object sender, SdkWrapper.TelemetryUpdatedEventArgs e)
 		{
 			// Leave now if the session info hasn't already been loaded
 			if (!SessionInfoLoaded)
@@ -337,7 +359,29 @@ namespace iRacingReplayDirector
 				// Set the details belonging to this driver
 				driver.Lap = laps[driver.Id];
 				driver.LapDistance = lapDistances[driver.Id];
-				driver.TrackSurface = (TrackSurfaces)trackSurfaces[driver.Id];
+
+				var updatedSurface = (TrackSurfaces)trackSurfaces[driver.Id];
+				var previousSurface = driver.TrackSurface;
+				driver.TrackSurface = updatedSurface;
+
+				// If driver was previously In World (On track, in pits etc.)
+				if (previousSurface != TrackSurfaces.NotInWorld)
+				{
+					// If they are now Not In World (left session, not in car...), refresh the filter...
+					if (updatedSurface == TrackSurfaces.NotInWorld)
+					{
+						DriversView.Refresh(); // Console.WriteLine($"{driver.Name} is now Out Of World");
+					}
+				}
+				else
+				{
+					// If driver was previously Not In World (Not in the car...)
+					// If they are now In World, update filter
+					if (updatedSurface != TrackSurfaces.NotInWorld)
+					{
+						DriversView.Refresh(); // Console.WriteLine($"{driver.Name} is now On Track");
+					}
+				}
 			}
 
 			YamlQuery sessionInfoQuery = Sim.Instance.SessionInfo["SessionInfo"]["Sessions"]["SessionNum", Sim.Instance.Telemetry.SessionNum.Value];
@@ -545,6 +589,14 @@ namespace iRacingReplayDirector
 			await Task.Delay(500);
 			
 			InSimUIEnabled = true;
+		}
+
+		public void ToggleInactiveDriverDisplay()
+		{
+			if (ShowInactiveDrivers) DriversView.Filter = null;
+			else DriversView.Filter = DriverOnTrackFilter;
+
+			DriversView.Refresh();
 		}
 	}
 }

@@ -35,6 +35,8 @@ namespace iRacingReplayDirector
 			vm.DisableUIWhenRecording = Properties.Settings.Default.DisableUIWhenRecording;
 			vm.StopRecordingOnFinalNode = Properties.Settings.Default.StopRecordingOnFinalNode;
 
+			vm.ShowInactiveDrivers = Properties.Settings.Default.ShowInactiveDrivers;
+
 			vm.SelectedCaptureMode = vm.CaptureModes.FirstOrDefault(m => m.Name == Properties.Settings.Default.CaptureModeSelected);
 		}
 

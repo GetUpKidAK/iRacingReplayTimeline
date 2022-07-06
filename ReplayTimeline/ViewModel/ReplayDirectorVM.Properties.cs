@@ -73,6 +73,8 @@ namespace iRacingReplayDirector
 					Sim.Instance.Sdk.Camera.SwitchToCar(_currentDriver.NumberRaw);
 					OnPropertyChanged("CurrentDriver");
 				}
+
+				OnPropertyChanged("CurrentDriver");
 			}
 		}
 
@@ -289,6 +291,14 @@ namespace iRacingReplayDirector
 			}
 		}
 
+		private bool _showInactiveDrivers;
+		public bool ShowInactiveDrivers
+		{
+			get { return _showInactiveDrivers; }
+			set { _showInactiveDrivers = value; Properties.Settings.Default.ShowInactiveDrivers = value; OnPropertyChanged("ShowInactiveDrivers"); }
+		}
+
+
 		private string _manualFrameEntryText;
 		public string ManualFrameEntryText
 		{
@@ -489,6 +499,8 @@ namespace iRacingReplayDirector
 		public ToggleSimUIOnPlaybackCommand ToggleSimUIOnPlaybackCommand { get; set; }
 		public ToggleSimUIOnRecordingCommand ToggleSimUIOnRecordingCommand { get; set; }
 		public ToggleRecordingOnFinalNodeCommand ToggleRecordingOnFinalNodeCommand { get; set; }
+
+		public ToggleShowInactiveDriversCommand ToggleShowInactiveDriversCommand { get; set; }
 		#endregion
 	}
 }
